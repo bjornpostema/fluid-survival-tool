@@ -28,7 +28,7 @@
 10
 #
 # List of transitions
-# Syntax: type id discFiringTime weight priority fluidFlowRate genDistribution
+# Syntax: type id discFiringTime weight priority fluidFlowRate genFireRate(EXP)
 #
 # Types:
 #
@@ -44,7 +44,7 @@
 2 demand21to6  0 0 0 1.0 na
 2 demand6to21  0 0 0 2.0 na
 0 failure  3 1 0 na
-3 repair   1 1 0 0 tba
+3 repair   1 1 0 0 10
 0 at6  9 1 0 0 na
 0 at21 15 1 0 0 na
 #
