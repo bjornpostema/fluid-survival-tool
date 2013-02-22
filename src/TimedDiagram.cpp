@@ -20,7 +20,7 @@ TimedDiagram::TimedDiagram() {
 void TimedDiagram::clear(){
 	dtrmEventList.clear();
 	regionList.clear();
-	instance == NULL;
+	//instance == NULL;
 }
 
 void TimedDiagram::setModel(Model* model){
@@ -52,7 +52,7 @@ void TimedDiagram::generateDiagram(Marking* initialMarking) {
 	double prePoint = 0;
 	gTrEnabledTime = 0;
 
-	for (int j = 0; j < dtrmEventList.size(); j++){
+	for (int j = 0; (unsigned)j < dtrmEventList.size(); j++){
 
 		if (!isGTransitionEnabled(model, dtrmEventList[j]->preRegionMarking)){
 			prePoint = dtrmEventList[j]->time;
@@ -417,7 +417,7 @@ void TimedDiagram::segmentizeStochasticRegion(Marking* marking, StochasticEvent*
 
 			createAddRegions(nextEvents, eventLine, marking);
 
-			for (int i = 0; i < nextEvents->size(); i++) {
+			for (int i = 0; (unsigned)i < nextEvents->size(); i++) {
 
 				//if (IS_ZERO(nextEvents->at(i)->timeSegment->p1.X - nextEvents->at(i)->timeSegment->p2.X))
 				//	continue;
@@ -474,11 +474,11 @@ void TimedDiagram::computeNextEvents(std::vector<StochasticEvent*> * potentialEv
 void TimedDiagram::minLines(std::vector<StochasticEvent*> * potentialEvents, Segment *uSegment, std::vector<StochasticEvent*> * nextEvents){
 
 	double start = uSegment->p1.X;
-	double end = uSegment->p2.X;
+	//double end = uSegment->p2.X;
 
 	double minStart = INF;
 	int minIndex;
-	for (int i = 0; i < potentialEvents->size(); i++) {
+	for (int i = 0; (unsigned)i < potentialEvents->size(); i++) {
 		if (potentialEvents->at(i)->timeSegment->getY(start) < minStart) {
 			minStart = potentialEvents->at(i)->timeSegment->getY(start);
 			minIndex = i;
@@ -492,11 +492,11 @@ void TimedDiagram::minLines(std::vector<StochasticEvent*> * potentialEvents, Seg
 
 	p1.X = start;
 	p1.Y = potentialEvents->at(crntIndex)->timeSegment->getY(start);
-	while (crntIndex < potentialEvents->size()) {
+	while ((unsigned)crntIndex < potentialEvents->size()) {
 
 		p2 = potentialEvents->at(crntIndex)->timeSegment->p2;  //this is the first point that crntIndex line is intersecting with.
 
-		for (int i = crntIndex + 1; i < potentialEvents->size(); i++) {
+		for (int i = crntIndex + 1; (unsigned)i < potentialEvents->size(); i++) {
 			Point p;
 			if (potentialEvents->at(crntIndex)->timeSegment->intersect(*potentialEvents->at(i)->timeSegment, p))
 				if (p.Y <= p2.Y) {
@@ -540,7 +540,7 @@ void TimedDiagram::createAddRegions(std::vector<StochasticEvent*> * eventList, S
 	int index2 = 0;
 	Point p1 = lowerBoundray->p1;
 	Point p2 = lowerBoundray->p2;
-	for (int i = 0; i < eventList->size(); i++){
+	for (int i = 0; (unsigned)i < eventList->size(); i++){
 		index2 = i;
 		if (eventList->at(i)->timeSegment->p2.Y == lowerBoundray->getY(eventList->at(i)->timeSegment->p2.X) ||
 			eventList->at(i)->timeSegment->p2.X == lowerBoundray->p2.X)
@@ -581,7 +581,7 @@ double TimedDiagram::calProbAtTime(double time, double (*sPdfInt)(double), bool 
 		double sFrameTime = time - gTrEnabledTime; 
 
 		Segment timeSeg(0, sFrameTime , 0, model->MaxTime - gTrEnabledTime);
-		for (int i = 0; i < regionList.size(); i++){
+		for (int i = 0; (unsigned)i < regionList.size(); i++){
 			//s1 and s2 are the validity interval for which the probability holds, returned by the function iPropHolds.
 			//std::cout << "i=" << i << "-";
 			if (regionList[i]->intersect(timeSeg, p1, p2)){
@@ -597,7 +597,7 @@ double TimedDiagram::calProbAtTime(double time, double (*sPdfInt)(double), bool 
 
 	//determinestic part after g-transition firing
 	int cc;
-	for (cc = 0; cc < dtrmEventList.size() && time > dtrmEventList[cc]->time ; cc++);
+	for (cc = 0; (unsigned)cc < dtrmEventList.size() && time > dtrmEventList[cc]->time ; cc++);
 	s1 = time > gTrEnabledTime ? time : 0;
 	s2 = model->MaxTime;
 	double t;

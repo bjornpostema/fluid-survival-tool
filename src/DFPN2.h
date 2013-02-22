@@ -11,7 +11,7 @@
 #define PT_DISCRETE   0
 #define PT_FLUID      1
 
-#define IS_ZERO
+//#define IS_ZERO
 
 typedef struct {
 	int type; // Place type
@@ -39,6 +39,13 @@ typedef struct {
 #define TT_FLUID           2
 #define TT_GENERAL         3
 
+typedef enum {
+	Exp = 1, // The exponential distribution
+	Uni = 2, // The uniform distribution
+	Gen = 3, // The self-defined general distribution
+	Err = 4 // The error
+} Distribution;
+
 typedef struct {
 	///////// Model field
 	int type; // Transition type
@@ -47,7 +54,9 @@ typedef struct {
 	double weight; // Weight (for both deterministic and immediate)
 	int priority; // Priority (for both deterministic and immediate)
 	double flowRate; // Flow rate (for fluid transitions)
-	char *distr; // distribution (for general)
+	char *df_argument; // The argument of the distribution function
+	int df_distr; // The actual distribution function (exp, uni, gen, err)
+	//char *distr; // distribution (for general)
 
 	////////// computed field
 	int inputListSize; // number of input arcs arriving to this transition

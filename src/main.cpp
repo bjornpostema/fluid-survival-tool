@@ -13,17 +13,67 @@
 #include <unistd.h>
 #include <stdlib.h>
 
+extern "C" {
+#include <matheval.h>
+}
 //#include <direct.h>
-
 
 #include "DFPN2.h"
 #include "Line.h"
 #include "TimedDiagram.h"
 
-double expPrarameter = 10;
+#define MAX_ID_LEN 2048
 
-double spdf(double s){
-	return (1 - exp(-s/expPrarameter));
+
+//double expPrarameter = 10;
+char *argument;
+double lambda;
+double a,b;
+void *f;
+
+/*
+ * The exponential probability density function.
+ */
+double spdfExp(double s){
+	return (1 - exp(-s/lambda));
+}
+
+/*
+ * The uniform probability density function.
+ */
+double spdfUni(double s){
+	return ((s-a)/(b-a));
+}
+
+/* The general probability density function defined by user.
+The math library supports the following functionalities:
+ *
+ * -> e (e), log2(e) (log2e), log10(e) (log10e), ln(2) (ln2), ln(10) (ln10), pi (pi),
+ * pi / 2 (pi_2), pi / 4 (pi_4), 1 / pi (1_pi), 2 / pi (2_pi), 2 / sqrt(pi) (2_sqrtpi),
+ * sqrt(2) (sqrt) and sqrt(1 / 2) (sqrt1_2).
+ * -> exponential (exp), logarithmic (log), square root (sqrt), sine (sin), cosine (cos),
+ * tangent (tan), cotangent (cot), secant (sec), cosecant (csc), inverse sine (asin),
+ * inverse cosine (acos), inverse tangent (atan), inverse cotangent (acot),
+ * inverse secant (asec), inverse cosecant (acsc), hyperbolic sine (sinh),
+ * cosine (cosh), hyperbolic tangent (tanh), hyperbolic cotangent (coth),
+ * hyperbolic secant (sech), hyperbolic cosecant (csch), hyperbolic inverse sine (asinh),
+ * hyperbolic inverse cosine (acosh), hyperbolic inverse tangent (atanh),
+ * hyperbolic inverse cotangent (acoth), hyperbolic inverse secant (asech),
+ * hyperbolic inverse cosecant (acsch), absolute value (abs),
+ * Heaviside step function (step) with value 1 defined for x = 0,
+ * Dirac delta function with infinity (delta) and not-a-number (nandelta)
+ * values defined for x = 0, and error function (erf).
+ * -> unary minus ('-'),addition ('+'), subtraction ('+'), multiplication ('*'),
+ * division multiplication ('/') and exponentiation ('^')
+ * -> Parenthesis ('(' and ')') could be used to change priority order
+ *
+ * For more details visit: http://www.gnu.org/software/libmatheval/manual/libmatheval.html
+ */
+double spdfGen(double s){
+	char *names[] = { "s" };
+	double values[] = { s };
+
+	return evaluator_evaluate (f, sizeof(names)/sizeof(names[0]), names, values);
 }
 
 
@@ -72,7 +122,7 @@ int main(int argc, char *argv[]) {
 	InitializeModel(model);
 	//Input and output list of places and transitions are created and sorted wrt to their priority and share.
 
-	expPrarameter = atoi(model->transitions[gTransitionId(model)].distr);
+	argument = model->transitions[gTransitionId(model)].df_argument;
 
 	model->MaxTime = 100.0;
 	Marking* initialMarking = createInitialMarking(model);
@@ -111,18 +161,41 @@ int main(int argc, char *argv[]) {
 		pIndex = i;
 	}
 
-
 	std::ofstream oFile;
 	oFile.open(argv[2], std::ios::out);
 
 	mtime = 0; seconds = 0; useconds = 0;
 	timeval t0, t1;
-
+	switch (model->transitions[gTransitionId(model)].df_distr)
+	{
+	case Exp: lambda = atoi(argument);
+	break;
+	case Uni:
+		char *argFinder;
+		argFinder = strtok(argument,",");
+		a = atoi(argFinder);
+		argFinder = strtok(NULL,",");
+		b = atoi(argFinder);
+	break;
+	case Gen:
+		f = evaluator_create (model->transitions[gTransitionId(model)].df_argument);
+	break;
+	}
 	for (double t = .02; t <= model->MaxTime + .01; t += .5){
 		for (amount = .05; amount <= model->places[pIndex].f_bound; amount += .2){
 			//std::cout << "t = " << t << "--amount = " << amount << std::endl;
+			double p = -1.0;
 			gettimeofday(&t0, NULL);
-			double p = TimedDiagram::getInstance()->calProbAtTime(t, spdf, propertyTest);
+			//double p = TimedDiagram::getInstance()->calProbAtTime(t, spdf, propertyTest);
+			switch (model->transitions[gTransitionId(model)].df_distr)
+			{
+			case Exp: p = TimedDiagram::getInstance()->calProbAtTime(t, spdfExp, propertyTest);
+			break;
+			case Uni: p = TimedDiagram::getInstance()->calProbAtTime(t, spdfUni, propertyTest);
+			break;
+			case Gen: p = TimedDiagram::getInstance()->calProbAtTime(t, spdfGen, propertyTest);
+			break;
+			}
 			gettimeofday(&t1, NULL);
 
 			seconds  += t1.tv_sec  - t0.tv_sec;
@@ -135,12 +208,17 @@ int main(int argc, char *argv[]) {
 		//std::cout << std::endl;
 	}
 
+	switch (model->transitions[gTransitionId(model)].df_distr)
+	{
+	case Gen: evaluator_destroy(f);
+	break;
+	}
 	mtime = ((seconds * 1000 + useconds/1000.0) + 0.5);
 	std::cout << "total time computing measures:  " << mtime << "ms" << std::endl;
 
 	oFile.close();
 	FILE* gnuplotPipe;
-	if (gnuplotPipe = popen("gnuplot -persist","w"))
+	if ( (gnuplotPipe = popen("gnuplot -persist","w")) )
 	{
 		fprintf(gnuplotPipe,"set pm3d \n unset surface\n "
 				"set xlabel \"Storage Content [m^3]\" \n"

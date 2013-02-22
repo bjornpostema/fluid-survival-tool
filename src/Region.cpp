@@ -12,7 +12,7 @@
 Region::Region(std::vector<StochasticEvent*> * eventList, Segment * lowerBoundray) {
 	eventSegments = eventList;
 	this->lowerBoundry = lowerBoundray;
-	for (int i = 0; i < eventSegments->size(); i++){
+	for (int i = 0; (unsigned)i < eventSegments->size(); i++){
 		if (eventSegments->at(i)->timeSegment->p1.X == lowerBoundray->p1.X)
 			this->leftBoundry = new Segment(lowerBoundray->p1, eventSegments->at(i)->timeSegment->p1);
 		if (eventSegments->at(i)->timeSegment->p2.X == lowerBoundray->p2.X)
@@ -28,7 +28,7 @@ void Region::print(std::ostream &out) {
 	out << "(" << lowerBoundry->p2.X << ", " << lowerBoundry->p2.Y << ")";
 	out << std::endl;
 
-	for (int i = 0; i < eventSegments->size(); i++) {
+	for (int i = 0; (unsigned)i < eventSegments->size(); i++) {
 		out <<  "(" <<eventSegments->at(i)->timeSegment->p1.X << ", "
 				<< eventSegments->at(i)->timeSegment->p1.Y << ")";
 		out << "--";
@@ -44,7 +44,7 @@ bool Region::intersect(Segment& s, Point &p1, Point &p2){
 	int intCnt = 0;
 	Point p;
 
-	for (int i = 0; i < eventSegments->size() && intCnt < 2; i++){
+	for (int i = 0; (unsigned)i < eventSegments->size() && intCnt < 2; i++){
 		if (eventSegments->at(i)->timeSegment->intersect(s, p)){
 			if (intCnt == 0) p1 = p;
 			if (intCnt == 1) p2 = p;

@@ -12,9 +12,8 @@
 #include <string.h>
 #include <math.h>
 
-
-char *transTypeName[] = { "Det. ", "Imm. ", "Fluid", "Gen. " };
-char *arcsTypeName[] = { "D.In ", "D.Out", "F.In ", "F.Out", "Inhib", "Test " };
+const char *transTypeName[] = { "Det. ", "Imm. ", "Fluid", "Gen. " };
+const char *arcsTypeName[] = { "D.In ", "D.Out", "F.In ", "F.Out", "Inhib", "Test " };
 
 /*********** Read Model (support function) *********************/
 #define READ_BUF_DIM 16384
@@ -144,23 +143,36 @@ Model *ReadModel(const char *FileName) {
 	if (M->N_transitions != 0) {
 		M->transitions = (Transition *) calloc(M->N_transitions,
 				sizeof(Transition));
-
 		for (i = 0; i < M->N_transitions; i++) {
 			buffLine = ReadLine(fp);
-
 			sscanf(buffLine, "%d %s %lg %lg %d %lg %s",
 					&M->transitions[i].type, idBuff, &M->transitions[i].time,
 					&M->transitions[i].weight, &M->transitions[i].priority,
 					&M->transitions[i].flowRate, distrBuff);
 			M->transitions[i].id = strdup(idBuff);
-			M->transitions[i].distr = strdup(distrBuff);
+
+			char *distrFunc = strdup(distrBuff);
+			char *distrFinder = strtok(distrFunc,"{}");
+			if (distrFinder != NULL && strcmp ("exp",distrFinder) == 0) {
+				M->transitions[i].df_distr = Exp;
+			} else if (strcmp ("uni",distrFinder) == 0) {
+				M->transitions[i].df_distr = Uni;
+			} else if (strcmp ("gen",distrFinder) == 0) {
+				M->transitions[i].df_distr = Gen;
+			} else {
+				M->transitions[i].df_distr = Err;
+			}
+			distrFinder = strtok(NULL,"{}");
+			M->transitions[i].df_argument = distrFinder;
+			//M->transitions[i].distr = strdup(distrBuff);
+			//M->transitions[i].distr = Distribution::Exp;
 			free(buffLine);
 
 			printf("Transition %d: %s %s %lg %lg %d %lg %s\n", i,
 					transTypeName[M->transitions[i].type],
 					M->transitions[i].id, M->transitions[i].time,
 					M->transitions[i].weight, M->transitions[i].priority,
-					M->transitions[i].flowRate, M->transitions[i].distr);
+					M->transitions[i].flowRate, distrFunc);
 
 			if (M->transitions[i].type == TT_FLUID) {
 				M->transitions[i].idInMarking = M->N_fluidTransitions;
@@ -946,7 +958,7 @@ int gTransitionId(Model* M){
 		if (M->transitions[gtId].type == TT_GENERAL)
 			return gtId;
 	}
-
+	return -1;
 }
 
 
