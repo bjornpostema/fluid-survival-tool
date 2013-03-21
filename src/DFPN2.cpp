@@ -143,8 +143,10 @@ Model *ReadModel(const char *FileName) {
 	if (M->N_transitions != 0) {
 		M->transitions = (Transition *) calloc(M->N_transitions,
 				sizeof(Transition));
+
 		for (i = 0; i < M->N_transitions; i++) {
 			buffLine = ReadLine(fp);
+
 			sscanf(buffLine, "%d %s %lg %lg %d %lg %s",
 					&M->transitions[i].type, idBuff, &M->transitions[i].time,
 					&M->transitions[i].weight, &M->transitions[i].priority,

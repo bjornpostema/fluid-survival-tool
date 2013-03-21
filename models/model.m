@@ -20,7 +20,7 @@
 4
 #
 # List of transitions
-# Syntax: type id discFiringTime weight priority fluidFlowRate genDistribution
+# Syntax: type id discFiringTime weight priority fluidFlowRate genDistribution(EXP rate)
 #
 # Types:
 #
@@ -31,7 +31,7 @@
 #
 2 pump 0 0 0 2.0 na
 2 demand 0 0 0 1.0 na
-3 pumpBreaks 3 1.0 0 0 exp(7.5)
+3 pumpBreaks 3 1.0 0 0 7.5
 0 demandStops 5 1.0 0 0 na
 #
 #### Number of arcs

@@ -11,7 +11,7 @@
 #include <vector>
 #include <math.h>
 
-//#include <./opencv2/opencv.hpp>
+#include <opencv2/opencv.hpp>
 
 #include "Event.h"
 #include "DFPN2.h"
@@ -50,7 +50,7 @@ public:
 
 	/**
 	 * @param marking Current marking of the system.
-	 * @param eventLine This is the equation of the lower boundary of region we wish to segmentize. \\
+	 * @param eventLine This is the equation of the lower boundary of region we wish to segmentize. We expect this event to contain its parent region.\\
 	 * Have in mind that this is a segment so it has the validity interval in itself.
 	 *
 	 * Each (potential) region to be segmentized at first consists of starting and ending for 's' (like the previous intervals),
@@ -59,7 +59,7 @@ public:
 	 * Note 1 : It is assumed that this function is called only for the upper part of st-diagram (when the general transition is fired.)
 	 * Note 2 : Remember that initial marking for this function to start should be such that general transition is fired.
 	 */
-	void segmentizeStochasticRegion(Marking* marking, StochasticEvent *eventLine, double timeBias);
+	void segmentizeStochasticRegion(Marking* marking, StochasticEvent *eventLine,  double timeBias);
 
 	/**
 	 * @param time The time for which probability calculation is being done.
@@ -70,11 +70,29 @@ public:
 	 */
 	double calProbAtTime(double time, double (*sPdfInt)(double), bool (*isPropHolds)(Model*, Marking*, double t0, double t1, double&, double&));
 
-	//void saveDiagram(std::string filename);
+	void saveDiagram(std::string filename);
+
+	double getTrEnabledTime() const {
+		return gTrEnabledTime;
+	}
 
 	int getNumberOfRegions(){return regionList.size() + dtrmEventList.size();};
 
 	Model* model;
+
+	/**
+	 * This vector contains list of region after firing of general transition, i.e. at the top of ts-line.
+	 */
+	std::vector<Region*> regionList;
+
+	/**
+	 * Before firing of general transition all events could be determined deterministicly. So they can be maintained as a
+	 * sequence points.
+	 */
+	std::vector<DtrmEvent*> dtrmEventList;
+
+	cv::Mat debugImage;
+	int scale;
 
 private:
 	static TimedDiagram* instance;
@@ -84,24 +102,16 @@ private:
 	 * keeps the first time g-transition could fire.
 	 */
 	double gTrEnabledTime;
-	/**
-	 * This vector contains list of region after firing of general transition, i.e. at the top of ts-line.
-	 */
-	std::vector<Region*> regionList;
-	/**
-	 * Before firing of general transition all events could be determined deterministicly. So they can be maintained as a 
-	 * sequence points.
-	 */
-	std::vector<DtrmEvent*> dtrmEventList;
+
 
 	void minLines(std::vector<StochasticEvent*> * potentialEvents, Segment* uSegment, std::vector<StochasticEvent*> * nextEvents);
-	void createAddRegions(std::vector<StochasticEvent*> * eventList, Segment * lowerBoundray, Marking* marking);
+	void createAddRegions(std::vector<StochasticEvent*> * eventList, StochasticEvent * preEvent, Marking* marking);
 
 	/**
 	 * Auxilary drawing functions
 	 */
 
-	//void drawSegmet(cv::Mat & image, Segment& seg, const int scale);
+	void drawSegmet(cv::Mat & image, Segment& seg, const int scale);
 
 	TimedDiagram();
 

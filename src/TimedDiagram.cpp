@@ -52,11 +52,15 @@ void TimedDiagram::generateDiagram(Marking* initialMarking) {
 	double prePoint = 0;
 	gTrEnabledTime = 0;
 
-	for (int j = 0; (unsigned)j < dtrmEventList.size(); j++){
+	for (int j = 0; (unsigned)j < dtrmEventList.size() - 1; j++){
+		std::cout << dtrmEventList[j]->time << std::endl;
+	}
+	// ignore the the last event.
+	for (int j = 0; (unsigned)j < dtrmEventList.size() - 1; j++){
 
-		if (!isGTransitionEnabled(model, dtrmEventList[j]->preRegionMarking)){
-			prePoint = dtrmEventList[j]->time;
-			gTrEnabledTime = dtrmEventList[j]->time;
+		if (!isGTransitionEnabled(model, dtrmEventList[j]->postRegionMarking)){
+			prePoint = dtrmEventList[j]->nextDtrmEvent->time;
+			gTrEnabledTime = dtrmEventList[j]->nextDtrmEvent->time;
 			continue;
 		}
 
@@ -66,9 +70,9 @@ void TimedDiagram::generateDiagram(Marking* initialMarking) {
 			continue;
 
 		//moving to the frame with origin at (gTrEnabledTime, gTrEnabledTime)
-		Point startPoint(prePoint - gTrEnabledTime, prePoint - gTrEnabledTime);	//******//
-		Point endPoint(dtrmEventList[j]->time - gTrEnabledTime, dtrmEventList[j]->time - gTrEnabledTime);
-		Marking* gtFiredMarking = copyMarking(model, dtrmEventList[j]->preRegionMarking);
+		Point startPoint(prePoint /*- gTrEnabledTime*/, prePoint /*- gTrEnabledTime*/);	//******//
+		Point endPoint(dtrmEventList[j]->nextDtrmEvent->time /*- gTrEnabledTime*/, dtrmEventList[j]->nextDtrmEvent->time /*- gTrEnabledTime*/);
+		Marking* gtFiredMarking = copyMarking(model, dtrmEventList[j]->postRegionMarking);
 
 		checkEnabled(model, gtFiredMarking);
 		setActFluidRate(model, gtFiredMarking, 0);
@@ -84,10 +88,11 @@ void TimedDiagram::generateDiagram(Marking* initialMarking) {
 		Segment* tsLine = new Segment(startPoint, endPoint);
 		StochasticEvent* initEvent = new StochasticEvent(tsLine, TRANSITION);
 		initEvent->id = gTransitionId(model);
-		initEvent->preRegionMarking = dtrmEventList[j]->preRegionMarking;
+		initEvent->preRegionMarking = dtrmEventList[j]->postRegionMarking;
+		initEvent->preDtrmEvent = dtrmEventList[j];
 		segmentizeStochasticRegion(gtFiredMarking, initEvent, prePoint);
 
-		prePoint = dtrmEventList[j]->time;
+		prePoint = dtrmEventList[j]->nextDtrmEvent->time;
 	}
 
 	//std::ofstream regionfile("regions.out");
@@ -125,6 +130,16 @@ void TimedDiagram::SegmentizeDtrmRegion(Marking* initialMarking){
 	EventType firstEventType;
 
 	double *clock0, *fluid0, *drift;
+	DtrmEvent* crntEvent = 0;
+	DtrmEvent* preEvent = 0;
+
+	crntEvent = new DtrmEvent(FIRST_NULL_EVENT);
+	crntEvent->time = 0;
+	crntEvent->id = -1;
+	crntEvent->preRegionMarking = marking;
+	crntEvent->postRegionMarking = marking;
+	dtrmEventList.push_back(crntEvent);
+	preEvent = crntEvent;
 
 	while (crntTime < model->MaxTime){
 
@@ -206,12 +221,15 @@ void TimedDiagram::SegmentizeDtrmRegion(Marking* initialMarking){
 
 		//if there is no event before max time reached, we are done.
 		if (crntTime + firstT > model->MaxTime){
-			DtrmEvent* e = new DtrmEvent(MAX_TIME_REACHED);
-			e->time = model->MaxTime;
-			e->id = -1;
-			e->preRegionMarking = marking;
-			e->postRegionMarking = NULL;
-			dtrmEventList.push_back(e);
+			crntEvent = new DtrmEvent(MAX_TIME_REACHED);
+			crntEvent->time = model->MaxTime;
+			crntEvent->id = -1;
+			crntEvent->preRegionMarking = marking;
+			crntEvent->postRegionMarking = NULL;
+			dtrmEventList.push_back(crntEvent);
+			if (preEvent != NULL)
+				preEvent->nextDtrmEvent = crntEvent;
+			crntEvent->nextDtrmEvent = 0;
 
 			break;
 		}
@@ -223,18 +241,19 @@ void TimedDiagram::SegmentizeDtrmRegion(Marking* initialMarking){
 		if (firstEventType == TRANSITION)
 			fireTransition(model, marking, firstEventID);
 
-		DtrmEvent* e = new DtrmEvent(firstEventType);
-		e->time = crntTime;
-		e->id = firstEventID;
-		e->preRegionMarking = preMarking;
-		e->postRegionMarking = marking;
-		dtrmEventList.push_back(e);
+		crntEvent= new DtrmEvent(firstEventType);
+		crntEvent->time = crntTime;
+		crntEvent->id = firstEventID;
+		crntEvent->preRegionMarking = preMarking;
+		crntEvent->postRegionMarking = marking;
+		dtrmEventList.push_back(crntEvent);
+		if (preEvent != NULL)
+			preEvent->nextDtrmEvent = crntEvent;
+		preEvent = crntEvent;
 	}
 }
 void TimedDiagram::segmentizeStochasticRegion(Marking* marking, StochasticEvent* eventSeg, double timeBias) {
 
-	//if (regionList.size() == 57)
-	//	std::cout << "debug ..." <<  std::endl;
 
 	Segment* eventLine = eventSeg->timeSegment;
 	if (eventLine->p2.Y > model->MaxTime || eventLine->p2.X > model->MaxTime) {
@@ -285,7 +304,7 @@ void TimedDiagram::segmentizeStochasticRegion(Marking* marking, StochasticEvent*
 
 		if ((model->transitions[i].type == TT_IMMEDIATE)) {
 			if (firstT > 0.0) {
-				firstT = 0.0;
+				firstT = 0.0;Region
 				enabledTransitionCache[0] = i;
 				cntFirst = 1;
 				hasImmediateEnabled = 1;
@@ -327,6 +346,7 @@ void TimedDiagram::segmentizeStochasticRegion(Marking* marking, StochasticEvent*
 			StochasticEvent* detTransEvent = new StochasticEvent(detTransSeg, TRANSITION);
 			detTransEvent->id = enabledTransitionCache[i];
 			detTransEvent->preRegionMarking = marking;
+			detTransSeg->print();
 			potentialEvents->push_back(detTransEvent);
 
 		}
@@ -368,7 +388,7 @@ void TimedDiagram::segmentizeStochasticRegion(Marking* marking, StochasticEvent*
 
 				StochasticEvent* placeEvent = new StochasticEvent();
 				Segment* placeSeg;
-				if (drift[model->places[i].idInMarking] > ZERO_PREC) {
+				if (d > ZERO_PREC) {
 
 					placeSeg = new Segment(eventLine->a - a / d,
 						(model->places[i].f_bound - b) / d + eventLine->b,
@@ -376,12 +396,14 @@ void TimedDiagram::segmentizeStochasticRegion(Marking* marking, StochasticEvent*
 						/*+ timeBias*/
 						start, end);
 					placeEvent->eventType = PLACE_UPPER_BOUNDRY;
-				} else if (drift[model->places[i].idInMarking] < -ZERO_PREC) {
+				} else if (d < -ZERO_PREC) {
 
-					placeSeg = new Segment(eventLine->a + a / abs(d), 
-						b / abs(d) + eventLine->b,
+					std::cout << a << ", " << std::abs(d) + eventLine->b << ", " << start << ", " <<  end << std::endl;
+					placeSeg = new Segment(eventLine->a + a / std::abs(d),
+						b / std::abs(d) + eventLine->b,
 						//+ gTrEnabledTime*(1- eventLine->a - a /abs(d))/*+ timeBias*/,
 						start, end);
+					placeSeg->print();
 					placeEvent->eventType = PLACE_LOWER_BOUNDRY;
 				}
 
@@ -403,6 +425,7 @@ void TimedDiagram::segmentizeStochasticRegion(Marking* marking, StochasticEvent*
 
 		if (cntFirst > 0) { // if there is at least an event that can happen
 
+			eventLine->print();
 			std::vector<StochasticEvent*> *nextEvents = new std::vector<StochasticEvent*>();
 			computeNextEvents(potentialEvents, eventLine, nextEvents);
 
@@ -415,9 +438,10 @@ void TimedDiagram::segmentizeStochasticRegion(Marking* marking, StochasticEvent*
 
 			//regionList.push_back(region);
 
-			createAddRegions(nextEvents, eventLine, marking);
+			createAddRegions(nextEvents, eventSeg, marking);
 
-			for (int i = 0; (unsigned)i < nextEvents->size(); i++) {
+
+			for (int i = 0; i < nextEvents->size(); i++) {
 
 				//if (IS_ZERO(nextEvents->at(i)->timeSegment->p1.X - nextEvents->at(i)->timeSegment->p2.X))
 				//	continue;
@@ -456,6 +480,11 @@ void TimedDiagram::segmentizeStochasticRegion(Marking* marking, StochasticEvent*
 			region->marking = marking;
 			region->timeBias = timeBias;
 
+			if (eventSeg->preRegion != 0)
+				eventSeg->preRegion->successors->push_back(region);
+			else //if we have entered from the deterministic are to this new region.
+				eventSeg->preDtrmEvent->nextRegions->push_back(region);
+
 			regionList.push_back(region);
 		}
 
@@ -474,11 +503,12 @@ void TimedDiagram::computeNextEvents(std::vector<StochasticEvent*> * potentialEv
 void TimedDiagram::minLines(std::vector<StochasticEvent*> * potentialEvents, Segment *uSegment, std::vector<StochasticEvent*> * nextEvents){
 
 	double start = uSegment->p1.X;
-	//double end = uSegment->p2.X;
+	double end = uSegment->p2.X;
 
 	double minStart = INF;
 	int minIndex;
-	for (int i = 0; (unsigned)i < potentialEvents->size(); i++) {
+	for (int i = 0; i < potentialEvents->size(); i++) {
+		std::cout << "a: " << potentialEvents->at(i)->timeSegment->a << std::endl;
 		if (potentialEvents->at(i)->timeSegment->getY(start) < minStart) {
 			minStart = potentialEvents->at(i)->timeSegment->getY(start);
 			minIndex = i;
@@ -514,16 +544,23 @@ void TimedDiagram::minLines(std::vector<StochasticEvent*> * potentialEvents, Seg
 
 		nextEvents->push_back(sEvent);
 
+		std::cout << "minIndex:"  << minIndex << std::endl;
+		std::cout << "crntIndex:" << crntIndex << std::endl;
+		std::cout << "potentialEvents->size():" << potentialEvents->size()<< std::endl;
+		uSegment->print();
 		//if there is no intersection we are done.
 		if (crntIndex == nextIndex) {
 			Point uPoint;
 
 			//if we have an intersection with the underlying segment, we should consider it.
+			potentialEvents->at(crntIndex)->timeSegment->print();
 			if (potentialEvents->at(crntIndex)->timeSegment->intersect(*uSegment, uPoint) && uPoint != uSegment->p2 && uPoint != uSegment->p1){
 				nextEvents->back()->timeSegment->p2 = uPoint;
 				uSegment->p1 = uPoint;
 				potentialEvents->erase(potentialEvents->begin() + crntIndex);
 				//I think potentialEvents->at(crntIndex) should be omitted.
+				uSegment->print();
+				std::cout << "potentialEvents->size():" << potentialEvents->size()<< std::endl;
 				minLines(potentialEvents, uSegment, nextEvents);
 			}
 
@@ -535,9 +572,10 @@ void TimedDiagram::minLines(std::vector<StochasticEvent*> * potentialEvents, Seg
 	}
 }
 
-void TimedDiagram::createAddRegions(std::vector<StochasticEvent*> * eventList, Segment * lowerBoundray, Marking* marking){
+void TimedDiagram::createAddRegions(std::vector<StochasticEvent*> * eventList, StochasticEvent * preEvent, Marking* marking){
 	int index1 = 0; 
 	int index2 = 0;
+	Segment* lowerBoundray = preEvent->timeSegment;
 	Point p1 = lowerBoundray->p1;
 	Point p2 = lowerBoundray->p2;
 	for (int i = 0; (unsigned)i < eventList->size(); i++){
@@ -558,6 +596,15 @@ void TimedDiagram::createAddRegions(std::vector<StochasticEvent*> * eventList, S
 			region->marking = marking;
 
 			regionList.push_back(region);
+
+			//if we have entered from an stochastic region to this new region.
+			if (preEvent->preRegion != 0)
+				preEvent->preRegion->successors->push_back(region);
+			else //if we have entered from the deterministic are to this new region.
+				preEvent->preDtrmEvent->nextRegions->push_back(region);
+
+			for (int j = index1; j <= index2; j++)
+				eventList->at(j)->preRegion = region;
 
 			p1 = p2;
 			index1 = index2 + 1;
@@ -612,47 +659,48 @@ double TimedDiagram::calProbAtTime(double time, double (*sPdfInt)(double), bool 
 	return prob;
 }
 
-//void TimedDiagram::saveDiagram(std::string filename){
-//	const int scale = 100;
-//	const int row = model->MaxTime * scale;
-//	const int col = model->MaxTime * scale;
-//
-//	cv::Mat diagram(row, col, CV_8UC3, cv::Scalar::all(255));
-//
-//
-//	for (int i = 0; i < regionList.size(); i++){
-//		drawSegmet(diagram, *regionList[i]->leftBoundry, scale);
-//		drawSegmet(diagram, *regionList[i]->rightBoundry, scale);
-//		drawSegmet(diagram, *regionList[i]->lowerBoundry, scale);
-//		for (int j = 0; j < regionList[i]->eventSegments->size(); j++)
-//			drawSegmet(diagram, *regionList[i]->eventSegments->at(j)->timeSegment, scale);
-//
-//		cv::Point p(scale*(regionList[i]->lowerBoundry->p1.X + regionList[i]->lowerBoundry->p2.X)/2,
-//			scale*(regionList[i]->lowerBoundry->p1.Y + regionList[i]->lowerBoundry->p2.Y)/2);
-//		char rn[10];
-//		itoa(i, rn, 10);
-//		cv::putText(diagram, std::string(rn), p, cv::FONT_HERSHEY_SIMPLEX, 1, cv::Scalar(0, 0, 255));
-//	}
-//
-//	for (int i = 0; i < dtrmEventList.size(); i++){
-//		cv::line(diagram, cv::Point((dtrmEventList[i]->time - gTrEnabledTime) * scale, (dtrmEventList[i]->time - gTrEnabledTime)* scale),
-//			cv::Point(col, (dtrmEventList[i]->time - gTrEnabledTime)* scale), cv::Scalar(0, 255, 0), 2);
-//	}
-//
-//	cv::line(diagram, cv::Point(0, 0), cv::Point(row, col), cv::Scalar(255, 0, 0), 2);
-//
-//	cv::flip(diagram, diagram, 0);
-//	cv::imwrite(filename + ".jpg", diagram);
-//
-//	//cv::Mat im2show;
-//	//cv::resize(diagram, im2show, cv::Size(1000, 1000));
-//	//cv::imshow("regions", im2show);
-//	//cv::waitKey();
-//}
+void TimedDiagram::saveDiagram(std::string filename){
 
-//void TimedDiagram::drawSegmet(cv::Mat & image, Segment& seg, const int scale){
-//	cv::Point p1(seg.p1.X * scale, seg.p1.Y * scale);
-//	cv::Point p2(seg.p2.X * scale, seg.p2.Y * scale);
-//
-//	cv::line(image, p1, p2, cv::Scalar(0, 255, 0), 2);
-//}
+	const int row = model->MaxTime * scale;
+	const int col = model->MaxTime * scale;
+
+	debugImage = cv::Mat(row, col, CV_8UC3, cv::Scalar::all(255));
+
+
+	for (int i = 0; (unsigned)i < regionList.size(); i++){
+		drawSegmet(debugImage, *regionList[i]->leftBoundry, scale);
+		drawSegmet(debugImage, *regionList[i]->rightBoundry, scale);
+		drawSegmet(debugImage, *regionList[i]->lowerBoundry, scale);
+		for (int j = 0; j < regionList[i]->eventSegments->size(); j++)
+			drawSegmet(debugImage, *regionList[i]->eventSegments->at(j)->timeSegment, scale);
+
+		cv::Point p(scale*(regionList[i]->lowerBoundry->p1.X + regionList[i]->lowerBoundry->p2.X)/2,
+			scale*(regionList[i]->lowerBoundry->p1.Y + regionList[i]->lowerBoundry->p2.Y)/2);
+//		char rn[10];
+//		sprintf(rn, "%d", i);
+//		cv::putText(debugImage, std::string(rn), p, cv::FONT_HERSHEY_SIMPLEX, 1, cv::Scalar(0, 0, 255));
+	}
+
+	for (int i = 0; (unsigned)i < dtrmEventList.size(); i++){
+		cv::line(debugImage, cv::Point((dtrmEventList[i]->time/* - gTrEnabledTime*/) * scale, (dtrmEventList[i]->time /* - gTrEnabledTime*/)* scale),
+			cv::Point(col, (dtrmEventList[i]->time /* - gTrEnabledTime*/)* scale), cv::Scalar(0, 255, 0), 1);
+	}
+
+	cv::line(debugImage, cv::Point(0, 0), cv::Point(row, col), cv::Scalar(255, 0, 0), 2);
+
+	cv::Mat flipped;
+	cv::flip(debugImage, flipped, 0);
+	cv::imwrite(filename + ".jpg", flipped);
+
+	//cv::Mat im2show;
+	//cv::resize(diagram, im2show, cv::Size(1000, 1000));
+	//cv::imshow("regions", im2show);
+	//cv::waitKey();
+}
+
+void TimedDiagram::drawSegmet(cv::Mat & image, Segment& seg, const int scale){
+	cv::Point p1(seg.p1.X * scale, seg.p1.Y * scale);
+	cv::Point p2(seg.p2.X * scale, seg.p2.Y * scale);
+
+	cv::line(image, p1, p2, cv::Scalar(0, 255, 0), 1);
+}

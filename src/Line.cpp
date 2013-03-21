@@ -7,6 +7,8 @@
 
 #include "Line.h"
 
+#include <iostream>
+
 Line::Line() {
 	// TODO Auto-generated constructor stub
 
@@ -46,12 +48,19 @@ bool Line::intersect(Line &l, Point& intPoint){
 
 	return true;
 }
+
+bool Line::isUp(Point& p){
+	if (this->a == INF)
+		return (p.X <= X);
+
+	return  ( p.Y - this->getY(p.X) > ZERO_PREC);
+}
 	
 
 Segment::Segment(Point &p1, Point &p2) {
 	this->p1 = p1;
 	this->p2 = p2;
-	if (p1.X - p2.X == 0){
+	if (IS_ZERO(p1.X - p2.X)){
 		a = INF;
 		b = INF;
 	} else{
@@ -85,7 +94,15 @@ Segment& Segment::operator =(const Segment &s){
 }
 
 bool Segment::intersect(Segment &s, Point &intPoint){
-	if (this->a == s.a) return false;
+	if (this->a == s.a){
+		//TODO: [IMPORTANT] here we may have an infinite intersection, if the two segments are lying on each others.
+//		if (IS_ZERO(this->getY(s.p1.X) - s.p1.Y)){
+//			intP
+//			return true;
+//		}
+//		else
+			return false;
+	}
 
 	double x ,y;
 	if (this->a == INF){
@@ -102,6 +119,13 @@ bool Segment::intersect(Segment &s, Point &intPoint){
 	//if (x < p1.X || x > p2.X || x < s.p1.X || x > s.p2.X ||
 	//	y < p1.Y || y > p2.Y || y < s.p1.Y || y > s.p2.Y)
 	//	return false;
+
+	if (s.p1 == this->p1 || s.p1 == this->p2 || s.p2 == this->p1 || s.p2 == this->p2){
+		intPoint.X = x;
+		intPoint.Y = y;
+		return true;
+	}
+
 	if (((s.isUp(this->p1) && !s.isUp(this->p2)) || (!s.isUp(this->p1) && s.isUp(this->p2))) &&
 		((this->isUp(s.p1) && !this->isUp(s.p2)) || (!this->isUp(s.p1) && this->isUp(s.p2))) ){
 		intPoint.X = x;
@@ -112,9 +136,95 @@ bool Segment::intersect(Segment &s, Point &intPoint){
 	return false;
 }
 
+IntersectionStatus Segment::intersect2(Segment& s, Point& intPoint) {
+	if (IS_ZERO(this->a - s.a)){
+		if (IS_ZERO(this->getY(s.p1.X) - s.p1.Y)){
+			return ALL;
+		}
+		else
+			return NO;
+	}
+
+	double x ,y;
+	if (this->a == INF){
+		x = this->p1.X;
+		y = s.getY(x);
+	}else if (s.a == INF){
+		x = s.p1.X;
+		y = this->getY(x);
+	}else{
+		x = -(b - s.b)/(a - s.a);
+		y = s.getY(x);
+	}
+
+	//if (x < p1.X || x > p2.X || x < s.p1.X || x > s.p2.X ||
+	//	y < p1.Y || y > p2.Y || y < s.p1.Y || y > s.p2.Y)
+	//	return false;
+
+	if (s.p1 == this->p1 || s.p1 == this->p2 || s.p2 == this->p1 || s.p2 == this->p2){
+		intPoint.X = x;
+		intPoint.Y = y;
+		return POINT;
+	}
+
+//	if (IS_ZERO(y - this->getY(x)) || IS_ZERO(y - s.getY(x))){
+//		intPoint.X = x;
+//		intPoint.Y = y;
+//		return POINT;
+//	}
+
+	if (((s.isUp(this->p1) && !s.isUp(this->p2)) || (!s.isUp(this->p1) && s.isUp(this->p2))) &&
+		((this->isUp(s.p1) && !this->isUp(s.p2)) || (!this->isUp(s.p1) && this->isUp(s.p2))) ){
+		intPoint.X = x;
+		intPoint.Y = y;
+		return POINT;
+	}
+
+
+
+	return NO;
+
+}
+
+bool Segment::intersect(Line&l, Point &intPoint){
+	if (IS_ZERO(this->a - l.a))
+		return false;
+
+	double x ,y;
+	if (this->a == INF){
+		x = this->p1.X;
+		y = l.getY(x);
+	}else if (l.a == INF){
+		x = l.X;
+		y = this->getY(x);
+	}else{
+		x = -(b - l.b)/(a - l.a);
+		y = l.getY(x);
+	}
+
+	//if (x < p1.X || x > p2.X || x < s.p1.X || x > s.p2.X ||
+	//	y < p1.Y || y > p2.Y || y < s.p1.Y || y > s.p2.Y)
+	//	return false;
+	if (l.isUp(this->p1) && !l.isUp(this->p2) || !l.isUp(this->p1) && l.isUp(this->p2)){
+		intPoint.X = x;
+		intPoint.Y = y;
+		return true;
+	}
+
+	return false;
+}
+
+
 bool Segment::isUp(Point& p){
 	if (this->a == INF)
 		return (p.X <= this->p1.X);
 
-	return  ( p.Y - this->getY(p.X) > ZERO_PREC);
+	return  ( p.Y - this->getY(p.X) >= 0);
 }
+
+void Segment::print() {
+	std::cout << "a:"<< a << "b:" << b <<  " p1:(" << p1.X << "," << p1.Y << ")" << " p2:(" << p2.X << "," << p2.Y << ")" << std::endl;
+}
+
+
+

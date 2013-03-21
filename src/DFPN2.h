@@ -11,7 +11,7 @@
 #define PT_DISCRETE   0
 #define PT_FLUID      1
 
-//#define IS_ZERO
+#define IS_ZERO
 
 typedef struct {
 	int type; // Place type

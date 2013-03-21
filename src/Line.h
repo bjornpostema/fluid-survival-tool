@@ -13,6 +13,8 @@
 
 #define INF +1.0e100
 
+enum IntersectionStatus {NO, ALL, POINT};
+
 struct Point{
 	double X, Y;
 
@@ -31,9 +33,11 @@ class Line {
 public:
 	double a;
 	double b;
+	double X; //in case a = INF, the equation is x=X.
 
 	Line();
-	Line(double _a, double _b) : a(_a), b(_b){};
+	Line(double _a, double _b): a(_a), b(_b) {};
+	Line(double _X): X(_X), a(INF){};
 	virtual ~Line();
 
 	Line & operator =(const Line &l);
@@ -47,8 +51,11 @@ public:
 //	bool operator> (const Line &l);
 
 	double getY(double x);
+	bool isUp(Point& p);
 
-	bool intersect(Line &l, Point& intPoint);
+
+	//TODO: This Function is should be modified for the case of a = INF.
+	virtual bool intersect(Line &l, Point& intPoint);
 
 };
 
@@ -66,7 +73,15 @@ public:
 	Segment& operator =(const Segment &s);
 
 	bool isUp(Point& p);
+
 	bool intersect(Segment &s, Point &intPoint);
+	/*
+	 * intPoint has a value if tow segments has an intersection on only one point.
+	 */
+	IntersectionStatus intersect2(Segment &s, Point &intPoint);
+	bool intersect(Line &l, Point &intPoint);
+
+	void print();
 };
 
 

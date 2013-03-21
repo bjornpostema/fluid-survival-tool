@@ -10,6 +10,7 @@
 #include "Region.h"
 
 Region::Region(std::vector<StochasticEvent*> * eventList, Segment * lowerBoundray) {
+	successors = new std::vector<Region*>();
 	eventSegments = eventList;
 	this->lowerBoundry = lowerBoundray;
 	for (int i = 0; (unsigned)i < eventSegments->size(); i++){
@@ -52,6 +53,41 @@ bool Region::intersect(Segment& s, Point &p1, Point &p2){
 		}
 	}
 	
+	if (leftBoundry->intersect(s, p)){
+		if (intCnt == 0) p1 = p;
+		if (intCnt == 1) p2 = p;
+		intCnt++;
+	}
+
+	if (rightBoundry->intersect(s, p)){
+		if (intCnt == 0) p1 = p;
+		if (intCnt == 1) p2 = p;
+		intCnt++;
+	}
+
+	if (lowerBoundry->intersect(s, p)){
+		if (intCnt == 0) p1 = p;
+		if (intCnt == 1) p2 = p;
+		intCnt++;
+	}
+
+	if (intCnt < 2) return false;
+	else return true;
+}
+
+bool Region::intersect(Line& s, Point &p1, Point &p2){
+	// Our regions are convex so they will have at most 2 intersection points.
+	int intCnt = 0;
+	Point p;
+
+	for (int i = 0; i < eventSegments->size() && intCnt < 2; i++){
+		if (eventSegments->at(i)->timeSegment->intersect(s, p)){
+			if (intCnt == 0) p1 = p;
+			if (intCnt == 1) p2 = p;
+			intCnt++;
+		}
+	}
+
 	if (leftBoundry->intersect(s, p)){
 		if (intCnt == 0) p1 = p;
 		if (intCnt == 1) p2 = p;
