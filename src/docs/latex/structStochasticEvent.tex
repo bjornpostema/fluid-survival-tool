@@ -1,0 +1,75 @@
+\hypertarget{structStochasticEvent}{\section{Stochastic\-Event Struct Reference}
+\label{structStochasticEvent}\index{Stochastic\-Event@{Stochastic\-Event}}
+}
+
+
+{\ttfamily \#include $<$Event.\-h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{structStochasticEvent_a6e3ed7abc6f78772300a5b94d64638c8}{{\bfseries Stochastic\-Event} (\hyperlink{classSegment}{Segment} $\ast$line, Event\-Type type)}\label{structStochasticEvent_a6e3ed7abc6f78772300a5b94d64638c8}
+
+\item 
+\hypertarget{structStochasticEvent_a37f3e2bc477fa20547b21876551450ca}{{\bfseries Stochastic\-Event} (\hyperlink{structStochasticEvent}{Stochastic\-Event} $\ast$se)}\label{structStochasticEvent_a37f3e2bc477fa20547b21876551450ca}
+
+\item 
+\hypertarget{structStochasticEvent_a6e3ed7abc6f78772300a5b94d64638c8}{{\bfseries Stochastic\-Event} (\hyperlink{classSegment}{Segment} $\ast$line, Event\-Type type)}\label{structStochasticEvent_a6e3ed7abc6f78772300a5b94d64638c8}
+
+\item 
+\hypertarget{structStochasticEvent_a37f3e2bc477fa20547b21876551450ca}{{\bfseries Stochastic\-Event} (\hyperlink{structStochasticEvent}{Stochastic\-Event} $\ast$se)}\label{structStochasticEvent_a37f3e2bc477fa20547b21876551450ca}
+
+\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{structStochasticEvent_a3fee00f7e0b02f6fa83191c903f051a8}{static bool {\bfseries greater\-Slope\-First} (\hyperlink{structStochasticEvent}{Stochastic\-Event} $\ast$e1, \hyperlink{structStochasticEvent}{Stochastic\-Event} $\ast$e2)}\label{structStochasticEvent_a3fee00f7e0b02f6fa83191c903f051a8}
+
+\item 
+\hypertarget{structStochasticEvent_a3fee00f7e0b02f6fa83191c903f051a8}{static bool {\bfseries greater\-Slope\-First} (\hyperlink{structStochasticEvent}{Stochastic\-Event} $\ast$e1, \hyperlink{structStochasticEvent}{Stochastic\-Event} $\ast$e2)}\label{structStochasticEvent_a3fee00f7e0b02f6fa83191c903f051a8}
+
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classSegment}{Segment} $\ast$ \hyperlink{structStochasticEvent_a39fc3833721f4066c15044e6772a5435}{time\-Segment}
+\item 
+\hypertarget{structStochasticEvent_a690adfab90bc2fe8652acfa56ac97f5c}{Event\-Type {\bfseries event\-Type}}\label{structStochasticEvent_a690adfab90bc2fe8652acfa56ac97f5c}
+
+\item 
+int \hyperlink{structStochasticEvent_a359f6c7f5e9d624744e35fb187adcc73}{id}
+\item 
+\hyperlink{structMarking}{Marking} $\ast$ \hyperlink{structStochasticEvent_a3179b1980d441007158d7a9c77b8ca1d}{pre\-Region\-Marking}
+\item 
+\hypertarget{structStochasticEvent_a643f0efa415d0d4a9bf435c9b78fa8df}{\hyperlink{classSTDRegion}{S\-T\-D\-Region} $\ast$ {\bfseries pre\-Region}}\label{structStochasticEvent_a643f0efa415d0d4a9bf435c9b78fa8df}
+
+\item 
+\hypertarget{structStochasticEvent_a34eef0f58d7388aae730fc042311826c}{\hyperlink{structDtrmEvent}{Dtrm\-Event} $\ast$ {\bfseries pre\-Dtrm\-Event}}\label{structStochasticEvent_a34eef0f58d7388aae730fc042311826c}
+
+\item 
+\hyperlink{structMarking}{Marking} $\ast$ \hyperlink{structStochasticEvent_a9c694991cdb06b9499b9c4295af4d98b}{post\-Region\-Marking}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Stochastic Event. sd 
+
+\subsection{Member Data Documentation}
+\hypertarget{structStochasticEvent_a359f6c7f5e9d624744e35fb187adcc73}{\index{Stochastic\-Event@{Stochastic\-Event}!id@{id}}
+\index{id@{id}!StochasticEvent@{Stochastic\-Event}}
+\subsubsection[{id}]{\setlength{\rightskip}{0pt plus 5cm}int Stochastic\-Event\-::id}}\label{structStochasticEvent_a359f6c7f5e9d624744e35fb187adcc73}
+\hyperlink{structTransition}{Transition} or place I\-D; \hypertarget{structStochasticEvent_a9c694991cdb06b9499b9c4295af4d98b}{\index{Stochastic\-Event@{Stochastic\-Event}!post\-Region\-Marking@{post\-Region\-Marking}}
+\index{post\-Region\-Marking@{post\-Region\-Marking}!StochasticEvent@{Stochastic\-Event}}
+\subsubsection[{post\-Region\-Marking}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Marking} $\ast$ Stochastic\-Event\-::post\-Region\-Marking}}\label{structStochasticEvent_a9c694991cdb06b9499b9c4295af4d98b}
+marking of region before this event happening. \hypertarget{structStochasticEvent_a3179b1980d441007158d7a9c77b8ca1d}{\index{Stochastic\-Event@{Stochastic\-Event}!pre\-Region\-Marking@{pre\-Region\-Marking}}
+\index{pre\-Region\-Marking@{pre\-Region\-Marking}!StochasticEvent@{Stochastic\-Event}}
+\subsubsection[{pre\-Region\-Marking}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Marking} $\ast$ Stochastic\-Event\-::pre\-Region\-Marking}}\label{structStochasticEvent_a3179b1980d441007158d7a9c77b8ca1d}
+marking of region before this event happening. \hypertarget{structStochasticEvent_a39fc3833721f4066c15044e6772a5435}{\index{Stochastic\-Event@{Stochastic\-Event}!time\-Segment@{time\-Segment}}
+\index{time\-Segment@{time\-Segment}!StochasticEvent@{Stochastic\-Event}}
+\subsubsection[{time\-Segment}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Segment} $\ast$ Stochastic\-Event\-::time\-Segment}}\label{structStochasticEvent_a39fc3833721f4066c15044e6772a5435}
+Describes the equation and the validity s-\/interval of next potential event, dependent on $ s $. 
+
+The documentation for this struct was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+model/Event.\-h\item 
+model/old/Event.\-h\end{DoxyCompactItemize}

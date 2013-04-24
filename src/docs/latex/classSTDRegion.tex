@@ -1,0 +1,55 @@
+\hypertarget{classSTDRegion}{\section{S\-T\-D\-Region Class Reference}
+\label{classSTDRegion}\index{S\-T\-D\-Region@{S\-T\-D\-Region}}
+}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classSTDRegion_a52a3824cb008328519128c2511d3043e}{{\bfseries S\-T\-D\-Region} (std\-::vector$<$ \hyperlink{structStochasticEvent}{Stochastic\-Event} $\ast$ $>$ $\ast$event\-List, \hyperlink{classSegment}{Segment} $\ast$lower\-Boundry)}\label{classSTDRegion_a52a3824cb008328519128c2511d3043e}
+
+\item 
+\hypertarget{classSTDRegion_a23a481692098bea54e19f26f6551ab50}{void {\bfseries print} (std\-::ostream \&out)}\label{classSTDRegion_a23a481692098bea54e19f26f6551ab50}
+
+\item 
+\hypertarget{classSTDRegion_abb64369d5a5fa5b71231c827066111df}{bool {\bfseries intersect} (\hyperlink{classSegment}{Segment} \&s, \hyperlink{structPoint}{Point} \&p1, \hyperlink{structPoint}{Point} \&p2)}\label{classSTDRegion_abb64369d5a5fa5b71231c827066111df}
+
+\item 
+\hypertarget{classSTDRegion_ad45677a054f77585b7087be951630724}{bool {\bfseries intersect} (\hyperlink{classLine}{Line} \&s, \hyperlink{structPoint}{Point} \&p1, \hyperlink{structPoint}{Point} \&p2)}\label{classSTDRegion_ad45677a054f77585b7087be951630724}
+
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classSTDRegion_ad665c33c075285e3f6c44db0fc2b2408}{std\-::vector$<$ \hyperlink{structStochasticEvent}{Stochastic\-Event} $\ast$ $>$ $\ast$ {\bfseries event\-Segments}}\label{classSTDRegion_ad665c33c075285e3f6c44db0fc2b2408}
+
+\item 
+\hypertarget{classSTDRegion_ad30192b606376da2a13c8a6d44d38a62}{std\-::vector$<$ \hyperlink{classSTDRegion}{S\-T\-D\-Region} $\ast$ $>$ $\ast$ {\bfseries successors}}\label{classSTDRegion_ad30192b606376da2a13c8a6d44d38a62}
+
+\item 
+\hypertarget{classSTDRegion_a5699bcbca000b47f0f35d1d2a954482d}{\hyperlink{classSegment}{Segment} $\ast$ {\bfseries lower\-Boundry}}\label{classSTDRegion_a5699bcbca000b47f0f35d1d2a954482d}
+
+\item 
+\hypertarget{classSTDRegion_a69d0da9f23e4dd8f79b2cb3ba40e6283}{\hyperlink{classSegment}{Segment} $\ast$ {\bfseries left\-Boundry}}\label{classSTDRegion_a69d0da9f23e4dd8f79b2cb3ba40e6283}
+
+\item 
+\hypertarget{classSTDRegion_a10de10f63d9fbd07fe057cd71d91d3c0}{\hyperlink{classSegment}{Segment} $\ast$ {\bfseries right\-Boundry}}\label{classSTDRegion_a10de10f63d9fbd07fe057cd71d91d3c0}
+
+\item 
+double \hyperlink{classSTDRegion_a66f6dbac4fc0f9f2b08ac7929ef41295}{time\-Bias}
+\item 
+\hyperlink{structMarking}{Marking} $\ast$ \hyperlink{classSTDRegion_ad5384bd954f03e3bafaf5bb913ca0485}{marking}
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classSTDRegion_ad5384bd954f03e3bafaf5bb913ca0485}{\index{S\-T\-D\-Region@{S\-T\-D\-Region}!marking@{marking}}
+\index{marking@{marking}!STDRegion@{S\-T\-D\-Region}}
+\subsubsection[{marking}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Marking}$\ast$ S\-T\-D\-Region\-::marking}}\label{classSTDRegion_ad5384bd954f03e3bafaf5bb913ca0485}
+This marking indicates the marking exactly after the happening of the event which caused us entering this region. so in order to finding of places marking an advancement according to the specified time is needed. \hypertarget{classSTDRegion_a66f6dbac4fc0f9f2b08ac7929ef41295}{\index{S\-T\-D\-Region@{S\-T\-D\-Region}!time\-Bias@{time\-Bias}}
+\index{time\-Bias@{time\-Bias}!STDRegion@{S\-T\-D\-Region}}
+\subsubsection[{time\-Bias}]{\setlength{\rightskip}{0pt plus 5cm}double S\-T\-D\-Region\-::time\-Bias}}\label{classSTDRegion_a66f6dbac4fc0f9f2b08ac7929ef41295}
+Each region should have a time bias. which means this is belong to which segment of main stochastic and determinestic line. 
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+model/S\-T\-D\-Region.\-h\item 
+model/S\-T\-D\-Region.\-cpp\end{DoxyCompactItemize}

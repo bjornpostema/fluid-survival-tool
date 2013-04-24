@@ -1,0 +1,62 @@
+\hypertarget{structDtrmEvent}{\section{Dtrm\-Event Struct Reference}
+\label{structDtrmEvent}\index{Dtrm\-Event@{Dtrm\-Event}}
+}
+
+
+{\ttfamily \#include $<$Event.\-h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{structDtrmEvent_a9ff83f26140ece31d58b6f9ea33fc0ec}{{\bfseries Dtrm\-Event} (Event\-Type type)}\label{structDtrmEvent_a9ff83f26140ece31d58b6f9ea33fc0ec}
+
+\item 
+\hypertarget{structDtrmEvent_a9ff83f26140ece31d58b6f9ea33fc0ec}{{\bfseries Dtrm\-Event} (Event\-Type type)}\label{structDtrmEvent_a9ff83f26140ece31d58b6f9ea33fc0ec}
+
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{structDtrmEvent_a15d88c4e3e37f6e2f81ea826e4bce5dd}{Event\-Type {\bfseries event\-Type}}\label{structDtrmEvent_a15d88c4e3e37f6e2f81ea826e4bce5dd}
+
+\item 
+int \hyperlink{structDtrmEvent_ab5e19522a82d496b8a66791bce168d81}{id}
+\item 
+double \hyperlink{structDtrmEvent_a23d94e3ab2a80c673f5e42aac1b6ecb0}{time}
+\item 
+\hyperlink{structMarking}{Marking} $\ast$ \hyperlink{structDtrmEvent_acaa9ee345f104aee09a01fe0594eab70}{pre\-Region\-Marking}
+\item 
+\hypertarget{structDtrmEvent_a2fd402a2460e7cc074a3351e82eb40dd}{\hyperlink{structDtrmEvent}{Dtrm\-Event} $\ast$ {\bfseries next\-Dtrm\-Event}}\label{structDtrmEvent_a2fd402a2460e7cc074a3351e82eb40dd}
+
+\item 
+\hypertarget{structDtrmEvent_a5f3587028a3fb59d48df3a343a4b2b45}{std\-::vector$<$ \hyperlink{classSTDRegion}{S\-T\-D\-Region} $\ast$ $>$ $\ast$ {\bfseries next\-Regions}}\label{structDtrmEvent_a5f3587028a3fb59d48df3a343a4b2b45}
+
+\item 
+\hyperlink{structMarking}{Marking} $\ast$ \hyperlink{structDtrmEvent_adb35b6b002efbadbb2c01c36ff9bffb0}{post\-Region\-Marking}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Deterministic Event. 
+
+\subsection{Member Data Documentation}
+\hypertarget{structDtrmEvent_ab5e19522a82d496b8a66791bce168d81}{\index{Dtrm\-Event@{Dtrm\-Event}!id@{id}}
+\index{id@{id}!DtrmEvent@{Dtrm\-Event}}
+\subsubsection[{id}]{\setlength{\rightskip}{0pt plus 5cm}int Dtrm\-Event\-::id}}\label{structDtrmEvent_ab5e19522a82d496b8a66791bce168d81}
+\hyperlink{structTransition}{Transition} or place I\-D; \hypertarget{structDtrmEvent_adb35b6b002efbadbb2c01c36ff9bffb0}{\index{Dtrm\-Event@{Dtrm\-Event}!post\-Region\-Marking@{post\-Region\-Marking}}
+\index{post\-Region\-Marking@{post\-Region\-Marking}!DtrmEvent@{Dtrm\-Event}}
+\subsubsection[{post\-Region\-Marking}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Marking} $\ast$ Dtrm\-Event\-::post\-Region\-Marking}}\label{structDtrmEvent_adb35b6b002efbadbb2c01c36ff9bffb0}
+marking of region before this event happening. \hypertarget{structDtrmEvent_acaa9ee345f104aee09a01fe0594eab70}{\index{Dtrm\-Event@{Dtrm\-Event}!pre\-Region\-Marking@{pre\-Region\-Marking}}
+\index{pre\-Region\-Marking@{pre\-Region\-Marking}!DtrmEvent@{Dtrm\-Event}}
+\subsubsection[{pre\-Region\-Marking}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Marking} $\ast$ Dtrm\-Event\-::pre\-Region\-Marking}}\label{structDtrmEvent_acaa9ee345f104aee09a01fe0594eab70}
+marking of region before this event happening. \hypertarget{structDtrmEvent_a23d94e3ab2a80c673f5e42aac1b6ecb0}{\index{Dtrm\-Event@{Dtrm\-Event}!time@{time}}
+\index{time@{time}!DtrmEvent@{Dtrm\-Event}}
+\subsubsection[{time}]{\setlength{\rightskip}{0pt plus 5cm}double Dtrm\-Event\-::time}}\label{structDtrmEvent_a23d94e3ab2a80c673f5e42aac1b6ecb0}
+Occurrence time.
+
+Occurance time. 
+
+The documentation for this struct was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+model/Event.\-h\item 
+model/old/Event.\-h\end{DoxyCompactItemize}

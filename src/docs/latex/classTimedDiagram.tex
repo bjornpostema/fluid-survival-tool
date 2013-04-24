@@ -1,0 +1,228 @@
+\hypertarget{classTimedDiagram}{\section{Timed\-Diagram Class Reference}
+\label{classTimedDiagram}\index{Timed\-Diagram@{Timed\-Diagram}}
+}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classTimedDiagram_adf699c8fddf11d5357faf2ef29bddd7c}{void {\bfseries set\-Model} (\hyperlink{structModel}{Model} $\ast$model)}\label{classTimedDiagram_adf699c8fddf11d5357faf2ef29bddd7c}
+
+\item 
+\hypertarget{classTimedDiagram_a7055f706b0c2444185e8d5d878626523}{void {\bfseries clear} ()}\label{classTimedDiagram_a7055f706b0c2444185e8d5d878626523}
+
+\item 
+void \hyperlink{classTimedDiagram_a55bc9188cb14b08bc95dde3778579f90}{generate\-Diagram} (\hyperlink{structMarking}{Marking} $\ast$initial\-Marking)
+\item 
+void \hyperlink{classTimedDiagram_aed76b48c2a65ee7ea16a393de058e581}{compute\-Next\-Events} (std\-::vector$<$ \hyperlink{structStochasticEvent}{Stochastic\-Event} $\ast$ $>$ $\ast$potential\-Events, \hyperlink{classSegment}{Segment} $\ast$u\-Segment, std\-::vector$<$ \hyperlink{structStochasticEvent}{Stochastic\-Event} $\ast$ $>$ $\ast$next\-Events)
+\begin{DoxyCompactList}\small\item\em This function takes the minimum of input event lines set, in the t-\/s frame. It returns the sorted resulting segments. T\-O\-D\-O\-: consider multiple events at the same time. \end{DoxyCompactList}\item 
+\hypertarget{classTimedDiagram_a51004d1d8a2ae7d80a089a54ecf93fec}{void {\bfseries Segmentize\-Dtrm\-Region} (\hyperlink{structMarking}{Marking} $\ast$marking)}\label{classTimedDiagram_a51004d1d8a2ae7d80a089a54ecf93fec}
+
+\item 
+void \hyperlink{classTimedDiagram_aa8d8af4ac9f2e51d12b6ae23b8c506c1}{segmentize\-Stochastic\-Region} (\hyperlink{structMarking}{Marking} $\ast$marking, \hyperlink{structStochasticEvent}{Stochastic\-Event} $\ast$event\-Line, double time\-Bias)
+\item 
+double \hyperlink{classTimedDiagram_a45ef38a01bcffd182224747bd2a96041}{cal\-Prob\-At\-Time} (double time, double($\ast$s\-Pdf\-Int)(double), bool($\ast$is\-Prop\-Holds)(\hyperlink{structModel}{Model} $\ast$, \hyperlink{structMarking}{Marking} $\ast$, double t0, double t1, double \&, double \&))
+\item 
+\hypertarget{classTimedDiagram_aa0eafacca33acf296c5bd1219f12fed8}{int {\bfseries get\-Number\-Of\-Regions} ()}\label{classTimedDiagram_aa0eafacca33acf296c5bd1219f12fed8}
+
+\item 
+\hypertarget{classTimedDiagram_adf699c8fddf11d5357faf2ef29bddd7c}{void {\bfseries set\-Model} (\hyperlink{structModel}{Model} $\ast$model)}\label{classTimedDiagram_adf699c8fddf11d5357faf2ef29bddd7c}
+
+\item 
+\hypertarget{classTimedDiagram_a7055f706b0c2444185e8d5d878626523}{void {\bfseries clear} ()}\label{classTimedDiagram_a7055f706b0c2444185e8d5d878626523}
+
+\item 
+\hypertarget{classTimedDiagram_a55bc9188cb14b08bc95dde3778579f90}{void {\bfseries generate\-Diagram} (\hyperlink{structMarking}{Marking} $\ast$initial\-Marking)}\label{classTimedDiagram_a55bc9188cb14b08bc95dde3778579f90}
+
+\item 
+void \hyperlink{classTimedDiagram_aed76b48c2a65ee7ea16a393de058e581}{compute\-Next\-Events} (std\-::vector$<$ \hyperlink{structStochasticEvent}{Stochastic\-Event} $\ast$ $>$ $\ast$potential\-Events, \hyperlink{classSegment}{Segment} $\ast$u\-Segment, std\-::vector$<$ \hyperlink{structStochasticEvent}{Stochastic\-Event} $\ast$ $>$ $\ast$next\-Events)
+\begin{DoxyCompactList}\small\item\em This function takes the minimum of input event lines set, in the t-\/s frame. It returns the sorted resulting segments. T\-O\-D\-O\-: consider multiple events at the same time. \end{DoxyCompactList}\item 
+\hypertarget{classTimedDiagram_a51004d1d8a2ae7d80a089a54ecf93fec}{void {\bfseries Segmentize\-Dtrm\-Region} (\hyperlink{structMarking}{Marking} $\ast$marking)}\label{classTimedDiagram_a51004d1d8a2ae7d80a089a54ecf93fec}
+
+\item 
+void \hyperlink{classTimedDiagram_aa8d8af4ac9f2e51d12b6ae23b8c506c1}{segmentize\-Stochastic\-Region} (\hyperlink{structMarking}{Marking} $\ast$marking, \hyperlink{structStochasticEvent}{Stochastic\-Event} $\ast$event\-Line, double time\-Bias)
+\item 
+double \hyperlink{classTimedDiagram_a45ef38a01bcffd182224747bd2a96041}{cal\-Prob\-At\-Time} (double time, double($\ast$s\-Pdf\-Int)(double), bool($\ast$is\-Prop\-Holds)(\hyperlink{structModel}{Model} $\ast$, \hyperlink{structMarking}{Marking} $\ast$, double t0, double t1, double \&, double \&))
+\item 
+\hypertarget{classTimedDiagram_a070d39903157613803111d696f54a7d0}{void {\bfseries save\-Diagram} (std\-::string filename)}\label{classTimedDiagram_a070d39903157613803111d696f54a7d0}
+
+\item 
+\hypertarget{classTimedDiagram_a5fadc1d768a55ee74864ee05dc1c7c23}{double {\bfseries get\-Tr\-Enabled\-Time} () const }\label{classTimedDiagram_a5fadc1d768a55ee74864ee05dc1c7c23}
+
+\item 
+\hypertarget{classTimedDiagram_aa0eafacca33acf296c5bd1219f12fed8}{int {\bfseries get\-Number\-Of\-Regions} ()}\label{classTimedDiagram_aa0eafacca33acf296c5bd1219f12fed8}
+
+\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classTimedDiagram_a9003646431725e6901bf7eacfd2a3775}{static \hyperlink{classTimedDiagram}{Timed\-Diagram} $\ast$ {\bfseries get\-Instance} ()}\label{classTimedDiagram_a9003646431725e6901bf7eacfd2a3775}
+
+\item 
+\hypertarget{classTimedDiagram_a45a59b6448eae518ed352328cd703ee3}{static \hyperlink{classTimedDiagram}{Timed\-Diagram} $\ast$ {\bfseries get\-Instance} ()}\label{classTimedDiagram_a45a59b6448eae518ed352328cd703ee3}
+
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classTimedDiagram_ad7f4b0079de06896c5e17f59c4fd9a67}{\hyperlink{structModel}{Model} $\ast$ {\bfseries model}}\label{classTimedDiagram_ad7f4b0079de06896c5e17f59c4fd9a67}
+
+\item 
+std\-::vector$<$ \hyperlink{classSTDRegion}{S\-T\-D\-Region} $\ast$ $>$ \hyperlink{classTimedDiagram_a78e0edbe8a03e71f0d229891ef4abe11}{region\-List}
+\item 
+\hypertarget{classTimedDiagram_a8b56e04641a67753c7a9ef544cab634e}{cv\-::\-Mat {\bfseries debug\-Image}}\label{classTimedDiagram_a8b56e04641a67753c7a9ef544cab634e}
+
+\item 
+\hypertarget{classTimedDiagram_ae0fdae2d323f9d062946805d7de78a99}{int {\bfseries scale}}\label{classTimedDiagram_ae0fdae2d323f9d062946805d7de78a99}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classTimedDiagram_a45ef38a01bcffd182224747bd2a96041}{\index{Timed\-Diagram@{Timed\-Diagram}!cal\-Prob\-At\-Time@{cal\-Prob\-At\-Time}}
+\index{cal\-Prob\-At\-Time@{cal\-Prob\-At\-Time}!TimedDiagram@{Timed\-Diagram}}
+\subsubsection[{cal\-Prob\-At\-Time}]{\setlength{\rightskip}{0pt plus 5cm}double Timed\-Diagram\-::cal\-Prob\-At\-Time (
+\begin{DoxyParamCaption}
+\item[{double}]{time, }
+\item[{double($\ast$)(double)}]{s\-Pdf\-Int, }
+\item[{bool($\ast$)({\bf Model} $\ast$, {\bf Marking} $\ast$, double t0, double t1, double \&, double \&)}]{is\-Prop\-Holds}
+\end{DoxyParamCaption}
+)}}\label{classTimedDiagram_a45ef38a01bcffd182224747bd2a96041}
+
+\begin{DoxyParams}{Parameters}
+{\em time} & The time for which probability calculation is being done. \\
+\hline
+{\em s\-Pdf\-Int} & Pointer to the integral pdf of s. \\
+\hline
+{\em is\-Prop\-Holds} & Pointer to the function which determines whether a spesific property for a marking holds. This function returns the interval that the property holds. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The probabilty that the given property holds for a given time. 
+\end{DoxyReturn}
+\hypertarget{classTimedDiagram_a45ef38a01bcffd182224747bd2a96041}{\index{Timed\-Diagram@{Timed\-Diagram}!cal\-Prob\-At\-Time@{cal\-Prob\-At\-Time}}
+\index{cal\-Prob\-At\-Time@{cal\-Prob\-At\-Time}!TimedDiagram@{Timed\-Diagram}}
+\subsubsection[{cal\-Prob\-At\-Time}]{\setlength{\rightskip}{0pt plus 5cm}double Timed\-Diagram\-::cal\-Prob\-At\-Time (
+\begin{DoxyParamCaption}
+\item[{double}]{time, }
+\item[{double($\ast$)(double)}]{s\-Pdf\-Int, }
+\item[{bool($\ast$)({\bf Model} $\ast$, {\bf Marking} $\ast$, double t0, double t1, double \&, double \&)}]{is\-Prop\-Holds}
+\end{DoxyParamCaption}
+)}}\label{classTimedDiagram_a45ef38a01bcffd182224747bd2a96041}
+
+\begin{DoxyParams}{Parameters}
+{\em time} & The time for which probability calculation is being done. \\
+\hline
+{\em s\-Pdf\-Int} & Pointer to the integral pdf of s. \\
+\hline
+{\em is\-Prop\-Holds} & Pointer to the function which determines whether a spesific property for a marking holds. This function returns the interval that the property holds. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The probabilty that the given property holds for a given time. 
+\end{DoxyReturn}
+\hypertarget{classTimedDiagram_aed76b48c2a65ee7ea16a393de058e581}{\index{Timed\-Diagram@{Timed\-Diagram}!compute\-Next\-Events@{compute\-Next\-Events}}
+\index{compute\-Next\-Events@{compute\-Next\-Events}!TimedDiagram@{Timed\-Diagram}}
+\subsubsection[{compute\-Next\-Events}]{\setlength{\rightskip}{0pt plus 5cm}void Timed\-Diagram\-::compute\-Next\-Events (
+\begin{DoxyParamCaption}
+\item[{std\-::vector$<$ {\bf Stochastic\-Event} $\ast$ $>$ $\ast$}]{potential\-Events, }
+\item[{{\bf Segment} $\ast$}]{u\-Segment, }
+\item[{std\-::vector$<$ {\bf Stochastic\-Event} $\ast$ $>$ $\ast$}]{next\-Events}
+\end{DoxyParamCaption}
+)}}\label{classTimedDiagram_aed76b48c2a65ee7ea16a393de058e581}
+
+
+This function takes the minimum of input event lines set, in the t-\/s frame. It returns the sorted resulting segments. T\-O\-D\-O\-: consider multiple events at the same time. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em potential\-Events} & List of possible next events. \\
+\hline
+{\em u\-Segment} & underlying segment. \\
+\hline
+{\em start} & Beginning of working interval. \\
+\hline
+{\em end} & End of working interval. \\
+\hline
+{\em next\-Events} & List computed next events, depending on the value of $ s$. \textbackslash{} Have in mind this list is sorted by the value of $ s$. This means that the first element of the list is the one happening by lower value of $ s$ \\
+\hline
+\end{DoxyParams}
+\hypertarget{classTimedDiagram_aed76b48c2a65ee7ea16a393de058e581}{\index{Timed\-Diagram@{Timed\-Diagram}!compute\-Next\-Events@{compute\-Next\-Events}}
+\index{compute\-Next\-Events@{compute\-Next\-Events}!TimedDiagram@{Timed\-Diagram}}
+\subsubsection[{compute\-Next\-Events}]{\setlength{\rightskip}{0pt plus 5cm}void Timed\-Diagram\-::compute\-Next\-Events (
+\begin{DoxyParamCaption}
+\item[{std\-::vector$<$ {\bf Stochastic\-Event} $\ast$ $>$ $\ast$}]{potential\-Events, }
+\item[{{\bf Segment} $\ast$}]{u\-Segment, }
+\item[{std\-::vector$<$ {\bf Stochastic\-Event} $\ast$ $>$ $\ast$}]{next\-Events}
+\end{DoxyParamCaption}
+)}}\label{classTimedDiagram_aed76b48c2a65ee7ea16a393de058e581}
+
+
+This function takes the minimum of input event lines set, in the t-\/s frame. It returns the sorted resulting segments. T\-O\-D\-O\-: consider multiple events at the same time. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em potential\-Events} & List of possible next events. \\
+\hline
+{\em u\-Segment} & underlying segment. \\
+\hline
+{\em start} & Beginning of working interval. \\
+\hline
+{\em end} & End of working interval. \\
+\hline
+{\em next\-Events} & List computed next events, depending on the value of $ s$. \textbackslash{} Have in mind this list is sorted by the value of $ s$. This means that the first element of the list is the one happening by lower value of $ s$ \\
+\hline
+\end{DoxyParams}
+\hypertarget{classTimedDiagram_a55bc9188cb14b08bc95dde3778579f90}{\index{Timed\-Diagram@{Timed\-Diagram}!generate\-Diagram@{generate\-Diagram}}
+\index{generate\-Diagram@{generate\-Diagram}!TimedDiagram@{Timed\-Diagram}}
+\subsubsection[{generate\-Diagram}]{\setlength{\rightskip}{0pt plus 5cm}void Timed\-Diagram\-::generate\-Diagram (
+\begin{DoxyParamCaption}
+\item[{{\bf Marking} $\ast$}]{initial\-Marking}
+\end{DoxyParamCaption}
+)}}\label{classTimedDiagram_a55bc9188cb14b08bc95dde3778579f90}
+Generating the stochastic (top of $ t = s $ line) part of diagram.
+
+The reason for (-\/ start\-Point.\-Y) is that we should shift the time to the frame with origin at (start\-Point.\-Y, start\-Point.\-Y). (This is how the algorithm is designed, there are other ways too!!)\hypertarget{classTimedDiagram_aa8d8af4ac9f2e51d12b6ae23b8c506c1}{\index{Timed\-Diagram@{Timed\-Diagram}!segmentize\-Stochastic\-Region@{segmentize\-Stochastic\-Region}}
+\index{segmentize\-Stochastic\-Region@{segmentize\-Stochastic\-Region}!TimedDiagram@{Timed\-Diagram}}
+\subsubsection[{segmentize\-Stochastic\-Region}]{\setlength{\rightskip}{0pt plus 5cm}void Timed\-Diagram\-::segmentize\-Stochastic\-Region (
+\begin{DoxyParamCaption}
+\item[{{\bf Marking} $\ast$}]{marking, }
+\item[{{\bf Stochastic\-Event} $\ast$}]{event\-Line, }
+\item[{double}]{time\-Bias}
+\end{DoxyParamCaption}
+)}}\label{classTimedDiagram_aa8d8af4ac9f2e51d12b6ae23b8c506c1}
+
+\begin{DoxyParams}{Parameters}
+{\em marking} & Current marking of the system. \\
+\hline
+{\em event\-Line} & This is the equation of the lower boundary of region we wish to segmentize. \textbackslash{} Have in mind that this is a segment so it has the validity interval in itself.\\
+\hline
+\end{DoxyParams}
+Each (potential) region to be segmentized at first consists of starting and ending for 's' (like the previous intervals), and an event line, which specifies the equation for $t$ (the time after which the event has occurred) depending on $s$. This function recursively segmentize such regions, by finding linear equations of all the possible next events. Note 1 \-: It is assumed that this function is called only for the upper part of st-\/diagram (when the general transition is fired.) Note 2 \-: Remember that initial marking for this function to start should be such that general transition is fired. \hypertarget{classTimedDiagram_aa8d8af4ac9f2e51d12b6ae23b8c506c1}{\index{Timed\-Diagram@{Timed\-Diagram}!segmentize\-Stochastic\-Region@{segmentize\-Stochastic\-Region}}
+\index{segmentize\-Stochastic\-Region@{segmentize\-Stochastic\-Region}!TimedDiagram@{Timed\-Diagram}}
+\subsubsection[{segmentize\-Stochastic\-Region}]{\setlength{\rightskip}{0pt plus 5cm}void Timed\-Diagram\-::segmentize\-Stochastic\-Region (
+\begin{DoxyParamCaption}
+\item[{{\bf Marking} $\ast$}]{marking, }
+\item[{{\bf Stochastic\-Event} $\ast$}]{event\-Line, }
+\item[{double}]{time\-Bias}
+\end{DoxyParamCaption}
+)}}\label{classTimedDiagram_aa8d8af4ac9f2e51d12b6ae23b8c506c1}
+
+\begin{DoxyParams}{Parameters}
+{\em marking} & Current marking of the system. \\
+\hline
+{\em event\-Line} & This is the equation of the lower boundary of region we wish to segmentize. We expect this event to contain its parent region.\textbackslash{} Have in mind that this is a segment so it has the validity interval in itself.\\
+\hline
+\end{DoxyParams}
+Each (potential) region to be segmentized at first consists of starting and ending for 's' (like the previous intervals), and an event line, which specifies the equation for $t$ (the time after which the event has occurred) depending on $s$. This function recursively segmentize such regions, by finding linear equations of all the possible next events. Note 1 \-: It is assumed that this function is called only for the upper part of st-\/diagram (when the general transition is fired.) Note 2 \-: Remember that initial marking for this function to start should be such that general transition is fired. 
+
+\subsection{Member Data Documentation}
+\hypertarget{classTimedDiagram_a78e0edbe8a03e71f0d229891ef4abe11}{\index{Timed\-Diagram@{Timed\-Diagram}!region\-List@{region\-List}}
+\index{region\-List@{region\-List}!TimedDiagram@{Timed\-Diagram}}
+\subsubsection[{region\-List}]{\setlength{\rightskip}{0pt plus 5cm}std\-::vector$<${\bf S\-T\-D\-Region}$\ast$$>$ Timed\-Diagram\-::region\-List}}\label{classTimedDiagram_a78e0edbe8a03e71f0d229891ef4abe11}
+This vector contains list of region after firing of general transition, i.\-e. at the top of ts-\/line. 
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+model/old/Timed\-Diagram.\-h\item 
+model/Timed\-Diagram.\-h\item 
+model/old/Timed\-Diagram.\-cpp\item 
+model/Timed\-Diagram.\-cpp\end{DoxyCompactItemize}
