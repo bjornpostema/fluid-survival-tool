@@ -55,7 +55,6 @@ void TimedDiagram::generateDiagram(Marking* initialMarking) {
 	//TODO: consider the marking after the last dtrEvent.
 	double prePoint = 0;
 	gTrEnabledTime = 0;
-
 	for (int j = 0; (unsigned)j < dtrmEventList.size() - 1; j++){
 		std::cout << dtrmEventList[j]->time << std::endl;
 	}
@@ -63,8 +62,8 @@ void TimedDiagram::generateDiagram(Marking* initialMarking) {
 	for (int j = 0; (unsigned)j < dtrmEventList.size() - 1; j++){
 
 		if (!isGTransitionEnabled(model, dtrmEventList[j]->postRegionMarking)){
-			prePoint = dtrmEventList[j]->nextDtrmEvent->time;
-			gTrEnabledTime = dtrmEventList[j]->nextDtrmEvent->time;
+            prePoint = dtrmEventList[j]->nextDtrmEvent->time;
+            gTrEnabledTime = dtrmEventList[j]->nextDtrmEvent->time;
 			continue;
 		}
 
@@ -74,9 +73,9 @@ void TimedDiagram::generateDiagram(Marking* initialMarking) {
 			continue;
 
 		//moving to the frame with origin at (gTrEnabledTime, gTrEnabledTime)
-		Point startPoint(prePoint /*- gTrEnabledTime*/, prePoint /*- gTrEnabledTime*/);	//******//
-		Point endPoint(dtrmEventList[j]->nextDtrmEvent->time /*- gTrEnabledTime*/, dtrmEventList[j]->nextDtrmEvent->time /*- gTrEnabledTime*/);
-		Marking* gtFiredMarking = copyMarking(model, dtrmEventList[j]->postRegionMarking);
+        Point startPoint(prePoint - gTrEnabledTime, prePoint - gTrEnabledTime);	//******//
+        Point endPoint(dtrmEventList[j]->nextDtrmEvent->time - gTrEnabledTime, dtrmEventList[j]->nextDtrmEvent->time - gTrEnabledTime);
+        Marking* gtFiredMarking = copyMarking(model, dtrmEventList[j]->postRegionMarking);
 
 		checkEnabled(model, gtFiredMarking);
 		setActFluidRate(model, gtFiredMarking, 0);
@@ -89,21 +88,24 @@ void TimedDiagram::generateDiagram(Marking* initialMarking) {
 		//TODO [IMPORTANT]: check whether the g-transition is enabled.
 		fireGeneralTransition(model, gtFiredMarking);
 
-		Segment* tsLine = new Segment(startPoint, endPoint);
+        Segment* tsLine = new Segment(startPoint, endPoint);
 		StochasticEvent* initEvent = new StochasticEvent(tsLine, TRANSITION);
 		initEvent->id = gTransitionId(model);
 		initEvent->preRegionMarking = dtrmEventList[j]->postRegionMarking;
-		initEvent->preDtrmEvent = dtrmEventList[j];
+        initEvent->preDtrmEvent = dtrmEventList[j];
 		segmentizeStochasticRegion(gtFiredMarking, initEvent, prePoint);
 
-		prePoint = dtrmEventList[j]->nextDtrmEvent->time;
+        prePoint = dtrmEventList[j]->nextDtrmEvent->time;
 	}
 
 	//std::ofstream regionfile("regions.out");
 
 	//for (int j = 0; j < dtrmEventList.size(); j++){
 	//	regionfile << "dtrm region(" << j << "): " << std::endl;
-	//	regionfile << "time: " << dtrmEventList[j]->time << "-type: " << dtrmEventList[j]->eventType << "-id: " << dtrmEventList[j]->id << std::endl;
+    //	regionfile << "time: " << dtrmEve                   //std::cout << sPdfInt(s1, fv) << "-" << sPdfInt(s2, fv) << std::endl;
+    //                    std::cout << sPdfInt(s1, fv) << "-" << sPdfInt(s2, fv) << " ";
+    //                    std::cout << fabs(sPdfInt(s1, fv) - sPdfInt(s2, fv)) << " ";
+    //                    std::cout << "prob" << prob << std::endl;ntList[j]->time << "-type: " << dtrmEventList[j]->eventType << "-id: " << dtrmEventList[j]->id << std::endl;
 	//}
 
 	//regionfile << "-------------------------------------------------" << std::endl;
@@ -134,16 +136,16 @@ void TimedDiagram::SegmentizeDtrmRegion(Marking* initialMarking){
 	EventType firstEventType;
 
 	double *clock0, *fluid0, *drift;
-	DtrmEvent* crntEvent = 0;
-	DtrmEvent* preEvent = 0;
+    DtrmEvent* crntEvent = 0;
+    DtrmEvent* preEvent = 0;
 
-	crntEvent = new DtrmEvent(FIRST_NULL_EVENT);
-	crntEvent->time = 0;
-	crntEvent->id = -1;
-	crntEvent->preRegionMarking = marking;
-	crntEvent->postRegionMarking = marking;
-	dtrmEventList.push_back(crntEvent);
-	preEvent = crntEvent;
+    crntEvent = new DtrmEvent(FIRST_NULL_EVENT);
+    crntEvent->time = 0;
+    crntEvent->id = -1;
+    crntEvent->preRegionMarking = marking;
+    crntEvent->postRegionMarking = marking;
+    dtrmEventList.push_back(crntEvent);
+    preEvent = crntEvent;
 
 	while (crntTime < model->MaxTime){
 
@@ -224,15 +226,15 @@ void TimedDiagram::SegmentizeDtrmRegion(Marking* initialMarking){
 
 		//if there is no event before max time reached, we are done.
 		if (crntTime + firstT > model->MaxTime){
-			crntEvent = new DtrmEvent(MAX_TIME_REACHED);
+            crntEvent = new DtrmEvent(MAX_TIME_REACHED);
 			crntEvent->time = model->MaxTime;
 			crntEvent->id = -1;
 			crntEvent->preRegionMarking = marking;
 			crntEvent->postRegionMarking = NULL;
-			dtrmEventList.push_back(crntEvent);
-			if (preEvent != NULL)
-				preEvent->nextDtrmEvent = crntEvent;
-			crntEvent->nextDtrmEvent = 0;
+            dtrmEventList.push_back(crntEvent);
+            if (preEvent != NULL)
+                preEvent->nextDtrmEvent = crntEvent;
+            crntEvent->nextDtrmEvent = 0;
 
 			break;
 		}
@@ -244,21 +246,22 @@ void TimedDiagram::SegmentizeDtrmRegion(Marking* initialMarking){
 		if (firstEventType == TRANSITION)
 			fireTransition(model, marking, firstEventID);
 
-		crntEvent= new DtrmEvent(firstEventType);
+        crntEvent= new DtrmEvent(firstEventType);
 		crntEvent->time = crntTime;
 		crntEvent->id = firstEventID;
 		crntEvent->preRegionMarking = preMarking;
 		crntEvent->postRegionMarking = marking;
 		dtrmEventList.push_back(crntEvent);
-		if (preEvent != NULL)
-			preEvent->nextDtrmEvent = crntEvent;
-		preEvent = crntEvent;
+        if (preEvent != NULL)
+            preEvent->nextDtrmEvent = crntEvent;
+        preEvent = crntEvent;
 	}
 }
 void TimedDiagram::segmentizeStochasticRegion(Marking* marking, StochasticEvent* eventSeg, double timeBias) {
 
 
 	Segment* eventLine = eventSeg->timeSegment;
+    std::cout << "P2 : " << eventLine->p2.X << " P1: "<< eventLine->p1.X << std::endl;
 	if (eventLine->p2.Y > model->MaxTime || eventLine->p2.X > model->MaxTime) {
 		std::cout << ("\n Maximum time reached") << std::endl;
 		return;
@@ -349,7 +352,7 @@ void TimedDiagram::segmentizeStochasticRegion(Marking* marking, StochasticEvent*
 			StochasticEvent* detTransEvent = new StochasticEvent(detTransSeg, TRANSITION);
 			detTransEvent->id = enabledTransitionCache[i];
 			detTransEvent->preRegionMarking = marking;
-			detTransSeg->print();
+            detTransSeg->print();
 			potentialEvents->push_back(detTransEvent);
 
 		}
@@ -405,8 +408,8 @@ void TimedDiagram::segmentizeStochasticRegion(Marking* marking, StochasticEvent*
 					placeSeg = new Segment(eventLine->a + a / std::abs(d),
 						b / std::abs(d) + eventLine->b,
 						//+ gTrEnabledTime*(1- eventLine->a - a /abs(d))/*+ timeBias*/,
-						start, end);
-					placeSeg->print();
+                        start, end);
+                    placeSeg->print();
 					placeEvent->eventType = PLACE_LOWER_BOUNDRY;
 				}
 
@@ -428,7 +431,7 @@ void TimedDiagram::segmentizeStochasticRegion(Marking* marking, StochasticEvent*
 
 		if (cntFirst > 0) { // if there is at least an event that can happen
 
-			eventLine->print();
+            eventLine->print();
 			std::vector<StochasticEvent*> *nextEvents = new std::vector<StochasticEvent*>();
 			computeNextEvents(potentialEvents, eventLine, nextEvents);
 
@@ -441,7 +444,7 @@ void TimedDiagram::segmentizeStochasticRegion(Marking* marking, StochasticEvent*
 
 			//regionList.push_back(region);
 
-			createAddRegions(nextEvents, eventSeg, marking);
+            createAddRegions(nextEvents, eventSeg, marking);
 
 
             for (int i = 0; (unsigned)i < nextEvents->size(); i++) {
@@ -483,10 +486,10 @@ void TimedDiagram::segmentizeStochasticRegion(Marking* marking, StochasticEvent*
 			region->marking = marking;
 			region->timeBias = timeBias;
 
-			if (eventSeg->preRegion != 0)
-				eventSeg->preRegion->successors->push_back(region);
-			else //if we have entered from the deterministic are to this new region.
-				eventSeg->preDtrmEvent->nextRegions->push_back(region);
+            if (eventSeg->preRegion != 0)
+                eventSeg->preRegion->successors->push_back(region);
+            else //if we have entered from the deterministic are to this new region.
+                eventSeg->preDtrmEvent->nextRegions->push_back(region);
 
 			regionList.push_back(region);
 		}
@@ -506,12 +509,12 @@ void TimedDiagram::computeNextEvents(std::vector<StochasticEvent*> * potentialEv
 void TimedDiagram::minLines(std::vector<StochasticEvent*> * potentialEvents, Segment *uSegment, std::vector<StochasticEvent*> * nextEvents){
 
 	double start = uSegment->p1.X;
-	double end = uSegment->p2.X;
+    double end = uSegment->p2.X;
 
 	double minStart = INF;
 	int minIndex;
     for (int i = 0; (unsigned)i < potentialEvents->size(); i++) {
-		std::cout << "a: " << potentialEvents->at(i)->timeSegment->a << std::endl;
+        std::cout << "a: " << potentialEvents->at(i)->timeSegment->a << std::endl;
 		if (potentialEvents->at(i)->timeSegment->getY(start) < minStart) {
 			minStart = potentialEvents->at(i)->timeSegment->getY(start);
 			minIndex = i;
@@ -547,23 +550,23 @@ void TimedDiagram::minLines(std::vector<StochasticEvent*> * potentialEvents, Seg
 
 		nextEvents->push_back(sEvent);
 
-		std::cout << "minIndex:"  << minIndex << std::endl;
-		std::cout << "crntIndex:" << crntIndex << std::endl;
-		std::cout << "potentialEvents->size():" << potentialEvents->size()<< std::endl;
-		uSegment->print();
+        std::cout << "minIndex:"  << minIndex << std::endl;
+        std::cout << "crntIndex:" << crntIndex << std::endl;
+        std::cout << "potentialEvents->size():" << potentialEvents->size()<< std::endl;
+        uSegment->print();
 		//if there is no intersection we are done.
 		if (crntIndex == nextIndex) {
 			Point uPoint;
 
 			//if we have an intersection with the underlying segment, we should consider it.
-			potentialEvents->at(crntIndex)->timeSegment->print();
+            potentialEvents->at(crntIndex)->timeSegment->print();
 			if (potentialEvents->at(crntIndex)->timeSegment->intersect(*uSegment, uPoint) && uPoint != uSegment->p2 && uPoint != uSegment->p1){
 				nextEvents->back()->timeSegment->p2 = uPoint;
 				uSegment->p1 = uPoint;
 				potentialEvents->erase(potentialEvents->begin() + crntIndex);
 				//I think potentialEvents->at(crntIndex) should be omitted.
-				uSegment->print();
-				std::cout << "potentialEvents->size():" << potentialEvents->size()<< std::endl;
+                uSegment->print();
+                std::cout << "potentialEvents->size():" << potentialEvents->size()<< std::endl;
 				minLines(potentialEvents, uSegment, nextEvents);
 			}
 
@@ -578,7 +581,7 @@ void TimedDiagram::minLines(std::vector<StochasticEvent*> * potentialEvents, Seg
 void TimedDiagram::createAddRegions(std::vector<StochasticEvent*> * eventList, StochasticEvent * preEvent, Marking* marking){
 	int index1 = 0; 
 	int index2 = 0;
-	Segment* lowerBoundray = preEvent->timeSegment;
+    Segment* lowerBoundray = preEvent->timeSegment;
 	Point p1 = lowerBoundray->p1;
 	Point p2 = lowerBoundray->p2;
 	for (int i = 0; (unsigned)i < eventList->size(); i++){
@@ -601,10 +604,10 @@ void TimedDiagram::createAddRegions(std::vector<StochasticEvent*> * eventList, S
 			regionList.push_back(region);
 
 			//if we have entered from an stochastic region to this new region.
-			if (preEvent->preRegion != 0)
-				preEvent->preRegion->successors->push_back(region);
-			else //if we have entered from the deterministic are to this new region.
-				preEvent->preDtrmEvent->nextRegions->push_back(region);
+            if (preEvent->preRegion != 0)
+                preEvent->preRegion->successors->push_back(region);
+            else //if we have entered from the deterministic are to this new region.
+                preEvent->preDtrmEvent->nextRegions->push_back(region);
 
 			for (int j = index1; j <= index2; j++)
 				eventList->at(j)->preRegion = region;
@@ -615,10 +618,10 @@ void TimedDiagram::createAddRegions(std::vector<StochasticEvent*> * eventList, S
 	}
 }
 
-double TimedDiagram::calProbAtTime(double time, double (*sPdfInt)(double, FunctionVars*), bool (*isPropHolds)(Model*, Marking*, double t0, double t1, double& , double&, FunctionVars*), FunctionVars* fv){
+double TimedDiagram::calProbAtTime(double time, double (*sPdfInt)(double), bool (*isPropHolds)(Model*, Marking*, double t0, double t1, double& , double&, unsigned int _pIndex, double _amount), unsigned int _pIndex, double _amount){
 	//TODO: by sorting region in more genuine way this function could be more effecient.
 
-	double s1, s2;
+    double s1, s2;
 	double prob = 0;
 	Point p1, p2;
 	
@@ -638,12 +641,16 @@ double TimedDiagram::calProbAtTime(double time, double (*sPdfInt)(double, Functi
 				s1 = p1.X; s2 = p2.X;
 				double t0 = sFrameTime - regionList[i]->lowerBoundry->b /*- regionList[i]->timeBias*/;
 				double t1 = - regionList[i]->lowerBoundry->a;
-                if (isPropHolds(model, regionList[i]->marking, t0, t1, s1, s2, fv)){
-                    prob += fabs(sPdfInt(s1, fv) - sPdfInt(s2, fv));
+                if (isPropHolds(model, regionList[i]->marking, t0, t1, s1, s2, _pIndex, _amount)){
+                    //if (s1 != 0 && s2 != 0) {
+//                    std::cout << "stochastic -" << " time: " << time <<" s1: " << s1 << " s2: " << s2 << " ";
+//                    std::cout << prob+sPdfInt(s2, fv) - sPdfInt(s1, fv) << " = " << prob << "+" << sPdfInt(s1,fv) << "-" << sPdfInt(s2,fv) << " = " << sPdfInt(s2, fv) - sPdfInt(s1, fv) << std::endl;
+                    prob += sPdfInt(s2) - sPdfInt(s1);
                     //std::cout << sPdfInt(s1, fv) << "-" << sPdfInt(s2, fv) << std::endl;
 //                    std::cout << sPdfInt(s1, fv) << "-" << sPdfInt(s2, fv) << " ";
 //                    std::cout << fabs(sPdfInt(s1, fv) - sPdfInt(s2, fv)) << " ";
-//                    std::cout << "prob" << prob << std::endl;
+                    //std::cout << "prob" << prob << std::endl;
+                    //}
 				}
 			}
 		}
@@ -653,15 +660,20 @@ double TimedDiagram::calProbAtTime(double time, double (*sPdfInt)(double, Functi
 	int cc;
 	for (cc = 0; (unsigned)cc < dtrmEventList.size() && time > dtrmEventList[cc]->time ; cc++);
 	s1 = time > gTrEnabledTime ? time : 0;
-	s2 = model->MaxTime;
-	double t;
+    s2 = INFINITY; //model->MaxTime; // THIS SEEMS WRONG. THIS SHOULD BE INFINITY TO INTEGRATE OVER.
+//    std::cout << "deterministic -" << " time: " << time << " s1: " << s1 << " s2: " << s2 << " ";
+//    std::cout << prob + sPdfInt(time > gTrEnabledTime ? s2 - gTrEnabledTime : s2, fv) - sPdfInt(time > gTrEnabledTime ? s1 - gTrEnabledTime : s1, fv) << " = " << prob << " + " << sPdfInt(time > gTrEnabledTime ? s1 - gTrEnabledTime : s1,fv) << "-" << sPdfInt(time > gTrEnabledTime ? s2 - gTrEnabledTime : s2,fv) << " = " << sPdfInt(time > gTrEnabledTime ? s2 - gTrEnabledTime : s2, fv) - sPdfInt(time > gTrEnabledTime ? s1 - gTrEnabledTime : s1, fv) << std::endl;
+
+    double t;
 	if (cc == 0)
 		t = time;
 	else 
 		t = time - dtrmEventList[cc - 1]->time;
-    if (isPropHolds(model, dtrmEventList[cc]->preRegionMarking, t , 0, s1, s2, fv))
-        prob += fabs(sPdfInt(time > gTrEnabledTime ? s1 - gTrEnabledTime : s1, fv) - sPdfInt(time > gTrEnabledTime ? s2 - gTrEnabledTime : s2, fv));
-
+    if (isPropHolds(model, dtrmEventList[cc]->preRegionMarking, t , 0, s1, s2, _pIndex, _amount)) {
+        //if (s1 != 0 && s2 != 0) {
+            prob += sPdfInt(time > gTrEnabledTime ? s2 - gTrEnabledTime : s2) - sPdfInt(time > gTrEnabledTime ? s1 - gTrEnabledTime : s1);
+        //}
+    }
 
 	return prob;
 }

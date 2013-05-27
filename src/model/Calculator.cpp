@@ -39,7 +39,7 @@ Calculator::~Calculator()
 bool Calculator::setPlace(QString rawPlaceName) {
     if (!rawPlaceName.isEmpty()) {
         placeName = rawPlaceName;
-        guic->addText(QString("Place name is set to: ").append(placeName));
+        guic->addText(QString("Place name is set to: ").append(placeName).toStdString());
         return true;
     } else {
         guic->addText("Place name is not set.");
@@ -50,7 +50,7 @@ bool Calculator::setPlace(QString rawPlaceName) {
 bool Calculator::setFile(QString rawFileName) {
     if (!rawFileName.isEmpty()) {
         fileName = rawFileName;
-        guic->addText(QString("File name set to: ").append(fileName));
+        guic->addText(QString("File name set to: ").append(fileName).toStdString());
     } else {
         guic->addText("File name is not set.");
         return false;
@@ -58,10 +58,10 @@ bool Calculator::setFile(QString rawFileName) {
 
     model = ReadModel(QString2Char(fileName), guic);
     if (model == NULL) {
-        guic->addText(QString("Model could not be read or parsed."));
+        guic->addText(QString("Model could not be read or parsed.").toStdString());
         return false;
     } else {
-        guic->addText(QString("Model is read and parsed."));
+        guic->addText(QString("Model is read and parsed.").toStdString());
         return true;
     }
 }
@@ -129,7 +129,7 @@ bool Calculator::showSTD(QString rawFileName) {
     std::cout << "Number of regions: " << TimedDiagram::getInstance()->getNumberOfRegions() << std::endl;
     std::cout << "Time to generate STD: " << mtime << "ms" << std::endl;
 
-    guic->addText(QString("Time to generate STD: %1 ms").arg(mtime));
+    guic->addText(QString("Time to generate STD: %1 ms").arg(mtime).toStdString());
 
     TimedDiagram::getInstance()->scale = 20;
     std::cout << "Writing the debug region diagram...." << std::endl;
@@ -203,13 +203,13 @@ bool Calculator::showProbFunc() {
     case Uni:
         argFinder = strtok(model->transitions[gTransitionId(model)].df_argument,",");
         if (argFinder == NULL) {
-            guic->addText(QString("Transition #%1 : %2 has an invalid cumulative distribution function (cdf) for uni{a,b}, since this requires two arguments.").arg(gTransitionId(model)+1).arg(model->transitions[gTransitionId(model)].id));
+            guic->addText(QString("Transition #%1 : %2 has an invalid cumulative distribution function (cdf) for uni{a,b}, since this requires two arguments.").arg(gTransitionId(model)+1).arg(model->transitions[gTransitionId(model)].id).toStdString());
             return false;
         }
         fv->a = atoi(argFinder);
         argFinder = strtok(NULL,",");
         if (argFinder == NULL) {
-            guic->addText(QString("Transition #%1 : %2 has an invalid cumulative distribution function (cdf) for uni{a,b}, since this requires two arguments.").arg(gTransitionId(model)+1).arg(model->transitions[gTransitionId(model)].id));
+            guic->addText(QString("Transition #%1 : %2 has an invalid cumulative distribution function (cdf) for uni{a,b}, since this requires two arguments.").arg(gTransitionId(model)+1).arg(model->transitions[gTransitionId(model)].id).toStdString());
             return false;
         }
         fv->b = atoi(argFinder);
@@ -220,13 +220,13 @@ bool Calculator::showProbFunc() {
     case Norm:
         argFinder = strtok(model->transitions[gTransitionId(model)].df_argument,",");
         if (argFinder == NULL) {
-            guic->addText(QString("Transition #%1 : %2 has an invalid cumulative distribution function (cdf) for norm{mu,sigma}, since this requires two arguments.").arg(gTransitionId(model)+1).arg(model->transitions[gTransitionId(model)].id));
+            guic->addText(QString("Transition #%1 : %2 has an invalid cumulative distribution function (cdf) for norm{mu,sigma}, since this requires two arguments.").arg(gTransitionId(model)+1).arg(model->transitions[gTransitionId(model)].id).toStdString());
             return false;
         }
         fv->mu = atoi(argFinder);
         argFinder = strtok(NULL,",");
         if (argFinder == NULL) {
-            guic->addText(QString("Transition #%1 : %2 has an invalid cumulative distribution function (cdf) for norm{mu,sigma}, since this requires two arguments.").arg(gTransitionId(model)+1).arg(model->transitions[gTransitionId(model)].id));
+            guic->addText(QString("Transition #%1 : %2 has an invalid cumulative distribution function (cdf) for norm{mu,sigma}, since this requires two arguments.").arg(gTransitionId(model)+1).arg(model->transitions[gTransitionId(model)].id).toStdString());
             return false;
         }
         fv->sigma = atoi(argFinder);

@@ -35,7 +35,7 @@ class Line {
 public:
 	double a;
 	double b;
-	double X; //in case a = INF, the equation is x=X.
+    double X; //in case a = INF, the equation is x=X.
 
 	Line();
 	Line(double _a, double _b): a(_a), b(_b) {};
@@ -53,11 +53,11 @@ public:
 //	bool operator> (const Line &l);
 
 	double getY(double x);
-	bool isUp(Point& p);
+    bool isUp(Point& p);
 
 
 	//TODO: This Function is should be modified for the case of a = INF.
-	virtual bool intersect(Line &l, Point& intPoint);
+    virtual bool intersect(Line &l, Point& intPoint);
 
 };
 
@@ -74,16 +74,16 @@ public:
 
 	Segment& operator =(const Segment &s);
 
-	bool isUp(Point& p);
+    bool isUp(Point& p);
 
 	bool intersect(Segment &s, Point &intPoint);
 	/*
 	 * intPoint has a value if tow segments has an intersection on only one point.
 	 */
-	IntersectionStatus intersect2(Segment &s, Point &intPoint);
-	bool intersect(Line &l, Point &intPoint);
+    IntersectionStatus intersect2(Segment &s, Point &intPoint);
+    bool intersect(Line &l, Point &intPoint);
 
-	void print();
+    void print();
 };
 
 }

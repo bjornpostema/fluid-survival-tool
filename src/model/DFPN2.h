@@ -10,7 +10,7 @@
 
 //#define IS_ZERO
 
-#include "../controller/GUIController.h"
+#include "Logger.h"
 
 namespace model {
 
@@ -48,7 +48,9 @@ typedef enum {
 	Uni = 2, // The uniform distribution
 	Gen = 3, // The self-defined general distribution
     Gamma = 4, // Gamma distribution
-    Norm = 5 // Normal distribution
+    Norm = 5, // Normal distribution
+    FoldedNorm = 6, // Folded Normal distribution
+    Dtrm = 7 // Makes the transition deterministic
 } Distribution;
 
 typedef struct {
@@ -186,12 +188,12 @@ typedef struct {
 #define IS_ZERO(x) (x < ZERO_PREC && x > -ZERO_PREC)
 
 
-bool validateModel(Model *model, GUIController *guic);
-Model *ReadModel(const char *FileName, GUIController *guic);
+bool validateModel(Model *model, Logger *guic);
+Model *ReadModel(const char *FileName, Logger *guic);
 void InitializeModel(Model *M);
 
 Marking *allocMarking(Model *M);
-void freeMarking(Model *M, Marking *K);
+void freeMarking(Marking *K);
 Marking *copyMarking(Model *M, Marking *Src);
 void printState(Model *M, State *S);
 Marking *createInitialMarking(Model *M);
@@ -219,7 +221,7 @@ int gTransitionId(Model* M);
 //int K = 9;
 
 typedef struct {
-    int pIndex = 16;
+    unsigned int pIndex = 16;
     double amount = 0;
     double mu = 0;
     double lambda;
@@ -227,15 +229,18 @@ typedef struct {
     void *f;
     double sigma = 1;
     int K = 9;
+    double dtrm = 0;
 } FunctionVars;
 
 int fact(int n);
-bool propertyTest(Model* model, Marking* marking, double t0, double t1, double &s1, double &s2, FunctionVars* fv);
-double spdfExp(double s, FunctionVars* fv);
-double spdfUni(double s, FunctionVars* fv);
-double spdfGen(double s, FunctionVars* fv);
-double spdfGamma(double s, FunctionVars* fv);
-double spdfNormal(double s, FunctionVars* fv);
+bool propertyTest(Model* model, Marking* marking, double t0, double t1, double &s1, double &s2, unsigned int _pIndex, double _amount);
+double scdfExp(double s, FunctionVars* fv);
+double scdfUni(double s, FunctionVars* fv);
+double scdfGen(double s, FunctionVars* fv);
+double scdfGamma(double s, FunctionVars* fv);
+double scdfNormal(double s, FunctionVars* fv);
+double scdfFoldedNormal(double s, FunctionVars* fv);
+double scdfDtrm(double s, FunctionVars* fv);
 
 }
 

@@ -20,7 +20,7 @@ LIBS += -L../model -L../libs -lmodel -lmatheval -lopencv_core -lopencv_imgproc -
 #Make the tool run with the actual shared library of the model.
 QMAKE_LFLAGS += -Wl,--rpath=\\\$\$ORIGIN
 QMAKE_LFLAGS += -Wl,--rpath=\\\$\$ORIGIN/model
-QMAKE_LFLAGS += -Wl,--rpath=\\\$\$ORIGIN/libs
+QMAKE_LFLAGS += -Wl,--rpath=\\\$\$ORIGIN/libs_64
 #QMAKE_LFLAGS += -Wl,-rpath-link=\\\$\$ORIGIN/libs
 QMAKE_LFLAGS_RPATH=
 
@@ -28,14 +28,28 @@ QMAKE_LFLAGS_RPATH=
 
 #LIBS    +=  -lmatheval -lopencv_core -lopencv_imgproc -lopencv_highgui -lopencv_ml -lopencv_video -lopencv_features2d -lopencv_calib3d -lopencv_objdetect -lopencv_contrib -lopencv_legacy -lopencv_flann
 
-TARGET = ../project
+TARGET = ../FST
 
 SOURCES +=  main.cpp\
-            GUIController.cpp
+            GUIController.cpp\
+            STDDialogController.cpp \
+            PlaceProbDialogController.cpp \
+            ModelCheckDialogController.cpp \
+            #GUIController_old2.cpp \
 
-HEADERS +=  GUIController.h
+HEADERS +=  GUIController.h\
+            STDDialogController.h \
+            PlaceProbDialogController.h \
+            ModelCheckDialogController.h \
+            #GUIController_old2.h \
+
 
 FORMS       +=  ../view/GUIView.ui\
-                ../view/GUIViewDesign.ui
+                #../view/GUIViewDesign.ui\
+                ../view/PlaceProbDialogView.ui \
+                ../view/STDDialogView.ui \
+                ../view/ModelCheckDialogView.ui \
+                #../view/GUIView_old2.ui \
+
 
 RESOURCES   +=  ../view/GUIResources.qrc\

@@ -4,12 +4,19 @@
 #include <QMainWindow>
 #include <QString>
 #include <QPlainTextEdit>
+#include "../model/Logger.h"
+#include <ios>
+#include <fstream>
+#include <sstream>
+#include "STDDialogController.h"
+#include "PlaceProbDialogController.h"
+#include "ModelCheckDialogController.h"
 
 namespace Ui {
 class GUIController;
 }
 
-class GUIController : public QMainWindow
+class GUIController : public QMainWindow, virtual public model::Logger
 {
     Q_OBJECT
     
@@ -17,9 +24,9 @@ public:
     explicit GUIController(QWidget *parent = 0);
     ~GUIController();
 
-    void addText(QString str);
-    void setText(QString str);
-    QString getText();
+    void addText(std::string str);
+    void setText(std::string str);
+    std::string getText();
 
 protected:
     void closeEvent(QCloseEvent *event);
@@ -32,11 +39,12 @@ private:
     void openFile(const QString &fileName, QTextEdit *editor);
     bool saveFile(const QString &fileName, QTextEdit *editor);
     void modelSetCurrentFile(const QString &fileName);
-    void specSetCurrentFile(const QString &fileName);
     QString strippedName(const QString &fullFileName, QTextEdit *editor);
 
-    QString modelCurFile, specCurFile;
-    QString modelFileName, specFileName;
+    QString modelCurFile;
+    QString modelFileName;
+
+    int pc;
 
 /* This is the Controller part of the class.
  * Slots receive signals from the view, while processing these slots to a model.
@@ -47,15 +55,11 @@ private slots:
     bool modelSave();
     bool modelSaveAs();
     void modelModified();
-    void specNew();
-    void specOpen();
-    bool specSave();
-    bool specSaveAs();
-    void specModified();
     void about();
     void openProjectWebsite();
     void generateSTD();
     void generateProbFunc();
     void modelCheck();
+//    void tempModelCheck();
 };
 #endif // GUICONTROLLER_H

@@ -1,5 +1,10 @@
 <RCC>
     <qresource prefix="/resources">
         <file>resources/logo.png</file>
+        <file>resources/dacs_logo.jpg</file>
+        <file>resources/introduction1.png</file>
+        <file>resources/introduction2.png</file>
+        <file>resources/introduction3.png</file>
+        <file>resources/introduction4.png</file>
     </qresource>
 </RCC>

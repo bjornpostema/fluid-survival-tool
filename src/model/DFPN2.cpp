@@ -90,7 +90,7 @@ int findTransition(Model *M, char *id) {
 
 #define MAX_ID_LEN 2048
 
-bool validateModel(Model *model, GUIController *guic) {
+bool validateModel(Model *model, Logger *guic) {
     bool res = true;
     /*
      * Place checks
@@ -99,35 +99,35 @@ bool validateModel(Model *model, GUIController *guic) {
         /* Guarentee unique place names */
         for (int j = 0; j < i; j++) {
             if (strcmp(model->places[i].id, model->places[j].id) == 0) {
-                guic->addText(QString("Place #%1 : %2 has the same name as place #%3 : %4.").arg(i+1).arg(model->places[i].id).arg(j+1).arg(model->places[j].id));
+                guic->addText(QString("Place #%1 : %2 has the same name as place #%3 : %4.").arg(i+1).arg(model->places[i].id).arg(j+1).arg(model->places[j].id).toStdString());
                 res = false;
             }
         }
         if (model->places[i].type == PT_DISCRETE) {
             /* A deterministic place should not have a negative discrete marking. */
             if (model->places[i].d_mark < 0) {
-                guic->addText(QString("Place #%1 : %2 has a negative discrete marking.").arg(i+1).arg(model->places[i].id));
+                guic->addText(QString("Place #%1 : %2 has a negative discrete marking.").arg(i+1).arg(model->places[i].id).toStdString());
                 res = false;
             }
             /* A deterministic place should only have zeros for fluid values */
             if (model->places[i].f_bound != 0 || model->places[i].f_level != 0) {
-                guic->addText(QString("Place #%1 : %2 can only contain zeros for the fluid level and fluid bound.").arg(i+1).arg(model->places[i].id));
+                guic->addText(QString("Place #%1 : %2 can only contain zeros for the fluid level and fluid bound.").arg(i+1).arg(model->places[i].id).toStdString());
                 res = false;
             }
         } else if (model->places[i].type == PT_FLUID) {
             /* A fluid place should not have a negative fluid level */
             if (model->places[i].f_level < 0) {
-                guic->addText(QString("Place #%1 : %2 has a negative fluid level.").arg(i+1).arg(model->places[i].id));
+                guic->addText(QString("Place #%1 : %2 has a negative fluid level.").arg(i+1).arg(model->places[i].id).toStdString());
                 res = false;
             }
             /* A fluid place should not have a negative fluid bound */
             if (model->places[i].f_bound < 0) {
-                guic->addText(QString("Place #%1 : %2 has a negative fluid bound").arg(i+1).arg(model->places[i].id));
+                guic->addText(QString("Place #%1 : %2 has a negative fluid bound").arg(i+1).arg(model->places[i].id).toStdString());
                 res = false;
             }
             /* A fluid place should only have zeros for discrete values */
             if (model->places[i].d_mark != 0) {
-                guic->addText(QString("Place #%1 : %2 can only contain zeros for the discrete marking.").arg(i+1).arg(model->places[i].id));
+                guic->addText(QString("Place #%1 : %2 can only contain zeros for the discrete marking.").arg(i+1).arg(model->places[i].id).toStdString());
                 res = false;
             }
         }
@@ -142,7 +142,7 @@ bool validateModel(Model *model, GUIController *guic) {
         /* Guarentee unique transition names */
         for (int j = 0; j < i; j++) {
             if (strcmp(model->transitions[i].id, model->transitions[j].id) == 0) {
-                guic->addText(QString("Transition #%1 : %2 has the same name as transition #%3 : %4.").arg(i+1).arg(model->transitions[i].id).arg(j+1).arg(model->transitions[j].id));
+                guic->addText(QString("Transition #%1 : %2 has the same name as transition #%3 : %4.").arg(i+1).arg(model->transitions[i].id).arg(j+1).arg(model->transitions[j].id).toStdString());
                 res = false;
             }
         }
@@ -151,7 +151,7 @@ bool validateModel(Model *model, GUIController *guic) {
 
     /* The maximum amount of general transitions is restricted. */
     if (gentrans != 1) {
-        guic->addText(QString("There are %1 general transition(s), while there should be 1.").arg(gentrans));
+        guic->addText(QString("There are %1 general transition(s), while there should be 1.").arg(gentrans).toStdString());
         res = false;
     }
 
@@ -162,7 +162,7 @@ bool validateModel(Model *model, GUIController *guic) {
         /* Guarentee unique transition names */
         for (int j = 0; j < i; j++) {
             if (strcmp(model->arcs[i].id, model->arcs[j].id) == 0) {
-                guic->addText(QString("Arc #%1 : %2 has the same name as arc #%3 : %4.").arg(i).arg(model->arcs[i].id).arg(j).arg(model->arcs[j].id));
+                guic->addText(QString("Arc #%1 : %2 has the same name as arc #%3 : %4.").arg(i).arg(model->arcs[i].id).arg(j).arg(model->arcs[j].id).toStdString());
                 res = false;
             }
         }
@@ -171,7 +171,7 @@ bool validateModel(Model *model, GUIController *guic) {
     return res;
 }
 
-Model *ReadModel(const char *FileName, GUIController *guic) {
+Model *ReadModel(const char *FileName, Logger *guic) {
     /*
      * 'locale' should be set in order for european machine's to work with dots in the files.
      * Using comma's instead of dots would be a major confusion, as was I when I discovered this tiny little bug. -Bjorn
@@ -190,7 +190,7 @@ Model *ReadModel(const char *FileName, GUIController *guic) {
 	fp = fopen(FileName, "r");
 	if (fp == NULL) {
 		printf("\n\n Error: cannot find model file %s\n\n", FileName);
-        guic->addText(QString("Error: cannot find model file %1").arg(FileName));
+        guic->addText(QString("Error: cannot find model file %1").arg(FileName).toStdString());
         return NULL;
 	}
 
@@ -215,7 +215,7 @@ Model *ReadModel(const char *FileName, GUIController *guic) {
 					&M->places[i].d_mark, &M->places[i].f_level,
                     &M->places[i].f_bound) != 5) {
                 printf("Error in place %s \n", idBuff);
-                guic->addText(QString("Place #%1 has the wrong amount of arguments.").arg(i+1));
+                guic->addText(QString("Place #%1 has the wrong amount of arguments.").arg(i+1).toStdString());
                 return NULL;
             }
 
@@ -252,7 +252,7 @@ Model *ReadModel(const char *FileName, GUIController *guic) {
 					&M->transitions[i].type, idBuff, &M->transitions[i].time,
 					&M->transitions[i].weight, &M->transitions[i].priority,
                     &M->transitions[i].flowRate, distrBuff) != 7) {
-                guic->addText(QString("Transition #%1 has the wrong amount of arguments.").arg(i+1));
+                guic->addText(QString("Transition #%1 has the wrong amount of arguments.").arg(i+1).toStdString());
                 return NULL;
             }
 
@@ -298,8 +298,12 @@ Model *ReadModel(const char *FileName, GUIController *guic) {
                 M->transitions[i].df_distr = Gamma;
             } else if (strcmp ("norm",distrFinder) == 0) {
                 M->transitions[i].df_distr = Norm;
+            } else if (strcmp ("foldednorm",distrFinder) == 0) {
+                M->transitions[i].df_distr = FoldedNorm;
+            } else if (strcmp ("dtrm",distrFinder) == 0) {
+                M->transitions[i].df_distr = Dtrm;
             } else if (M->transitions[i].type == TT_GENERAL) {
-                guic->addText(QString("Transition #%1 : %2 has an incorrect cumulative distribution function (cdf). The supported cdfs are: exp{<lambda>}, uni{<a>,<b>}, gen{<f(s)>}. For example: exp{10} and gen{(1-exp(-s/10))}.").arg(i+1).arg(M->transitions[i].id));
+                guic->addText(QString("Transition #%1 : %2 has an incorrect cumulative distribution function (cdf). The supported cdfs are: exp{<lambda>}, uni{<a>,<b>}, gen{<f(s)>}. For example: exp{10} and gen{(1-exp(-s/10))}.").arg(i+1).arg(M->transitions[i].id).toStdString());
                 res = false;
             }
             distrFinder = strtok(NULL,delims);
@@ -343,7 +347,7 @@ Model *ReadModel(const char *FileName, GUIController *guic) {
             if (sscanf(buffLine, "%d %s %s %s %lg %lg %d", &M->arcs[i].type,
 					idBuff, sBuff, dBuff, &M->arcs[i].weight,
                     &M->arcs[i].share, &M->arcs[i].priority) != 7) {
-                guic->addText(QString("Arc #%1 has the wrong amount of arguments.").arg(i+1));
+                guic->addText(QString("Arc #%1 has the wrong amount of arguments.").arg(i+1).toStdString());
                 res = false;
             }
 			M->arcs[i].id = strdup(idBuff);
@@ -355,10 +359,10 @@ Model *ReadModel(const char *FileName, GUIController *guic) {
 				sId = findTransition(M, sBuff);
 				dId = findPlace(M, dBuff);
                 if (sId == -1) {
-                    guic->addText(QString("Arc #%1 : %2 has an invalid transition name %3").arg(i+1).arg(M->arcs[i].id).arg(sBuff));
+                    guic->addText(QString("Arc #%1 : %2 has an invalid transition name %3").arg(i+1).arg(M->arcs[i].id).arg(sBuff).toStdString());
                     res = false;
                 } else if (dId == -1) {
-                    guic->addText(QString("Arc #%1 : %2 has an invalid place name %3").arg(i+1).arg(M->arcs[i].id).arg(dBuff));
+                    guic->addText(QString("Arc #%1 : %2 has an invalid place name %3").arg(i+1).arg(M->arcs[i].id).arg(dBuff).toStdString());
                     res = false;
                 }
                 M->arcs[i].fromId = sId;
@@ -373,10 +377,10 @@ Model *ReadModel(const char *FileName, GUIController *guic) {
 				sId = findPlace(M, sBuff);
 				dId = findTransition(M, dBuff);
                 if (sId == -1) {
-                    guic->addText(QString("Arc #%1 : %2 has an invalid transition named %3").arg(i+1).arg(M->arcs[i].id).arg(sBuff));
+                    guic->addText(QString("Arc #%1 : %2 has an invalid transition named %3").arg(i+1).arg(M->arcs[i].id).arg(sBuff).toStdString());
                     res = false;
                 } else if (dId == -1) {
-                    guic->addText(QString("Arc #%1 : %2 has an invalid place named %3").arg(i+1).arg(M->arcs[i].id).arg(dBuff));
+                    guic->addText(QString("Arc #%1 : %2 has an invalid place named %3").arg(i+1).arg(M->arcs[i].id).arg(dBuff).toStdString());
                     res = false;
                 }
                 M->arcs[i].fromId = sId;
@@ -1117,15 +1121,32 @@ int gTransitionId(Model* M){
 /*
  * The exponential probability density function.
  */
-double spdfExp(double s, FunctionVars* fv){
-    return (1 - exp(-s/fv->lambda));
+double scdfExp(double s, FunctionVars* fv){
+    //return s < 10 ? 0 : 1;
+    return s != INFINITY ? (1 - exp(-fv->lambda*s)) : 1;
 }
 
 /*
  * The uniform probability density function.
  */
-double spdfUni(double s, FunctionVars* fv){
-    return ((s-fv->a)/(fv->b-fv->a));
+//double scdfUni(double s, FunctionVars* fv){
+//    return s != INFINITY ? ((s-fv->a)/(fv->b-fv->a)) : 1;
+//}
+
+/*
+ * The uniform probability density function.
+ */
+double scdfUni(double s, FunctionVars* fv){
+    double res;
+    if (s < fv->a) {
+        res = 0;
+    } else if (s >= fv->a && s < fv->b) {
+        res = ((s-fv->a)/(fv->b-fv->a));
+    } else if (s >= fv->b || s == INFINITY){
+        res = 1;
+    }
+    return res;
+//    return s != INFINITY ? ((s-fv->a)/(fv->b-fv->a)) : 1;
 }
 
 /* The general probability density function defined by user.
@@ -1152,11 +1173,11 @@ The math library supports the following functionalities:
  *
  * For more details visit: http://www.gnu.org/software/libmatheval/manual/libmatheval.html
  */
-double spdfGen(double s, FunctionVars* fv){
+double scdfGen(double s, FunctionVars* fv){
     char *names[] = { "s" };
     double values[] = { s };
 
-    return evaluator_evaluate (fv->f, sizeof(names)/sizeof(names[0]), names, values);
+    return s != INFINITY ? evaluator_evaluate (fv->f, sizeof(names)/sizeof(names[0]), names, values) : 1;
 }
 
 int fact(int n){
@@ -1166,39 +1187,82 @@ int fact(int n){
         return n*fact(n-1);
 }
 
-double spdfGamma(double s, FunctionVars* fv){
-    double sum = 0;
-    for (int i = 0; i < fv->K; i++){
-        sum += (1/fact(i))*pow((s/fv->lambda), i)*exp(-s/fv->lambda);
+double scdfGamma(double s, FunctionVars* fv){
+    double res = 0;
+    if (s != INFINITY) {
+        double sum = 0;
+        for (int i = 0; i < fv->K; i++){
+            sum += (1/fact(i))*pow((s/fv->lambda), i)*exp(-s/fv->lambda);
+        }
+        res = 1 - sum;
+    } else {
+        res = 1;
     }
-    return 1 - sum;
+    return res;
 }
 
-double spdfNormal(double s, FunctionVars* fv){
-    return -.5*(1 - erf((s - fv->mu)/(fv->sigma*1.414213562)));
+double scdfNormal(double s, FunctionVars* fv){
+    //-.5*(1 - erf((s - fv->mu)/(fv->sigma*1.414213562)))
+    return s != INFINITY ? .5*(1 + erf((s - fv->mu)/(sqrt(2.0*fv->sigma*fv->sigma)))) : 1;
 }
 
-bool propertyTest(Model* model, Marking* marking, double t0, double t1, double &s1, double &s2, FunctionVars* fv){
+//double scdfTruncatedNormal(double s, FunctionVars* fv){
+//    //-.5*(1 - erf((s - fv->mu)/(fv->sigma*1.414213562)))
+//    return s != INFINITY ? (scdfNormal(((s-fv->mu)/fv->sigma),fv) - scdfNormal((fv->mu/fv->sigma),fv))/(1-scdfNormal((fv->mu/fv->sigma)),fv): 1;
+//}
+
+double scdfFoldedNormal(double s, FunctionVars* fv){
+    //-.5*(1 - erf((s - fv->mu)/(fv->sigma*1.414213562)))
+    return s != INFINITY ? .5*(erf((s + fv->mu)/(sqrt(2)*fv->sigma)) + erf((s - fv->mu)/(sqrt(2)*fv->sigma))) : 1;
+}
+
+double scdfDtrm(double s, FunctionVars* fv){
+    //-.5*(1 - erf((s - fv->mu)/(fv->sigma*1.414213562)))
+    return (s < fv->dtrm) ? 0 : 1;
+}
+
+//#ifndef Pi
+//#define Pi 3.141592653589793238462643
+//#endif
+
+//double spdfNormal(double s, FunctionVars* fv)
+//{
+//  double L, K, w ;
+//  /* constants */
+//  double const a1 = 0.31938153, a2 = -0.356563782, a3 = 1.781477937;
+//  double const a4 = -1.821255978, a5 = 1.330274429;
+
+//  L = fabs(s);
+//  K = 1.0 / (1.0 + 0.2316419 * L);
+//  w = 1.0 - 1.0 / sqrt(2 * Pi) * exp(-L *L / 2) * (a1 * K + a2 * K *K + a3 * K * K * K/* pow(K,3)*/ + a4 * K * K * K * K /*pow(K,4)*/ + a5 * K * K * K * K * K/* pow(K,5)*/);
+
+//  if (x < 0 ){
+//    w= 1.0 - w;
+//  }
+//  return w;
+//}
+
+bool propertyTest(Model* model, Marking* marking, double t0, double t1, double &s1, double &s2, unsigned int pIndex, double amount){
     /**
      * fluid level in a place is (as+b) + (t1s+t0)d. t1s+t0 is time that has passed after entering this region.
      */
-    double b = marking->fluid0[model->places[fv->pIndex].idInMarking] + t0*marking->fluidPlaceDeriv[model->places[fv->pIndex].idInMarking];
-    double a = marking->fluid1[model->places[fv->pIndex].idInMarking] + t1*marking->fluidPlaceDeriv[model->places[fv->pIndex].idInMarking];
+    double b = marking->fluid0[model->places[pIndex].idInMarking] + t0*marking->fluidPlaceDeriv[model->places[pIndex].idInMarking];
+    double a = marking->fluid1[model->places[pIndex].idInMarking] + t1*marking->fluidPlaceDeriv[model->places[pIndex].idInMarking];
     if (IS_ZERO(a)) {
-        if (b <= fv->amount)
+        if (b <= amount)
             return true;
         else
             return false;
     }
-    double p = (fv->amount-b)/a;
+    double p = (amount-b)/a;
     if (p < s2 && p > s1){
         if (a < -ZERO_PREC) s1 = p;
         if (a > +ZERO_PREC) s2 = p;
         return true;
     } else if (p > s2){
-        if (a * s2 + b < fv->amount) return true;
+        if (a * s2 + b < amount) return true;
     } else if (p < s1){
-        if (a * s1 + b < fv->amount) return true;
+        if (a * s1 + b < amount) return true;
     }
 
     return false;

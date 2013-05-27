@@ -58,7 +58,7 @@ struct StochasticEvent{
 	StochasticEvent(Segment *line, EventType type) : timeSegment(line), eventType(type), preRegion(0), preDtrmEvent(0){};
 	StochasticEvent(StochasticEvent* se){
 		timeSegment = se->timeSegment;
-		eventType = se->eventType;
+        eventType = se->eventType;
 		id = se->id;
 		preRegionMarking = se->preRegionMarking;
 		postRegionMarking = se->postRegionMarking;
@@ -88,7 +88,7 @@ struct DtrmEvent{
 	 * marking of region before this event happening.
 	 */
 	Marking* preRegionMarking;
-	DtrmEvent* nextDtrmEvent;
+    DtrmEvent* nextDtrmEvent;
 
 	/*
 	 * Set of next stochastic regions which could be entered after this deterministic event.

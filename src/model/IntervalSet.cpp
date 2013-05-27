@@ -160,7 +160,7 @@ void IntervalSet::print(std::ostream& out) {
 	out << "{";
 	for (unsigned int i = 0; i < intervals.size(); i++)
 		out << "(" << intervals.at(i).start << "," << intervals.at(i).end << ") ";
-	out << "}" << std::endl;
+    out << "}";
 }
 
 IntervalSet* Interval::minus(const Interval& tosub) {

@@ -18,6 +18,7 @@
 #include "Region.h"
 #include "Line.h"
 #include "Calculator.h"
+#include "IntervalSet.h"
 
 namespace model {
 
@@ -63,10 +64,11 @@ public:
 	 * @param time The time for which probability calculation is being done.
 	 * @param sPdfInt Pointer to the integral pdf of s.
 	 * @param isPropHolds Pointer to the function which determines whether a spesific property for a marking holds. This 
-	 *		  function returns the interval that the property holds.
-	 * @return The probabilty that the given property holds for a given time.
+     *		  function returns the interval that the property holds.
+     * @param fv function variables for the integral calculation.
+     * @return The probabilty that the given property holds for a given time to check.
 	 */
-    double calProbAtTime(double time, double (*sPdfInt)(double, FunctionVars*), bool (*isPropHolds)(Model*, Marking*, double t0, double t1, double&, double&, FunctionVars*), FunctionVars* fv);
+    double calProbAtTime(double time, double (*sPdfInt)(double), bool (*isPropHolds)(Model*, Marking*, double t0, double t1, double&, double&, unsigned int _pindex, double _amount), unsigned int _pindex, double _amount);
 
 	void saveDiagram(std::string filename);
 
@@ -90,20 +92,19 @@ public:
 	std::vector<DtrmEvent*> dtrmEventList;
 
 	cv::Mat debugImage;
-	int scale;
+    int scale;
 
 private:
 	static TimedDiagram* instance;
 	unsigned int currentTime;
 
-	/**
-	 * keeps the first time g-transition could fire.
-	 */
-	double gTrEnabledTime;
-
+    /**
+     * keeps the first time g-transition could fire.
+     */
+    double gTrEnabledTime;
 
 	void minLines(std::vector<StochasticEvent*> * potentialEvents, Segment* uSegment, std::vector<StochasticEvent*> * nextEvents);
-	void createAddRegions(std::vector<StochasticEvent*> * eventList, StochasticEvent * preEvent, Marking* marking);
+    void createAddRegions(std::vector<StochasticEvent*> * eventList, StochasticEvent * preEvent, Marking* marking);
 
 	/**
 	 * Auxilary drawing functions

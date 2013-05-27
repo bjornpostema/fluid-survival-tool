@@ -60,7 +60,7 @@ public:
 	};
 	bool isEmpty() {return intervals.empty();};
 
-	void print(std::ostream& out);
+    void print(std::ostream& out);
 };
 
 }

@@ -59,9 +59,9 @@ RegionState GeometryHelper::getTimeAndDirection(DtrmEvent* dtrmRegion,Formula* f
 	}
 
 
-	if ((dir == UP && t > dtrmRegion->nextDtrmEvent->time) && (dir == DOWN && t < dtrmRegion->time))
+    if ((dir == UP && t > dtrmRegion->nextDtrmEvent->time) && (dir == DOWN && t < dtrmRegion->time))
 		return NONE;
-	else if ((dir == UP && (t <= dtrmRegion->time)) || (dir == DOWN && (t >= dtrmRegion->nextDtrmEvent->time)))
+    else if ((dir == UP && (t <= dtrmRegion->time)) || (dir == DOWN && (t >= dtrmRegion->nextDtrmEvent->time)))
 		return ENTIRE;
 	else
 		return PART;
@@ -190,37 +190,37 @@ Polygon* GeometryHelper::regionToPoly(Region* region) {
 
 void GeometryHelper::addToPolygon(Polygon* poly, Segment* seg, Line* line, Direction direction) {
 	Point intersection;
-	if (seg->intersect(*line, intersection)){
-		if ((direction == UP && line->isUp(seg->p1)) || (direction == DOWN && !line->isUp(seg->p1)) ){
-			if (intersection != seg->p1)
-				poly->segments->push_back(new Segment(seg->p1, intersection));
-		}
-		else
-			if (intersection != seg->p2)
-				poly->segments->push_back(new Segment(seg->p2, intersection));
-	}else if((direction == UP && line->isUp(seg->p1) && line->isUp(seg->p2)) || (direction == DOWN && !line->isUp(seg->p1) && !line->isUp(seg->p2)) ){
-		poly->segments->push_back(seg);
-	}
+    if (seg->intersect(*line, intersection)){
+        if ((direction == UP && line->isUp(seg->p1)) || (direction == DOWN && !line->isUp(seg->p1)) ){
+            if (intersection != seg->p1)
+                poly->segments->push_back(new Segment(seg->p1, intersection));
+        }
+        else
+            if (intersection != seg->p2)
+                poly->segments->push_back(new Segment(seg->p2, intersection));
+    }else if((direction == UP && line->isUp(seg->p1) && line->isUp(seg->p2)) || (direction == DOWN && !line->isUp(seg->p1) && !line->isUp(seg->p2)) ){
+        poly->segments->push_back(seg);
+    }
 }
 
 Polygon* GeometryHelper::cropPolygon(Polygon* poly, double t, Direction dir) {
 	if (poly == NULL || poly->segments->size() == 0) return NULL;
 
 	Polygon* newPoly = new Polygon();
-	Line* line = new Line(0, t);
-	Point p1, p2;
-	if (poly->intersect(line, p1, p2)){
-		for (unsigned int i = 0; i < poly->segments->size(); i++)
-			addToPolygon(newPoly, poly->segments->at(i), line, dir);
-		newPoly->segments->push_back(new Segment(p1, p2));
-	}else{
-		if ((dir == DOWN && !line->isUp(poly->segments->at(0)->p1))  || (dir == UP && line->isUp(poly->segments->at(0)->p1))){
-			for (unsigned int i = 0; i < poly->segments->size(); i++)
-				newPoly->segments->push_back(poly->segments->at(i));
-		}else
-			newPoly = NULL;
+    Line* line = new Line(0, t);
+    Point p1, p2;
+    if (poly->intersect(line, p1, p2)){
+        for (unsigned int i = 0; i < poly->segments->size(); i++)
+            addToPolygon(newPoly, poly->segments->at(i), line, dir);
+        newPoly->segments->push_back(new Segment(p1, p2));
+    }else{
+        if ((dir == DOWN && !line->isUp(poly->segments->at(0)->p1))  || (dir == UP && line->isUp(poly->segments->at(0)->p1))){
+            for (unsigned int i = 0; i < poly->segments->size(); i++)
+                newPoly->segments->push_back(poly->segments->at(i));
+        }else
+            newPoly = NULL;
 
-	}
+    }
 	return newPoly;
 
 }
@@ -240,22 +240,22 @@ IntervalSet* GeometryHelper::getIntersectionIntervals(Polygon* poly, Segment* se
 	int numIntersection = 0;
 	std::cout << "---------------------------" << std::endl;
 	poly->print();
-	for (unsigned int i = 0; i < poly->segments->size(); i++){
-			Point intPt;
-			IntersectionStatus inStatus = poly->segments->at(i)->intersect2(*segment, intPt);
-			if ( inStatus == ALL){
-				Interval i1(segment->p1.X, segment->p2.X);
-				Interval i2(poly->segments->at(i)->p1.X, poly->segments->at(i)->p2.X);
-				Interval res;
-				i1.intersect(i2, res);
-				IntervalSet* ret = new IntervalSet();
-				ret->intervals.push_back(res);
-				return ret;
-			} else if(inStatus == NO) continue;
-			if (numIntersection == 0) { intPt1 = intPt; numIntersection++;}
-			else if (numIntersection == 1 ) { intPt2 = intPt; numIntersection++;}
-			else break;
-	}
+    for (unsigned int i = 0; i < poly->segments->size(); i++){
+            Point intPt;
+            IntersectionStatus inStatus = poly->segments->at(i)->intersect2(*segment, intPt);
+            if ( inStatus == ALL){
+                Interval i1(segment->p1.X, segment->p2.X);
+                Interval i2(poly->segments->at(i)->p1.X, poly->segments->at(i)->p2.X);
+                Interval res;
+                i1.intersect(i2, res);
+                IntervalSet* ret = new IntervalSet();
+                ret->intervals.push_back(res);
+                return ret;
+            } else if(inStatus == NO) continue;
+            if (numIntersection == 0) { intPt1 = intPt; numIntersection++;}
+            else if (numIntersection == 1 ) { intPt2 = intPt; numIntersection++;}
+            else break;
+    }
 	if (numIntersection < 2) return NULL; //No intersection
 	else {Interval I(intPt1.X, intPt2.X); IntervalSet* ret = new IntervalSet(); ret->intervals.push_back(I); return ret;}
 }
@@ -264,32 +264,32 @@ IntervalSet* GeometryHelper::getIntersectionIntervals(Polygon* poly1, Polygon* p
 	Point intPt1, intPt2;
 	int numIntersection = 0;
 	IntervalSet* ret = new IntervalSet();
-	for (unsigned int i = 0; i < poly1->segments->size(); i++){
-		for (unsigned int j = 0; j < poly2->segments->size(); j++){
-			Point intPt;
-			IntersectionStatus inStatus = poly1->segments->at(i)->intersect2(*poly2->segments->at(j), intPt);
-			if (inStatus == ALL){
-				Interval i1(poly1->segments->at(i)->p1.X, poly1->segments->at(i)->p2.X);
-				Interval i2(poly2->segments->at(j)->p1.X, poly2->segments->at(j)->p2.X);
-				Interval res;
-				i1.intersect(i2, res);
-				ret->intervals.push_back(res);
-				break;
-			}
-			if (inStatus == POINT && numIntersection == 0) {
-				intPt1 = intPt;
-				numIntersection++;
-			}
-			else if (inStatus == POINT && numIntersection == 1 ) {
-				intPt2 = intPt;
-				numIntersection++;
-			}
-		}
-		if (numIntersection ==2){
-			Interval I(intPt1.X, intPt2.X);
-			ret->intervals.push_back(I);
-		}
-	}
+    for (unsigned int i = 0; i < poly1->segments->size(); i++){
+        for (unsigned int j = 0; j < poly2->segments->size(); j++){
+            Point intPt;
+            IntersectionStatus inStatus = poly1->segments->at(i)->intersect2(*poly2->segments->at(j), intPt);
+            if (inStatus == ALL){
+                Interval i1(poly1->segments->at(i)->p1.X, poly1->segments->at(i)->p2.X);
+                Interval i2(poly2->segments->at(j)->p1.X, poly2->segments->at(j)->p2.X);
+                Interval res;
+                i1.intersect(i2, res);
+                ret->intervals.push_back(res);
+                break;
+            }
+            if (inStatus == POINT && numIntersection == 0) {
+                intPt1 = intPt;
+                numIntersection++;
+            }
+            else if (inStatus == POINT && numIntersection == 1 ) {
+                intPt2 = intPt;
+                numIntersection++;
+            }
+        }
+        if (numIntersection ==2){
+            Interval I(intPt1.X, intPt2.X);
+            ret->intervals.push_back(I);
+        }
+    }
 	std::cout << "ret: ";
 //	ret->print();
 	ret->removeRedundency();

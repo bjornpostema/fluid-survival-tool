@@ -35,7 +35,10 @@
    <bool>false</bool>
   </property>
   <property name="styleSheet">
-   <string notr="true"/>
+   <string notr="true">background-color: rgb(255, 255, 255);
+border-top-color: rgb(217, 217, 217);
+selection-color: rgb(161, 161, 161);
+border-color: rgb(231, 231, 231);</string>
   </property>
   <property name="dockOptions">
    <set>QMainWindow::AllowTabbedDocks|QMainWindow::AnimatedDocks</set>
@@ -45,83 +48,39 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
-     <widget class="QTabWidget" name="tabWidget">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
+    <item row="1" column="0">
+     <widget class="QTextEdit" name="modelEditor">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
+        <verstretch>1</verstretch>
        </sizepolicy>
       </property>
       <property name="font">
        <font>
-        <family>Ubuntu Mono</family>
-        <pointsize>12</pointsize>
+        <family>Ubuntu</family>
+        <pointsize>10</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
        </font>
       </property>
-      <property name="layoutDirection">
-       <enum>Qt::LeftToRight</enum>
+      <property name="frameShape">
+       <enum>QFrame::WinPanel</enum>
       </property>
-      <property name="tabShape">
-       <enum>QTabWidget::Rounded</enum>
+      <property name="frameShadow">
+       <enum>QFrame::Sunken</enum>
       </property>
-      <property name="currentIndex">
+      <property name="lineWidth">
        <number>1</number>
       </property>
-      <property name="documentMode">
-       <bool>true</bool>
-      </property>
-      <property name="movable">
-       <bool>false</bool>
-      </property>
-      <widget class="QWidget" name="ModelTab">
-       <attribute name="title">
-        <string>HPnG Model</string>
-       </attribute>
-       <layout class="QGridLayout" name="gridLayout_4">
-        <item row="0" column="0">
-         <widget class="QLabel" name="modelFileName">
-          <property name="text">
-           <string>untitled.hpng</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QTextEdit" name="modelEditor">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>1</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="font">
-           <font>
-            <family>Ubuntu Mono</family>
-            <pointsize>12</pointsize>
-            <weight>50</weight>
-            <italic>false</italic>
-            <bold>false</bold>
-           </font>
-          </property>
-          <property name="frameShape">
-           <enum>QFrame::WinPanel</enum>
-          </property>
-          <property name="frameShadow">
-           <enum>QFrame::Sunken</enum>
-          </property>
-          <property name="lineWidth">
-           <number>1</number>
-          </property>
-          <property name="html">
-           <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+      <property name="html">
+       <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu Mono'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;#####################&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;# DFPN model file   #&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;#    Demo HPNG Model File     #&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;#####################&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;#&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;#### Number of places&lt;/p&gt;
@@ -165,8 +124,8 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;2 pump1c  0 0 0 1.7 na&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;2 demand21to6  0 0 0 1.0 na&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;2 demand6to21  0 0 0 2.0 na&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;0 failure  3 1 0 na&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;3 repair   1 1 0 0 gen{(1 - exp(-s/10))}&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;0 failure  3 1 0 0 na&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;3 repair   1 1 0 0 exp{10}&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;0 at6  9 1 0 0 na&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;0 at21 15 1 0 0 na&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;#&lt;/p&gt;
@@ -200,8 +159,8 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;5 teSt1  Stor1On  pump1b 1 1 0&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;0 in6    time21to6   at6 1 1 0&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;0 in21   time6to21 at21 1 1 0&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;1 out21   at6 time6to21 1 1 0&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;1 out6    at21  time21to6  1 1 0&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;1 out21b   at6 time6to21 1 1 0&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;1 out6b    at21  time21to6  1 1 0&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;5 test21to6 time21to6 demand21to6 1 1 0&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;5 test6to21 time6to21 demand6to21 1 1 0&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;0 inBreak  Input1On failure 1 1 0&lt;/p&gt;
@@ -210,152 +169,31 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;1 outRepair repair Input1On 1 1 0&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;0 failoncetest failonce failure 1 1 0&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;#&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="SpecTab">
-       <attribute name="title">
-        <string>STL Specification</string>
-       </attribute>
-       <layout class="QGridLayout" name="gridLayout_3">
-        <item row="1" column="0">
-         <widget class="QTextEdit" name="specEditor">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>1</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>12</pointsize>
-           </font>
-          </property>
-          <property name="html">
-           <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="0">
+     <widget class="QLabel" name="modelFileName">
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="text">
+       <string>untitled.hpng</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QTextEdit" name="outputEditor">
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+      <property name="html">
+       <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu Mono'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;P&amp;gt;0.2(stor2&amp;lt;=0.2 U Input1On=2)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="specFileName">
-          <property name="text">
-           <string>untitled.stl</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="MCTab">
-       <property name="enabled">
-        <bool>true</bool>
-       </property>
-       <attribute name="title">
-        <string>Model Checker</string>
-       </attribute>
-       <layout class="QGridLayout" name="gridLayout_2">
-        <item row="1" column="1">
-         <widget class="QPushButton" name="generateProbFunc">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>12</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>Generate Pr-t plot (requires: HPnG model + Place)</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="1">
-         <widget class="QPushButton" name="modelCheck">
-          <property name="text">
-           <string>Run The Model Checker</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="placeLabel">
-          <property name="font">
-           <font>
-            <pointsize>12</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>Place</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <widget class="QPushButton" name="generateSTD">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
-          <property name="font">
-           <font>
-            <family>Ubuntu Mono</family>
-            <pointsize>12</pointsize>
-            <weight>50</weight>
-            <italic>false</italic>
-            <bold>false</bold>
-           </font>
-          </property>
-          <property name="text">
-           <string>Generate STD t-s-plot (requires: HPnG model)</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QLineEdit" name="placeEdit"/>
-        </item>
-        <item row="7" column="0" colspan="2">
-         <widget class="QTextEdit" name="outputEditor">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
-          <property name="font">
-           <font>
-            <family>Ubuntu Mono</family>
-            <pointsize>12</pointsize>
-            <weight>50</weight>
-            <italic>false</italic>
-            <bold>false</bold>
-           </font>
-          </property>
-          <property name="frameShape">
-           <enum>QFrame::WinPanel</enum>
-          </property>
-          <property name="frameShadow">
-           <enum>QFrame::Sunken</enum>
-          </property>
-          <property name="html">
-           <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu Mono'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Model Checker Output:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="1">
-         <widget class="QLineEdit" name="time2Check"/>
-        </item>
-        <item row="3" column="0">
-         <widget class="QLabel" name="labelTime2Check">
-          <property name="text">
-           <string>Time to check</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;---- Application Output ----&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
      </widget>
     </item>
    </layout>
@@ -369,6 +207,124 @@ p, li { white-space: pre-wrap; }
      <height>23</height>
     </rect>
    </property>
+   <property name="palette">
+    <palette>
+     <active>
+      <colorrole role="Button">
+       <brush brushstyle="SolidPattern">
+        <color alpha="255">
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+       </brush>
+      </colorrole>
+      <colorrole role="Base">
+       <brush brushstyle="SolidPattern">
+        <color alpha="255">
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+       </brush>
+      </colorrole>
+      <colorrole role="Window">
+       <brush brushstyle="SolidPattern">
+        <color alpha="255">
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+       </brush>
+      </colorrole>
+      <colorrole role="HighlightedText">
+       <brush brushstyle="SolidPattern">
+        <color alpha="255">
+         <red>161</red>
+         <green>161</green>
+         <blue>161</blue>
+        </color>
+       </brush>
+      </colorrole>
+     </active>
+     <inactive>
+      <colorrole role="Button">
+       <brush brushstyle="SolidPattern">
+        <color alpha="255">
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+       </brush>
+      </colorrole>
+      <colorrole role="Base">
+       <brush brushstyle="SolidPattern">
+        <color alpha="255">
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+       </brush>
+      </colorrole>
+      <colorrole role="Window">
+       <brush brushstyle="SolidPattern">
+        <color alpha="255">
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+       </brush>
+      </colorrole>
+      <colorrole role="HighlightedText">
+       <brush brushstyle="SolidPattern">
+        <color alpha="255">
+         <red>161</red>
+         <green>161</green>
+         <blue>161</blue>
+        </color>
+       </brush>
+      </colorrole>
+     </inactive>
+     <disabled>
+      <colorrole role="Button">
+       <brush brushstyle="SolidPattern">
+        <color alpha="255">
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+       </brush>
+      </colorrole>
+      <colorrole role="Base">
+       <brush brushstyle="SolidPattern">
+        <color alpha="255">
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+       </brush>
+      </colorrole>
+      <colorrole role="Window">
+       <brush brushstyle="SolidPattern">
+        <color alpha="255">
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+       </brush>
+      </colorrole>
+      <colorrole role="HighlightedText">
+       <brush brushstyle="SolidPattern">
+        <color alpha="255">
+         <red>161</red>
+         <green>161</green>
+         <blue>161</blue>
+        </color>
+       </brush>
+      </colorrole>
+     </disabled>
+    </palette>
+   </property>
    <property name="font">
     <font>
      <family>Ubuntu Mono</family>
@@ -380,7 +336,144 @@ p, li { white-space: pre-wrap; }
    <property name="layoutDirection">
     <enum>Qt::LeftToRight</enum>
    </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QMenuBar::item { background: rgb(255, 255, 255); }</string>
+   </property>
+   <widget class="QMenu" name="menuHelp">
+    <property name="font">
+     <font>
+      <family>Ubuntu Mono</family>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="title">
+     <string>&amp;Help</string>
+    </property>
+    <addaction name="actionInfo"/>
+    <addaction name="actionProject_website"/>
+   </widget>
    <widget class="QMenu" name="menuFile">
+    <property name="palette">
+     <palette>
+      <active>
+       <colorrole role="Button">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Base">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Window">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="HighlightedText">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>161</red>
+          <green>161</green>
+          <blue>161</blue>
+         </color>
+        </brush>
+       </colorrole>
+      </active>
+      <inactive>
+       <colorrole role="Button">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Base">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Window">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="HighlightedText">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>161</red>
+          <green>161</green>
+          <blue>161</blue>
+         </color>
+        </brush>
+       </colorrole>
+      </inactive>
+      <disabled>
+       <colorrole role="Button">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Base">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Window">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="HighlightedText">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>161</red>
+          <green>161</green>
+          <blue>161</blue>
+         </color>
+        </brush>
+       </colorrole>
+      </disabled>
+     </palette>
+    </property>
     <property name="font">
      <font>
       <family>Ubuntu Mono</family>
@@ -389,8 +482,17 @@ p, li { white-space: pre-wrap; }
       <bold>false</bold>
      </font>
     </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="tearOffEnabled">
+     <bool>false</bool>
+    </property>
     <property name="title">
      <string>&amp;File</string>
+    </property>
+    <property name="separatorsCollapsible">
+     <bool>false</bool>
     </property>
     <widget class="QMenu" name="menuNew">
      <property name="font">
@@ -403,7 +505,6 @@ p, li { white-space: pre-wrap; }
       <string>&amp;New</string>
      </property>
      <addaction name="newModel"/>
-     <addaction name="newSpec"/>
     </widget>
     <widget class="QMenu" name="menuOpen">
      <property name="font">
@@ -416,7 +517,6 @@ p, li { white-space: pre-wrap; }
       <string>&amp;Open</string>
      </property>
      <addaction name="openModel"/>
-     <addaction name="openSpec"/>
     </widget>
     <widget class="QMenu" name="menu_Save">
      <property name="font">
@@ -428,7 +528,6 @@ p, li { white-space: pre-wrap; }
       <string>&amp;Save</string>
      </property>
      <addaction name="saveModel"/>
-     <addaction name="saveSpec"/>
     </widget>
     <widget class="QMenu" name="menuSave_As">
      <property name="font">
@@ -440,7 +539,6 @@ p, li { white-space: pre-wrap; }
       <string>Save &amp;As</string>
      </property>
      <addaction name="saveAsModel"/>
-     <addaction name="saveAsSpec"/>
     </widget>
     <widget class="QMenu" name="menuExamples">
      <property name="title">
@@ -457,7 +555,7 @@ p, li { white-space: pre-wrap; }
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
-   <widget class="QMenu" name="menuHelp">
+   <widget class="QMenu" name="menuTools">
     <property name="font">
      <font>
       <family>Ubuntu Mono</family>
@@ -465,15 +563,61 @@ p, li { white-space: pre-wrap; }
      </font>
     </property>
     <property name="title">
-     <string>&amp;Help</string>
+     <string>&amp;Tools</string>
     </property>
-    <addaction name="actionInfo"/>
-    <addaction name="actionProject_website"/>
+    <widget class="QMenu" name="menuGenerate">
+     <property name="title">
+      <string>&amp;Generate...</string>
+     </property>
+     <addaction name="actionSTD"/>
+     <addaction name="actionProbability_Distribution"/>
+    </widget>
+    <addaction name="menuGenerate"/>
+    <addaction name="actionModel_Checker"/>
    </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuTools"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
+   </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
+   <property name="movable">
+    <bool>false</bool>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::TopToolBarArea</set>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>42</width>
+     <height>42</height>
+    </size>
+   </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonTextBesideIcon</enum>
+   </property>
+   <property name="floatable">
+    <bool>false</bool>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionSTD"/>
+   <addaction name="actionProbability_Distribution"/>
+   <addaction name="actionModel_Checker"/>
+  </widget>
   <action name="actionExit">
    <property name="text">
     <string>E&amp;xit</string>
@@ -496,20 +640,6 @@ p, li { white-space: pre-wrap; }
     <string>Ctrl+N</string>
    </property>
   </action>
-  <action name="newSpec">
-   <property name="text">
-    <string>&amp;STL Specification</string>
-   </property>
-   <property name="statusTip">
-    <string>Create a new STL specification file in the editor</string>
-   </property>
-   <property name="font">
-    <font>
-     <family>Ubuntu Mono</family>
-     <pointsize>12</pointsize>
-    </font>
-   </property>
-  </action>
   <action name="openModel">
    <property name="text">
     <string>&amp;HPnG Model</string>
@@ -527,12 +657,21 @@ p, li { white-space: pre-wrap; }
     <string>Ctrl+O</string>
    </property>
   </action>
-  <action name="openSpec">
+  <action name="actionRun">
    <property name="text">
-    <string>&amp;STL Specification</string>
+    <string>Run...</string>
+   </property>
+  </action>
+  <action name="actionInfo">
+   <property name="icon">
+    <iconset resource="GUIResources.qrc">
+     <normaloff>:/resources/resources/dacs_logo.jpg</normaloff>:/resources/resources/dacs_logo.jpg</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;About</string>
    </property>
    <property name="statusTip">
-    <string>Open a STL specification file in the editor</string>
+    <string>Show information the tool</string>
    </property>
    <property name="font">
     <font>
@@ -540,18 +679,8 @@ p, li { white-space: pre-wrap; }
      <pointsize>12</pointsize>
     </font>
    </property>
-  </action>
-  <action name="actionRun">
-   <property name="text">
-    <string>Run...</string>
-   </property>
-  </action>
-  <action name="actionInfo">
-   <property name="text">
-    <string>&amp;About</string>
-   </property>
-   <property name="statusTip">
-    <string>Show information the tool</string>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
    </property>
   </action>
   <action name="actionProject_website">
@@ -579,40 +708,12 @@ p, li { white-space: pre-wrap; }
     <string>Ctrl+S</string>
    </property>
   </action>
-  <action name="saveSpec">
-   <property name="text">
-    <string>&amp;STL Specification</string>
-   </property>
-   <property name="statusTip">
-    <string>Save the STL specification file</string>
-   </property>
-   <property name="font">
-    <font>
-     <family>Ubuntu Mono</family>
-     <pointsize>12</pointsize>
-    </font>
-   </property>
-  </action>
   <action name="saveAsModel">
    <property name="text">
     <string>&amp;HPnG Model</string>
    </property>
    <property name="statusTip">
     <string>Save a HPnG model file in a specific location</string>
-   </property>
-   <property name="font">
-    <font>
-     <family>Ubuntu Mono</family>
-     <pointsize>12</pointsize>
-    </font>
-   </property>
-  </action>
-  <action name="saveAsSpec">
-   <property name="text">
-    <string>&amp;STL Specification</string>
-   </property>
-   <property name="statusTip">
-    <string>Save a STL specification file in a specific location</string>
    </property>
    <property name="font">
     <font>
@@ -635,6 +736,119 @@ p, li { white-space: pre-wrap; }
      <family>Ubuntu Mono</family>
      <pointsize>12</pointsize>
     </font>
+   </property>
+  </action>
+  <action name="actionDiscrete_Place">
+   <property name="text">
+    <string>Discrete Place</string>
+   </property>
+  </action>
+  <action name="actionFluid_Place">
+   <property name="text">
+    <string>Fluid Place</string>
+   </property>
+  </action>
+  <action name="actionDeterministic_Transition">
+   <property name="text">
+    <string>Deterministic Transition</string>
+   </property>
+  </action>
+  <action name="actionImmediate_Transition">
+   <property name="text">
+    <string>Immediate Transition</string>
+   </property>
+  </action>
+  <action name="actionFluid_Transition">
+   <property name="text">
+    <string>Fluid Transition</string>
+   </property>
+  </action>
+  <action name="actionGeneral_Transition">
+   <property name="text">
+    <string>General Transition</string>
+   </property>
+  </action>
+  <action name="actionDiscrete_Arc">
+   <property name="text">
+    <string>Discrete Arc</string>
+   </property>
+  </action>
+  <action name="actionFluid_Arc">
+   <property name="text">
+    <string>Fluid Arc</string>
+   </property>
+  </action>
+  <action name="actionInhibitor_Arc">
+   <property name="text">
+    <string>Inhibitor Arc</string>
+   </property>
+  </action>
+  <action name="actionTest_Arc">
+   <property name="text">
+    <string>Test Arc</string>
+   </property>
+  </action>
+  <action name="actionSTD">
+   <property name="icon">
+    <iconset resource="GUIResources.qrc">
+     <normaloff>:/resources/resources/introduction1.png</normaloff>:/resources/resources/introduction1.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;STD...</string>
+   </property>
+   <property name="font">
+    <font/>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionProbability_Distribution">
+   <property name="icon">
+    <iconset resource="GUIResources.qrc">
+     <normaloff>:/resources/resources/introduction3.png</normaloff>:/resources/resources/introduction3.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Cont. Place Prob. Plots...</string>
+   </property>
+   <property name="toolTip">
+    <string>Cont. Prob. Plots...</string>
+   </property>
+   <property name="font">
+    <font/>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionModel_Checker">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="GUIResources.qrc">
+     <normaloff>:/resources/resources/introduction4.png</normaloff>:/resources/resources/introduction4.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Model Checker...</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionFormula_Prob_Plots">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="GUIResources.qrc">
+     <normaloff>:/resources/resources/introduction2.png</normaloff>:/resources/resources/introduction2.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Formula Prob. Plots...</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
    </property>
   </action>
  </widget>
@@ -660,42 +874,10 @@ p, li { white-space: pre-wrap; }
    </hints>
   </connection>
   <connection>
-   <sender>openSpec</sender>
-   <signal>triggered()</signal>
-   <receiver>GUIController</receiver>
-   <slot>specOpen()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>312</x>
-     <y>179</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>newModel</sender>
    <signal>triggered()</signal>
    <receiver>GUIController</receiver>
    <slot>modelNew()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>312</x>
-     <y>179</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>newSpec</sender>
-   <signal>triggered()</signal>
-   <receiver>GUIController</receiver>
-   <slot>specNew()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -756,42 +938,10 @@ p, li { white-space: pre-wrap; }
    </hints>
   </connection>
   <connection>
-   <sender>saveSpec</sender>
-   <signal>triggered()</signal>
-   <receiver>GUIController</receiver>
-   <slot>specSave()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>312</x>
-     <y>179</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>saveAsModel</sender>
    <signal>triggered()</signal>
    <receiver>GUIController</receiver>
    <slot>modelSaveAs()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>312</x>
-     <y>179</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>saveAsSpec</sender>
-   <signal>triggered()</signal>
-   <receiver>GUIController</receiver>
-   <slot>specSaveAs()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -836,62 +986,46 @@ p, li { white-space: pre-wrap; }
    </hints>
   </connection>
   <connection>
-   <sender>specEditor</sender>
-   <signal>textChanged()</signal>
-   <receiver>GUIController</receiver>
-   <slot>specModified()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>312</x>
-     <y>205</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>312</x>
-     <y>179</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>generateSTD</sender>
-   <signal>clicked()</signal>
+   <sender>actionSTD</sender>
+   <signal>triggered()</signal>
    <receiver>GUIController</receiver>
    <slot>generateSTD()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>312</x>
-     <y>273</y>
+     <x>-1</x>
+     <y>-1</y>
     </hint>
     <hint type="destinationlabel">
-     <x>312</x>
-     <y>179</y>
+     <x>445</x>
+     <y>278</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>generateProbFunc</sender>
-   <signal>clicked()</signal>
+   <sender>actionProbability_Distribution</sender>
+   <signal>triggered()</signal>
    <receiver>GUIController</receiver>
    <slot>generateProbFunc()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>363</x>
-     <y>245</y>
+     <x>-1</x>
+     <y>-1</y>
     </hint>
     <hint type="destinationlabel">
-     <x>341</x>
-     <y>165</y>
+     <x>445</x>
+     <y>278</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>modelCheck</sender>
-   <signal>clicked()</signal>
+   <sender>actionModel_Checker</sender>
+   <signal>triggered()</signal>
    <receiver>GUIController</receiver>
    <slot>modelCheck()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>469</x>
-     <y>185</y>
+     <x>-1</x>
+     <y>-1</y>
     </hint>
     <hint type="destinationlabel">
      <x>445</x>
@@ -916,5 +1050,6 @@ p, li { white-space: pre-wrap; }
   <slot>generateSTD()</slot>
   <slot>generateProbFunc()</slot>
   <slot>modelCheck()</slot>
+  <slot>tempModelCheck()</slot>
  </slots>
 </ui>

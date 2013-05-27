@@ -10,9 +10,9 @@
 }
 
 #INCLUDEPATH += /usr/include/opencv \
-INCLUDEPATH += ../includes/opencv \
-               ../includes/opencv2 \
-               ../includes \
+INCLUDEPATH += ../includes_64/opencv \
+               ../includes_64/opencv2 \
+               ../includes_64 \
 
 #Make the tool run with the actual shared library of the model.
 #QMAKE_LFLAGS += -Wl,--rpath=\\\$\$ORIGIN
@@ -37,7 +37,7 @@ SOURCES +=  DFPN2.cpp\
             Polygon.cpp\
             TimedDiagram.cpp\
             Region.cpp\
-            Calculator.cpp\
+            Facade.cpp
 
 
 HEADERS +=  DFPN2.h\
@@ -50,4 +50,7 @@ HEADERS +=  DFPN2.h\
             Polygon.h\
             TimedDiagram.h\
             Region.h\
-            Calculator.h\
+            Facade.h\
+            Logger.h
+
+OTHER_FILES +=

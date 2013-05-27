@@ -10,7 +10,8 @@
 #include <QtGui>
 #include "QRect"
 #include "QDesktopWidget"
-#include "../model/Calculator.h"
+#include "../model/Facade.h"
+#include "../model/Logger.h"
 
 /**
  * @brief GUIController::GUIController is the constructor of the main window.
@@ -23,7 +24,8 @@
  */
 GUIController::GUIController(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::GUIController)
+    ui(new Ui::GUIController),
+    Logger()
 {
     // Create all elements in the window from the UI file.
     ui->setupUi(this);
@@ -38,13 +40,15 @@ GUIController::GUIController(QWidget *parent) :
 
     // Set the file names of the model and the specification.
     modelSetCurrentFile("");
-    specSetCurrentFile("");
 
     // Since it might look nice.
     setUnifiedTitleAndToolBarOnMac(true);
 
     // Initialization procedure was succesful.
     ui->statusBar->showMessage("Ready");
+
+    // Set program counter to 0
+    pc = 0;
 }
 
 /**
@@ -62,7 +66,7 @@ GUIController::~GUIController()
  */
 void GUIController::closeEvent(QCloseEvent *event)
 {
-    if (checkSave(ui->modelEditor) && checkSave(ui->specEditor)) {
+    if (checkSave(ui->modelEditor)) {
         event->accept();
     } else {
         event->ignore();
@@ -78,22 +82,22 @@ void GUIController::modelNew()
         ui->modelEditor->clear();
         modelSetCurrentFile("");
         modelModified();
-        ui->tabWidget->setCurrentIndex(ui->tabWidget->indexOf(ui->ModelTab));
+        this->addText("New model file created.");
     }
 }
 
-/**
- * @brief GUIController::specNew Creates a new specification file in the specification text editor
- */
-void GUIController::specNew()
-{
-    if (checkSave(ui->specEditor)) {
-        ui->specEditor->clear();
-        specSetCurrentFile("");
-        specModified();
-        ui->tabWidget->setCurrentIndex(ui->tabWidget->indexOf(ui->SpecTab));
-    }
-}
+///**
+// * @brief GUIController::specNew Creates a new specification file in the specification text editor
+// */
+//void GUIController::specNew()
+//{
+//    if (checkSave(ui->specEditor)) {
+//        ui->specEditor->clear();
+//        specSetCurrentFile("");
+//        specModified();
+//        ui->tabWidget->setCurrentIndex(ui->tabWidget->indexOf(ui->SpecTab));
+//    }
+//}
 
 /**
  * @brief GUIController::modelOpen Ask to define a file name for the model and open the file.
@@ -104,24 +108,24 @@ void GUIController::modelOpen()
         QString fileName = QFileDialog::getOpenFileName(this, tr("Open HPnG model"),"untitled.hpng",tr("HPnG files (*.hpng *.m);;All Files (*.*)"));
         if (!fileName.isEmpty()) {
             openFile(fileName,ui->modelEditor);
-            ui->tabWidget->setCurrentIndex(ui->tabWidget->indexOf(ui->ModelTab));
+            this->addText("Model file loaded.");
         }
     }
 }
 
-/**
- * @brief GUIController::specOpen Ask to define a file name for the specification and open the file.
- */
-void GUIController::specOpen()
-{
-    if (checkSave(ui->specEditor)) {
-        QString fileName = QFileDialog::getOpenFileName(this, tr("Open STL specification"),"untitled.stl",tr("STL files (*.stl);;All Files (*.*)"));
-        if (!fileName.isEmpty()) {
-            openFile(fileName,ui->specEditor);
-            ui->tabWidget->setCurrentIndex(ui->tabWidget->indexOf(ui->SpecTab));
-        }
-    }
-}
+///**
+// * @brief GUIController::specOpen Ask to define a file name for the specification and open the file.
+// */
+//void GUIController::specOpen()
+//{
+//    if (checkSave(ui->specEditor)) {
+//        QString fileName = QFileDialog::getOpenFileName(this, tr("Open STL specification"),"untitled.stl",tr("STL files (*.stl);;All Files (*.*)"));
+//        if (!fileName.isEmpty()) {
+//            openFile(fileName,ui->specEditor);
+//            ui->tabWidget->setCurrentIndex(ui->tabWidget->indexOf(ui->SpecTab));
+//        }
+//    }
+//}
 
 /**
  * @brief GUIController::modelSave Saves the current model file.
@@ -129,27 +133,30 @@ void GUIController::specOpen()
  */
 bool GUIController::modelSave()
 {
-    ui->tabWidget->setCurrentIndex(ui->tabWidget->indexOf(ui->ModelTab));
+    bool res = false;
     if (modelCurFile.isEmpty()) {
-        return modelSaveAs();
+        res = modelSaveAs();
     } else {
-        return saveFile(modelCurFile,ui->modelEditor);
+        res = saveFile(modelCurFile,ui->modelEditor);
     }
+
+    res ? this->addText("Model file is succesfully saved.") : this->addText("Model file is NOT saved.");
+    return res;
 }
 
-/**
- * @brief GUIController::specSave Saves the current specification file.
- * @return Gives true if the specification file is saved else false.
- */
-bool GUIController::specSave()
-{
-    ui->tabWidget->setCurrentIndex(ui->tabWidget->indexOf(ui->SpecTab));
-    if (specCurFile.isEmpty()) {
-        return specSaveAs();
-    } else {
-        return saveFile(specCurFile,ui->specEditor);
-    }
-}
+///**
+// * @brief GUIController::specSave Saves the current specification file.
+// * @return Gives true if the specification file is saved else false.
+// */
+//bool GUIController::specSave()
+//{
+//    ui->tabWidget->setCurrentIndex(ui->tabWidget->indexOf(ui->SpecTab));
+//    if (specCurFile.isEmpty()) {
+//        return specSaveAs();
+//    } else {
+//        return saveFile(specCurFile,ui->specEditor);
+//    }
+//}
 
 /**
  * @brief GUIController::modelSaveAs Gives a dialog where to save the model file and saves the file.
@@ -164,18 +171,18 @@ bool GUIController::modelSaveAs()
     return saveFile(fileName,ui->modelEditor);
 }
 
-/**
- * @brief GUIController::specSaveAs Gives a dialog where to save the specification file and saves the file.
- * @return Gives true if the specification file is saved else false.
- */
-bool GUIController::specSaveAs()
-{
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Save STL specification"),"untitled.stl",tr("STL files (*.stl);;All Files (*.*)"));
-    if (fileName.isEmpty())
-        return false;
+///**
+// * @brief GUIController::specSaveAs Gives a dialog where to save the specification file and saves the file.
+// * @return Gives true if the specification file is saved else false.
+// */
+//bool GUIController::specSaveAs()
+//{
+//    QString fileName = QFileDialog::getSaveFileName(this, tr("Save STL specification"),"untitled.stl",tr("STL files (*.stl);;All Files (*.*)"));
+//    if (fileName.isEmpty())
+//        return false;
 
-    return saveFile(fileName,ui->specEditor);
-}
+//    return saveFile(fileName,ui->specEditor);
+//}
 
 /**
  * @brief GUIController::about Gives some information about the tool in a small about pop-up.
@@ -183,7 +190,7 @@ bool GUIController::specSaveAs()
 void GUIController::about()
 {
    QMessageBox::about(this, tr("About FST"),
-            tr("FST is developed at the University of Twente.\n"
+            tr("Fluid Survival Tool is developed at the University of Twente.\n"
                "The application is for academic and non-commercial use only.\n\n"
                "Tool contributors:\n"
                "H. Ghasemieh, MSc.\n"
@@ -199,13 +206,13 @@ void GUIController::modelModified()
     ui->modelFileName->setText((modelCurFile == "" ? "untitled.hpng" : modelFileName) + (ui->modelEditor->document()->isModified() ? "*":""));
 }
 
-/**
- * @brief GUIController::specModified Places an asterix near the filename to indicate that the specificaiton file was modified.
- */
-void GUIController::specModified()
-{
-    ui->specFileName->setText((specCurFile == "" ? "untitled.stl" : specFileName) + (ui->specEditor->document()->isModified() ? "*":""));
-}
+///**
+// * @brief GUIController::specModified Places an asterix near the filename to indicate that the specificaiton file was modified.
+// */
+//void GUIController::specModified()
+//{
+//    ui->specFileName->setText((specCurFile == "" ? "untitled.stl" : specFileName) + (ui->specEditor->document()->isModified() ? "*":""));
+//}
 
 /**
  * @brief GUIController::checkSave Saves a modified file from an text editor.
@@ -223,8 +230,6 @@ bool GUIController::checkSave(QTextEdit *editor)
         if (ret == QMessageBox::Save)
             if (editor == ui->modelEditor) {
                 return modelSave();
-            } else if (editor == ui->specEditor) {
-                return specSave();
             } else {
                 return true;
             }
@@ -262,9 +267,6 @@ void GUIController::openFile(const QString &fileName, QTextEdit *editor)
     if (editor == ui->modelEditor) {
         modelSetCurrentFile(fileName);
         modelModified();
-    } else if (editor == ui->specEditor) {
-        specSetCurrentFile(fileName);
-        specModified();
     }
     statusBar()->showMessage(tr("File loaded"), 2000);
 }
@@ -298,9 +300,6 @@ bool GUIController::saveFile(const QString &fileName, QTextEdit *editor)
     if (editor == ui->modelEditor) {
         modelSetCurrentFile(fileName);
         modelModified();
-    } else if (editor == ui->specEditor) {
-        specSetCurrentFile(fileName);
-        specModified();
     }
     statusBar()->showMessage(tr("File saved"), 2000);
     return true;
@@ -325,24 +324,24 @@ void GUIController::modelSetCurrentFile(const QString &fileName)
     modelFileName = parts.at(parts.size()-1);
 }
 
-/**
- * @brief GUIController::specSetCurrentFile Displays the current specification file name.
- * @param fileName The name of the current specification file.
- */
-void GUIController::specSetCurrentFile(const QString &fileName)
-{
-    specCurFile = fileName;
-    ui->specEditor->document()->setModified(false);
-    setWindowModified(false);
+///**
+// * @brief GUIController::specSetCurrentFile Displays the current specification file name.
+// * @param fileName The name of the current specification file.
+// */
+//void GUIController::specSetCurrentFile(const QString &fileName)
+//{
+//    specCurFile = fileName;
+//    ui->specEditor->document()->setModified(false);
+//    setWindowModified(false);
 
-    QString shownName = specCurFile;
-    if (specCurFile.isEmpty())
-        shownName = "untitled.stl";
-    setWindowFilePath(shownName);
+//    QString shownName = specCurFile;
+//    if (specCurFile.isEmpty())
+//        shownName = "untitled.stl";
+//    setWindowFilePath(shownName);
 
-    QStringList parts = fileName.split("/");
-    specFileName = parts.at(parts.size()-1);
-}
+//    QStringList parts = fileName.split("/");
+//    specFileName = parts.at(parts.size()-1);
+//}
 
 /**
  * @brief GUIController::openProjectWebsite Opens the googlecode project website.
@@ -359,30 +358,30 @@ void GUIController::openProjectWebsite() {
  * @brief GUIController::generateSTD Generates an STD.
  */
 void GUIController::generateSTD() {
-    try {
-        this->addText("");
-        ui->tabWidget->setCurrentIndex(ui->tabWidget->indexOf(ui->MCTab));
-        if (checkSave(ui->modelEditor) && !modelCurFile.isEmpty()) {
-            model::Calculator *c;
-            c = new model::Calculator(modelCurFile,ui->placeEdit->text(),this);
-            if (c->showSTD(modelFileName)) {
+    STDDialogController dialogSTD(this,modelFileName);
+    if (!checkSave(ui->modelEditor) || modelCurFile.isEmpty()) {
+        this->addText("The model file should be saved before execution.");
+    } else if(dialogSTD.exec() == QDialog::Accepted )
+    {
+        try {
+            model::Facade *f;
+            f = new model::Facade(modelCurFile,this);
+            if (f->showSTD(modelFileName, dialogSTD.getMaxTime(), dialogSTD.getImageScale())) {
                 this->addText("Displaying STD...");
             } else {
                 this->addText("The STD could not be displayed.");
             }
-        } else {
-            this->addText("The model file should be saved before execution.");
+        } catch (const std::exception & e)  {
+            QMessageBox msgBox;
+            msgBox.setWindowTitle("Exception.");
+            msgBox.setInformativeText(e.what());
+            msgBox.exec();
+        } catch (...) {
+            QMessageBox msgBox;
+            msgBox.setWindowTitle("Exception.");
+            msgBox.setInformativeText("An unknown exception is caught.");
+            msgBox.exec();
         }
-    } catch (const std::exception & e)  {
-        QMessageBox msgBox;
-        msgBox.setWindowTitle("Exception.");
-        msgBox.setInformativeText(e.what());
-        msgBox.exec();
-    } catch (...) {
-        QMessageBox msgBox;
-        msgBox.setWindowTitle("Exception.");
-        msgBox.setInformativeText("An unknown exception is caught.");
-        msgBox.exec();
     }
 }
 
@@ -390,81 +389,131 @@ void GUIController::generateSTD() {
  * @brief GUIController::generateProbFunc Generates an probability function for a given place.
  */
 void GUIController::generateProbFunc() {
-      try {
-        // do something, maybe in a loop within subroutines
-        // that will trow specific errors for instance DecodingError
-        this->addText("");
-        ui->tabWidget->setCurrentIndex(ui->tabWidget->indexOf(ui->MCTab));
-        if (!modelCurFile.isEmpty() && checkSave(ui->modelEditor)) {
-            model::Calculator *c;
-            c = new model::Calculator(modelCurFile,ui->placeEdit->text(),this);
-            if (c->showProbFunc()) {
-                this->addText("Displaying Probability Distribution Pr-t plot...");
-            } else {
-                this->addText("The Probability Distribution Pr-t plot could not be displayed.");
+    PlaceProbDialogController dialogPlaceProb(this,modelFileName);
+    if (!checkSave(ui->modelEditor) || modelCurFile.isEmpty()) {
+        this->addText("The model file should be saved before execution.");
+    } else if(dialogPlaceProb.exec() == QDialog::Accepted )
+    {
+        try {
+            if (dialogPlaceProb.checkConstRange()) {
+                model::Facade *f;
+                f = new model::Facade(modelCurFile,dialogPlaceProb.getPlaceName(),this);
+                if (f->showProbFunc(dialogPlaceProb.getConstStart(),dialogPlaceProb.getConstEnd(),dialogPlaceProb.getConstStep(),dialogPlaceProb.getTimeStep(),dialogPlaceProb.getMaxTime())) {
+                    this->addText("Displaying Probability Distribution Pr-t plot...");
+                } else {
+                    this->addText("The Probability Distribution Pr-t plot could not be displayed.");
+                }
+            } if (dialogPlaceProb.checkSpecConst()) {
+                model::Facade *f;
+                f = new model::Facade(modelCurFile,dialogPlaceProb.getPlaceName(),this);
+                if (f->showProbFunc(dialogPlaceProb.getConst(),dialogPlaceProb.getTimeStep(),dialogPlaceProb.getMaxTime())) {
+                    this->addText("Displaying Probability Distribution Pr-t plot...");
+                } else {
+                    this->addText("The Probability Distribution Pr-t plot could not be displayed.");
+                }
             }
-        } else {
-            this->addText("The model file should be saved before execution.");
+        } catch (const std::exception & e)  {
+            QMessageBox msgBox;
+            msgBox.setWindowTitle("Exception.");
+            msgBox.setInformativeText(e.what());
+            msgBox.exec();
+        } catch (...) {
+            QMessageBox msgBox;
+            msgBox.setWindowTitle("Exception.");
+            msgBox.setInformativeText("An unknown exception is caught.");
+            msgBox.exec();
         }
-    } catch (const std::exception & e)  {
-        QMessageBox msgBox;
-        msgBox.setWindowTitle("Exception.");
-        msgBox.setInformativeText(e.what());
-        msgBox.exec();
-    } catch (...) {
-        QMessageBox msgBox;
-        msgBox.setWindowTitle("Exception.");
-        msgBox.setInformativeText("An unknown exception is caught.");
-        msgBox.exec();
     }
 }
 
 void GUIController::modelCheck(){
-    try {
-        this->addText("");
-        ui->tabWidget->setCurrentIndex(ui->tabWidget->indexOf(ui->MCTab));
-        if (!modelCurFile.isEmpty() && checkSave(ui->modelEditor)) {
-            model::Calculator *c;
-            c = new model::Calculator(modelCurFile,ui->placeEdit->text(),this);
-            if (c->modelCheck(ui->specEditor->toPlainText(), ui->time2Check->text())) {
-                this->addText("Model checking...");
-            } else {
-                this->addText("The model checking could not be performed.");
+    ModelCheckDialogController dialogModelCheck(this,modelFileName);
+    if (!checkSave(ui->modelEditor) || modelCurFile.isEmpty()) {
+        this->addText("The model file should be saved before execution.");
+    } else if(dialogModelCheck.exec() == QDialog::Accepted )
+    {
+        this->addText("Model Checking procedure initialized.");
+        try {
+                if (!modelCurFile.isEmpty() && checkSave(ui->modelEditor)) {
+                    model::Facade *f;
+                    f = new model::Facade(modelCurFile,this);
+                    if (f->modelCheck(dialogModelCheck.getFormula(), dialogModelCheck.getTTC(),dialogModelCheck.getMaxTime())) {
+                        this->addText("Model checking...");
+                    } else {
+                        this->addText("The model checking could not be performed.");
+                    }
+                } else {
+                    this->addText("The model file and the spec file should be saved before execution.");
+                }
+            } catch (const std::exception & e)  {
+                QMessageBox msgBox;
+                msgBox.setWindowTitle("Exception.");
+                msgBox.setInformativeText(e.what());
+                msgBox.exec();
+            } catch (...) {
+                QMessageBox msgBox;
+                msgBox.setWindowTitle("Exception.");
+                msgBox.setInformativeText("An unknown exception is caught.");
+                msgBox.exec();
             }
-        } else {
-            this->addText("The model file and the spec file should be saved before execution.");
-        }
-    } catch (const std::exception & e)  {
-        QMessageBox msgBox;
-        msgBox.setWindowTitle("Exception.");
-        msgBox.setInformativeText(e.what());
-        msgBox.exec();
-    } catch (...) {
-        QMessageBox msgBox;
-        msgBox.setWindowTitle("Exception.");
-        msgBox.setInformativeText("An unknown exception is caught.");
-        msgBox.exec();
-    }
+    }  
 }
+
+//void GUIController::tempModelCheck(){
+//    ModelCheckDialogController dialogModelCheck(this);
+//    if (!checkSave(ui->modelEditor) || modelCurFile.isEmpty()) {
+//        this->addText("The model file should be saved before execution.");
+//    } else if(dialogModelCheck.exec() == QDialog::Accepted )
+//    {
+//        try {
+//            this->addText("");
+//            model::Facade *f;
+//            f = new model::Facade(modelCurFile,dialogModelCheck.getTempPlaceName(),this);
+//            if (f->tempUntilModelCheck()) {
+//                this->addText("The model checking process ended succesfully.");
+//            } else {
+//                this->addText("The model checking could not be performed.");
+//            }
+//        } catch (const std::exception & e)  {
+//            QMessageBox msgBox;
+//            msgBox.setWindowTitle("Exception.");
+//            msgBox.setInformativeText(e.what());
+//            msgBox.exec();
+//        } catch (...) {
+//            QMessageBox msgBox;
+//            msgBox.setWindowTitle("Exception.");
+//            msgBox.setInformativeText("An unknown exception is caught.");
+//            msgBox.exec();
+//        }
+//    }
+//}
 
 /**
  * @brief GUIController::addText Add a text to the build-in terminal
  * @param str String containing the text to be added.
  */
-void GUIController::addText(QString str)
+void GUIController::addText(std::string str)
 {
+//    std::ofstream log("log.txt", std::ios_base::app | std::ios_base::out);
+
+//    log << this->getText();
+    //QString qStr = QString::fromAscii(str.data(),str.size());
     //this->setText("<font color=\"Black\"> \>" + str + "</font>" + "\n" + "<font color=\"Grey\">" + this->getText() + "</font>");
-    this->setText(this->getText() + "\n" + str);
+    std::stringstream sstream;
+    sstream << pc;
+    this->setText(this->getText() + "\n" + sstream.str() + " : " + str);
+    pc++;
 }
 
 /**
  * @brief GUIController::setText Set the text in the build-in terminal
  * @param str String containing the text to be set.
  */
-void GUIController::setText(QString str)
+void GUIController::setText(std::string str)
 {
+    QString qStr = QString::fromAscii(str.data(),str.size());
     //ui->outputEditor->setHtml(str);
-    ui->outputEditor->setText(str);
+    ui->outputEditor->setText(qStr);
     QScrollBar *sb = ui->outputEditor->verticalScrollBar();
     sb->triggerAction(QScrollBar::SliderToMaximum);
 }
@@ -473,7 +522,7 @@ void GUIController::setText(QString str)
  * @brief GUIController::getText Give the current text of the build-in terminal
  * @return Gives a QString text of the build-in terminal.
  */
-QString GUIController::getText()
+std::string GUIController::getText()
 {
-    return ui->outputEditor->toPlainText();
+    return ui->outputEditor->toPlainText().toStdString();
 }
