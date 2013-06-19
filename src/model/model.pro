@@ -37,7 +37,9 @@ SOURCES +=  DFPN2.cpp\
             Polygon.cpp\
             TimedDiagram.cpp\
             Region.cpp\
-            Facade.cpp
+            Facade.cpp\
+            flex/fmll.cpp\
+            flex/fmly.cpp\
 
 
 HEADERS +=  DFPN2.h\
@@ -51,6 +53,9 @@ HEADERS +=  DFPN2.h\
             TimedDiagram.h\
             Region.h\
             Facade.h\
-            Logger.h
+            Logger.h\
+            flex/parser_bison_class.tab.h\
 
-OTHER_FILES +=
+OTHER_FILES +=  flex/parser_bison_class.y\
+                flex/lexer.l\
+                flex/makefile\

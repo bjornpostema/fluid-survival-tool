@@ -1,0 +1,208 @@
+State 0:
+          main ::= * PR LEQ DOUBLE LPAREN expr RPAREN
+
+                            PR shift  19
+                          main accept
+
+State 1:
+          expr ::= * expr AND expr
+          expr ::= * NEG expr
+          expr ::= NEG * expr
+          expr ::= * expr UNTIL LCOLON DOUBLE COMMA DOUBLE RCOLON expr
+          expr ::= * atomdisexpr
+          atomdisexpr ::= * VARIABLE EQUALS DOUBLE
+          expr ::= * atomcontexpr
+          atomcontexpr ::= * VARIABLE LEQ DOUBLE
+
+                      VARIABLE shift  6
+                           NEG shift  1
+                          expr shift  7
+                   atomdisexpr shift  23
+                  atomcontexpr shift  20
+
+State 2:
+          expr ::= * expr AND expr
+          expr ::= * NEG expr
+          expr ::= * expr UNTIL LCOLON DOUBLE COMMA DOUBLE RCOLON expr
+          expr ::= expr UNTIL LCOLON DOUBLE COMMA DOUBLE RCOLON * expr
+          expr ::= * atomdisexpr
+          atomdisexpr ::= * VARIABLE EQUALS DOUBLE
+          expr ::= * atomcontexpr
+          atomcontexpr ::= * VARIABLE LEQ DOUBLE
+
+                      VARIABLE shift  6
+                           NEG shift  1
+                          expr shift  24
+                   atomdisexpr shift  23
+                  atomcontexpr shift  20
+
+State 3:
+          expr ::= * expr AND expr
+          expr ::= expr AND * expr
+          expr ::= * NEG expr
+          expr ::= * expr UNTIL LCOLON DOUBLE COMMA DOUBLE RCOLON expr
+          expr ::= * atomdisexpr
+          atomdisexpr ::= * VARIABLE EQUALS DOUBLE
+          expr ::= * atomcontexpr
+          atomcontexpr ::= * VARIABLE LEQ DOUBLE
+
+                      VARIABLE shift  6
+                           NEG shift  1
+                          expr shift  15
+                   atomdisexpr shift  23
+                  atomcontexpr shift  20
+
+State 4:
+          main ::= PR LEQ DOUBLE LPAREN * expr RPAREN
+          expr ::= * expr AND expr
+          expr ::= * NEG expr
+          expr ::= * expr UNTIL LCOLON DOUBLE COMMA DOUBLE RCOLON expr
+          expr ::= * atomdisexpr
+          atomdisexpr ::= * VARIABLE EQUALS DOUBLE
+          expr ::= * atomcontexpr
+          atomcontexpr ::= * VARIABLE LEQ DOUBLE
+
+                      VARIABLE shift  6
+                           NEG shift  1
+                          expr shift  5
+                   atomdisexpr shift  23
+                  atomcontexpr shift  20
+
+State 5:
+          main ::= PR LEQ DOUBLE LPAREN expr * RPAREN
+          expr ::= expr * AND expr
+          expr ::= expr * UNTIL LCOLON DOUBLE COMMA DOUBLE RCOLON expr
+
+                           AND shift  3
+                         UNTIL shift  14
+                        RPAREN shift  16
+
+State 6:
+          atomdisexpr ::= VARIABLE * EQUALS DOUBLE
+          atomcontexpr ::= VARIABLE * LEQ DOUBLE
+
+                           LEQ shift  8
+                        EQUALS shift  9
+
+State 7:
+          expr ::= expr * AND expr
+      (2) expr ::= NEG expr *
+          expr ::= expr * UNTIL LCOLON DOUBLE COMMA DOUBLE RCOLON expr
+
+                           AND shift  3
+                         UNTIL shift  14
+                     {default} reduce 2
+
+State 8:
+          atomcontexpr ::= VARIABLE LEQ * DOUBLE
+
+                        DOUBLE shift  21
+
+State 9:
+          atomdisexpr ::= VARIABLE EQUALS * DOUBLE
+
+                        DOUBLE shift  22
+
+State 10:
+          expr ::= expr UNTIL LCOLON DOUBLE COMMA DOUBLE * RCOLON expr
+
+                        RCOLON shift  2
+
+State 11:
+          expr ::= expr UNTIL LCOLON DOUBLE COMMA * DOUBLE RCOLON expr
+
+                        DOUBLE shift  10
+
+State 12:
+          expr ::= expr UNTIL LCOLON DOUBLE * COMMA DOUBLE RCOLON expr
+
+                         COMMA shift  11
+
+State 13:
+          expr ::= expr UNTIL LCOLON * DOUBLE COMMA DOUBLE RCOLON expr
+
+                        DOUBLE shift  12
+
+State 14:
+          expr ::= expr UNTIL * LCOLON DOUBLE COMMA DOUBLE RCOLON expr
+
+                        LCOLON shift  13
+
+State 15:
+          expr ::= expr * AND expr
+      (1) expr ::= expr AND expr *
+          expr ::= expr * UNTIL LCOLON DOUBLE COMMA DOUBLE RCOLON expr
+
+                         UNTIL shift  14
+                     {default} reduce 1
+
+State 16:
+      (0) main ::= PR LEQ DOUBLE LPAREN expr RPAREN *
+
+                             $ reduce 0
+
+State 17:
+          main ::= PR LEQ DOUBLE * LPAREN expr RPAREN
+
+                        LPAREN shift  4
+
+State 18:
+          main ::= PR LEQ * DOUBLE LPAREN expr RPAREN
+
+                        DOUBLE shift  17
+
+State 19:
+          main ::= PR * LEQ DOUBLE LPAREN expr RPAREN
+
+                           LEQ shift  18
+
+State 20:
+      (6) expr ::= atomcontexpr *
+
+                     {default} reduce 6
+
+State 21:
+      (7) atomcontexpr ::= VARIABLE LEQ DOUBLE *
+
+                     {default} reduce 7
+
+State 22:
+      (5) atomdisexpr ::= VARIABLE EQUALS DOUBLE *
+
+                     {default} reduce 5
+
+State 23:
+      (4) expr ::= atomdisexpr *
+
+                     {default} reduce 4
+
+State 24:
+          expr ::= expr * AND expr
+          expr ::= expr * UNTIL LCOLON DOUBLE COMMA DOUBLE RCOLON expr
+      (3) expr ::= expr UNTIL LCOLON DOUBLE COMMA DOUBLE RCOLON expr *
+
+                     {default} reduce 3
+
+----------------------------------------------------
+Symbols:
+    0: $:
+    1: DOUBLE
+    2: INTEGER
+    3: VARIABLE
+    4: NEG
+    5: AND
+    6: OR
+    7: UNTIL
+    8: PR
+    9: LEQ
+   10: LPAREN
+   11: RPAREN
+   12: LCOLON
+   13: COMMA
+   14: RCOLON
+   15: EQUALS
+   16: error:
+   17: expr: VARIABLE NEG
+   18: main: PR
+   19: atomdisexpr: VARIABLE
+   20: atomcontexpr: VARIABLE

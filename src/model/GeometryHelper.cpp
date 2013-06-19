@@ -34,7 +34,7 @@ RegionState GeometryHelper::getTimeAndDirection(DtrmEvent* dtrmRegion,Formula* f
 
 	if (formula->getType() == COMBI){
 		AtomDisFormula* disFormula = ((ADFormula*)formula)->disFormula;
-		if (dtrmRegion->postRegionMarking->tokens[disFormula->getPlaceIndex()] != disFormula->getN())
+        if (dtrmRegion->postRegionMarking->tokens[disFormula->getPlaceIndex()] != disFormula->getN())
 			return NONE;
 	}
 
@@ -44,8 +44,8 @@ RegionState GeometryHelper::getTimeAndDirection(DtrmEvent* dtrmRegion,Formula* f
 	}else
 		atomConProp = ((AtomContFormula*)formula);
 
-	double f0 = dtrmRegion->postRegionMarking->fluid0[model->places[atomConProp->getPlaceIndex()].idInMarking];
-	double d = dtrmRegion->postRegionMarking->fluidPlaceDeriv[model->places[atomConProp->getPlaceIndex()].idInMarking];
+    double f0 = dtrmRegion->postRegionMarking->fluid0[model->places[atomConProp->getPlaceIndex()].idInMarking];
+    double d = dtrmRegion->postRegionMarking->fluidPlaceDeriv[model->places[atomConProp->getPlaceIndex()].idInMarking];
 
 	if (d == 0){
 		if (f0 >= atomConProp->getC())
@@ -112,7 +112,7 @@ Polygon* GeometryHelper::createPolygon(Region* region, Formula* formula) {
 
 	if (formula->getType() == COMBI){
 		AtomDisFormula* disFormula = ((ADFormula*)formula)->disFormula;
-		if (region->marking->tokens[disFormula->getPlaceIndex()] != disFormula->getN())
+        if (region->marking->tokens[disFormula->getPlaceIndex()] != disFormula->getN())
 			return NULL;
 	}
 
@@ -123,9 +123,9 @@ Polygon* GeometryHelper::createPolygon(Region* region, Formula* formula) {
 		atomConProp = ((AtomContFormula*)formula);
 
 
-	double f0 = region->marking->fluid0[model->places[atomConProp->getPlaceIndex()].idInMarking];
-	double f1 = region->marking->fluid1[model->places[atomConProp->getPlaceIndex()].idInMarking];
-	double d = region->marking->fluidPlaceDeriv[model->places[atomConProp->getPlaceIndex()].idInMarking];
+    double f0 = region->marking->fluid0[model->places[atomConProp->getPlaceIndex()].idInMarking];
+    double f1 = region->marking->fluid1[model->places[atomConProp->getPlaceIndex()].idInMarking];
+    double d = region->marking->fluidPlaceDeriv[model->places[atomConProp->getPlaceIndex()].idInMarking];
 
 	std:: cout << "f0: "<< f0 << " f1: " << f1 << " d: "<< d << std::endl;
 	Polygon* poly;

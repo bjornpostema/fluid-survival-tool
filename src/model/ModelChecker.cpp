@@ -114,13 +114,13 @@ bool ModelChecker::setVariables() {
     case Uni:
         argFinder = strtok(argument,",");
         if (argFinder == NULL) {
-            guic->addText(QString("Transition #%1 : %2 has an invalid cumulative distribution function (cdf) for uni{a,b}, since this requires two arguments.").arg(gTransitionId(this->model)+1).arg(this->model->transitions[gTransitionId(this->model)].id).toStdString());
+            guic->addError(QString("Transition #%1 : %2 has an invalid cumulative distribution function (cdf) for uni{a,b}, since this requires two arguments.").arg(gTransitionId(this->model)+1).arg(this->model->transitions[gTransitionId(this->model)].id).toStdString());
             return false;
         }
         a = atof(argFinder);
         argFinder = strtok(NULL,",");
         if (argFinder == NULL) {
-            guic->addText(QString("Transition #%1 : %2 has an invalid cumulative distribution function (cdf) for uni{a,b}, since this requires two arguments.").arg(gTransitionId(this->model)+1).arg(this->model->transitions[gTransitionId(this->model)].id).toStdString());
+            guic->addError(QString("Transition #%1 : %2 has an invalid cumulative distribution function (cdf) for uni{a,b}, since this requires two arguments.").arg(gTransitionId(this->model)+1).arg(this->model->transitions[gTransitionId(this->model)].id).toStdString());
             return false;
         }
         this->setAB(a,atof(argFinder));
@@ -133,13 +133,13 @@ bool ModelChecker::setVariables() {
     case FoldedNorm:
         argFinder = strtok(argument,",");
         if (argFinder == NULL) {
-            guic->addText(QString("Transition #%1 : %2 has an invalid cumulative distribution function (cdf) for norm{mu,sigma}, since this requires two arguments.").arg(gTransitionId(this->model)+1).arg(this->model->transitions[gTransitionId(this->model)].id).toStdString());
+            guic->addError(QString("Transition #%1 : %2 has an invalid cumulative distribution function (cdf) for norm{mu,sigma}, since this requires two arguments.").arg(gTransitionId(this->model)+1).arg(this->model->transitions[gTransitionId(this->model)].id).toStdString());
             return false;
         }
         this->setMu(atof(argFinder));
         argFinder = strtok(NULL,",");
         if (argFinder == NULL) {
-            guic->addText(QString("Transition #%1 : %2 has an invalid cumulative distribution function (cdf) for norm{mu,sigma}, since this requires two arguments.").arg(gTransitionId(this->model)+1).arg(this->model->transitions[gTransitionId(this->model)].id).toStdString());
+            guic->addError(QString("Transition #%1 : %2 has an invalid cumulative distribution function (cdf) for norm{mu,sigma}, since this requires two arguments.").arg(gTransitionId(this->model)+1).arg(this->model->transitions[gTransitionId(this->model)].id).toStdString());
             return false;
         }
         this->setSigma(atof(argFinder));
@@ -148,13 +148,13 @@ bool ModelChecker::setVariables() {
     case Norm:
         argFinder = strtok(argument,",");
         if (argFinder == NULL) {
-            guic->addText(QString("Transition #%1 : %2 has an invalid cumulative distribution function (cdf) for norm{mu,sigma}, since this requires two arguments.").arg(gTransitionId(this->model)+1).arg(this->model->transitions[gTransitionId(this->model)].id).toStdString());
+            guic->addError(QString("Transition #%1 : %2 has an invalid cumulative distribution function (cdf) for norm{mu,sigma}, since this requires two arguments.").arg(gTransitionId(this->model)+1).arg(this->model->transitions[gTransitionId(this->model)].id).toStdString());
             return false;
         }
         this->setMu(atof(argFinder));
         argFinder = strtok(NULL,",");
         if (argFinder == NULL) {
-            guic->addText(QString("Transition #%1 : %2 has an invalid cumulative distribution function (cdf) for norm{mu,sigma}, since this requires two arguments.").arg(gTransitionId(this->model)+1).arg(this->model->transitions[gTransitionId(this->model)].id).toStdString());
+            guic->addError(QString("Transition #%1 : %2 has an invalid cumulative distribution function (cdf) for norm{mu,sigma}, since this requires two arguments.").arg(gTransitionId(this->model)+1).arg(this->model->transitions[gTransitionId(this->model)].id).toStdString());
             return false;
         }
         this->setSigma(atof(argFinder));
@@ -229,9 +229,9 @@ IntervalSet* ModelChecker::visitDtrmRegion(DtrmEvent* dtrmRegion, Formula* psi1,
 
 }
 
-IntervalSet* ModelChecker::until(Formula* psi1, Formula* psi2, Interval bound) {
+bool ModelChecker::until(IntervalSet *&satSet, Formula* psi1, Formula* psi2, Interval bound) {
 	// TODO: Currently I have assumed that the given bound starts at 0 ie. T_1 = 0.
-
+    // TODO: Traverse through the formulas retrieving the polygons. Then in the end retrieve the intervalset.
 //	if (satSet != NULL)
 //		satSet->clear();
 //	else
@@ -268,7 +268,7 @@ IntervalSet* ModelChecker::until(Formula* psi1, Formula* psi2, Interval bound) {
 		}
 	}
 
-	return satSet;
+    return true;
 }
 
 //IntervalSet* ModelChecker::tempUntil(Formula* psi1, Formula* psi2, Interval bound, double time) {
@@ -315,51 +315,50 @@ IntervalSet* ModelChecker::until(Formula* psi1, Formula* psi2, Interval bound) {
 //    return satSet;
 //}
 
-IntervalSet* ModelChecker::iSetTT() {
-    IntervalSet* resISet = new IntervalSet();
+bool ModelChecker::iSetTT(IntervalSet *&res) {
+    res = new IntervalSet();
     Interval I(0, INFINITY);
-    resISet->intervals.push_back(I);
+    res->intervals.push_back(I);
     std::cout << "IntervalSet result TT : ";
-    resISet->print(std::cout);
+    res->print(std::cout);
     std::cout << std::endl;
-    return resISet;
+    return true;
 }
 
-IntervalSet* ModelChecker::iSetNeg(IntervalSet* iset1) {
+bool ModelChecker::iSetNeg(IntervalSet *&res, IntervalSet* iset1) {
     std::cout << "IntervalSet 1 : ";
     iset1->print(std::cout);
     std::cout << std::endl;
-    IntervalSet* resISet;
-    resISet = iSetTT()->minus(iset1);
+    if(!iSetTT(res)) return false;
+    res->minus(iset1);
     std::cout << "IntervalSet result NEG : ";
-    resISet->print(std::cout);
+    res->print(std::cout);
     std::cout << std::endl;
-    return resISet;
+    return true;
 }
 
-IntervalSet* ModelChecker::iSetAnd(IntervalSet* iset1, IntervalSet* iset2) {
+bool ModelChecker::iSetAnd(IntervalSet *&res, IntervalSet* iset1, IntervalSet* iset2) {
     std::cout << "IntervalSet 1 : ";
     iset1->print(std::cout);
     std::cout << std::endl;
     std::cout << "IntervalSet 2 : ";
     iset2->print(std::cout);
     std::cout << std::endl;
-    IntervalSet* resISet;
-    resISet = iset1->intersect(iset2);
+    res = iset1->intersect(iset2);
     std::cout << "IntervalSet result AND : ";
-    resISet->print(std::cout);
+    res->print(std::cout);
     std::cout << std::endl;
-    return resISet;
+    return true;
 }
 
-IntervalSet* ModelChecker::iSetAtomDis(AtomDisFormula* psi1) {
-    IntervalSet *res = this->calcAtomDisISetAtTime(ttc, psi1->getPlaceIndex(), psi1->getN());
-    return res;
+bool ModelChecker::iSetAtomDis(IntervalSet *&res, AtomDisFormula* psi1) {
+    res = this->calcAtomDisISetAtTime(ttc, psi1->getPlaceIndex(), psi1->getN());
+    return true;
 }
 
-IntervalSet* ModelChecker::iSetAtomCont(AtomContFormula* psi1) {
-    IntervalSet *res = this->calcAtomContISetAtTime(ttc, psi1->getPlaceIndex(), psi1->getC());
-    return res;
+bool ModelChecker::iSetAtomCont(IntervalSet *&res, AtomContFormula* psi1) {
+    res = this->calcAtomContISetAtTime(ttc, psi1->getPlaceIndex(), psi1->getC());
+    return true;
 }
 
 double ModelChecker::calcProb(IntervalSet* iSet, double shift) {
@@ -391,26 +390,98 @@ double ModelChecker::calcProb(IntervalSet* iSet, double shift) {
     return prob;
 }
 
-Formula ModelChecker::parseFML(QString rawFML) {
+bool ModelChecker::parseFML(Formula *&fullFML, QString rawFormula) {
     /*
-     * TODO: Parse the STL formula
-     * Use Flex + Lemon, YACC or Bison, rather than ANTLR or own implementation.
+     * Parse the STL formula
+     * Use Flex + Bison
      * Flex (Lexer) : Scans the lines and transforms it into tokens.
-     * Lemon (Parser) : Creates the datastructure of the AST and gives initial values to the different type of formulas.
+     * Bison (Parser) : Creates the datastructure of the AST and gives initial values to the different type of formulas.
      */
+    yy_scan_string(rawFormula.toAscii().data());
+    yyparse();
+    yylex_destroy();
+    reset_lexer();
+    if (getColError() == -1) {
+        guic->addText("The formula is succesfully parsed.");
+    } else {
+        guic->addError(QString("Syntax error for character %1 in formula %2: The formula could not be parsed.").arg(getColError()).arg(rawFormula).toStdString());
+        return false;
+    }
+    //fullFML = parser_results();
+    double prob = 0.2;
+    Interval bound(0,10);
+    fullFML = new ProbFormula(new UntilFormula(new AtomContFormula(0,0,"reservoir",5.00),new AtomDisFormula(0,0,"pumpon",0),bound),0,prob,LEQ);
+//    /*
+//     * Some intermediate datastructures that should work as test cases.
+//     */
+//    double n1 = 1, c2 = 0.1, c3 = 0.2;
+//    double t1 = 0, t2 = 10;
+//    double ttc = 2.00, prob = 0.2;
+//    Interval bound(0,10);
 
+//    if (QString::compare(rawFormula, QString("Pr<=0.2 (P(1) == 1)")) == STR_EQUAL) {
+//        // P(1)=1
+//        fullFML = new ProbFormula(new AtomDisFormula(0,0,"Input1On",n1),0,prob,LEQ);
+//        guic->addText("Checking demo formula 1 : Pr&lt;=0.2 (P(1) == 1)");
+//    } else if (QString::compare(rawFormula, QString("Pr<=0.2 (P(6) <= 0.1)")) == STR_EQUAL) {
+//        // P(8)<=0.1
+//        fullFML = new ProbFormula(new AtomContFormula(0,0,"soft1",c2),0,prob,LEQ);
+//        guic->addText("Checking demo formula 2 : Pr&lt;=0.2 (P(6) &lt;= 0.1)");
+//    } else if (QString::compare(rawFormula, QString("Pr<=0.2 (P(6) <= 0.2 AND P(6) <= 0.1)")) == STR_EQUAL) {
+//        // P(1)=1 ^ P(8)<=0.1
+//        fullFML = new ProbFormula (new AndFormula(new AtomContFormula(0,0,"soft1", c3),new AtomContFormula(0,0,"soft1",c2)),0,prob,LEQ);
+//        guic->addText("Checking demo formula 3 : Pr&lt;=0.2 (P(6) &lt;= 0.2 AND P(6) &lt;= 0.1)");
+//    } else if (QString::compare(rawFormula, QString("Pr<=0.2 ~(P(6) == 0.1)")) == STR_EQUAL) {
+//        // ~P(8)<=0.1
+//        fullFML = new ProbFormula (new NegFormula(new AtomContFormula(0,0,"soft1",c2),0),0,prob,LEQ);
+//        guic->addText("Checking demo formula 4 : Pr&lt;=0.2 ~(P(6) == 0.1)");
+//    } else if (QString::compare(rawFormula, QString("Pr<=0.2 ~(P(1) == 1)")) == STR_EQUAL) {
+//        // ~P(1)=1
+//        fullFML = new ProbFormula (new NegFormula(new AtomDisFormula(0,0,"Input1On", n1),0),0,prob,LEQ);
+//        guic->addText("Checking demo formula 5 : Pr&lt;=0.2 ~(P(1) == 1)");
+//    } else if (QString::compare(rawFormula, QString("Pr<=0.2 (tt)")) == STR_EQUAL) {
+//        // tt
+//        fullFML = new ProbFormula(new TrueFormula(0,0),0,prob,LEQ);
+//        guic->addText("Checking demo formula 6 : Pr&lt;=0.2 (tt)");
+//    } else if (QString::compare(rawFormula, QString("Pr<=0.2 (P(1)=1 U[0,10] P(8)=0.1)")) == STR_EQUAL) {
+//        // P(1)=1 U[0,10] P(8)=0.1
+//        fullFML = new ProbFormula(new UntilFormula(new AtomDisFormula(0,0,"Input1On", n1),new AtomContFormula(0,0,"stor2",c3),bound),0,prob,LEQ);
+//        guic->addText("Checking demo formula 7 : Pr&lt;=0.2 (P(1)=1 U[0,10] P(8)=0.1)");
+//    } else if (QString::compare(rawFormula, QString("Pr<=0.2 ((P(1)=1 AND P(8)<=0.1) U[0,10] P(9)=0.2)")) == STR_EQUAL) {
+//        // (P(1)=1 ^ P(8)<=0.1) U[0,10] P(9)=0.2
+//        fullFML = new ProbFormula(new UntilFormula(new AndFormula(new AtomDisFormula(0,0,"Input1On", n1),new AtomContFormula(0,0,"soft1",c2)),new AtomContFormula(0,0,"stor2",c3),bound),0,prob,LEQ);
+//        guic->addText("Checking demo formula 8 : Pr&lt;=0.2 ((P(1)=1 AND P(8)&lt;=0.1) U[0,10] P(9)=0.2)");
+//    } else if (QString::compare(rawFormula, QString("Pr<=0.2 (P(2) <= 5)")) == STR_EQUAL) {
+//        fullFML = new ProbFormula(new AtomContFormula(0,0,"reservoir",5.00),0,prob,LEQ);
+//        guic->addText("Checking demo formula 1 : Pr&lt;=0.2 (P(2) &lt;= 5)");
+//    } else if (QString::compare(rawFormula, QString("Pr<=0.2 (P(0) == 0)")) == STR_EQUAL) {
+//        fullFML = new ProbFormula(new AtomDisFormula(0,0,"pumpOn",0),0,prob,LEQ);
+//        guic->addText("Checking demo formula 2 : Pr&lt;=0.2 (P(0) == 0)");
+//    } else if (QString::compare(rawFormula, QString("Pr<=0.2 (~P(0) == 0)")) == STR_EQUAL) {
+//        fullFML = new ProbFormula(new NegFormula(new AtomDisFormula(0,0,"pumpOn",0),0),0,prob,LEQ);
+//        guic->addText("Checking demo formula 3 : Pr&lt;=0.2 (~ P(0) == 0)");
+//    } else if (QString::compare(rawFormula, QString("Pr<=0.2 (P(0) == 0 AND P(2) <= 5)")) == STR_EQUAL) {
+//        fullFML = new ProbFormula(new AndFormula(new AtomDisFormula(0,0,"pumpOn",0),new AtomContFormula(0,0,"reservoir",5.00)),0,prob,LEQ);
+//        guic->addText("Checking demo formula 4 : Pr&lt;=0.2 (P(0) == 0 AND P(2) &lt;= 5)");
+//    } else if (QString::compare(rawFormula, QString("Pr<=0.2 (P(0) == 0 U[0,10] P(2) <= 5)")) == STR_EQUAL) {
+//        fullFML = new ProbFormula(new UntilFormula(new AtomContFormula(0,0,"reservoir",5.00),new AtomDisFormula(0,0,"pumpOn",0),bound),0,prob,LEQ);
+//        guic->addText("Checking demo formula 5 : Pr&lt;=0.2 (P(0) == 0 U[0,10] P(2) &lt;= 5)");
+//    } else {
+        //guic->addText("Checking the input formula.");
+//    }
+return true;
 }
 
-bool ModelChecker::traverseFML(Formula *fullFML) {
+bool ModelChecker::traverseFML(bool &res, Formula *fullFML) {
     /*
      * TODO: Traverse through the STL formula
      * Strategies is post-order
      */
     IntervalSet *iSetLeft;
     IntervalSet *iSetRight;
-    bool res = false;
-    if (fullFML->getLeftChild() != 0) { iSetLeft = traverseISetFML(fullFML->getLeftChild()); }
-    if (fullFML->getRightChild() != 0) { iSetRight = traverseISetFML(fullFML->getRightChild()); }
+    res = false;
+    if (fullFML->getLeftChild() != 0) { if (!traverseISetFML(iSetLeft,fullFML->getLeftChild())) return false; }
+    if (fullFML->getRightChild() != 0) { if (!traverseISetFML(iSetRight,fullFML->getRightChild())) return false; }
 
     /*
      * Actual actions of the formulas
@@ -435,59 +506,81 @@ bool ModelChecker::traverseFML(Formula *fullFML) {
             break;
         }
     }
-
-
-    return res;
+    return true;
 }
 
-IntervalSet* ModelChecker::traverseISetFML(Formula *fullFML) {
+bool ModelChecker::traverseISetFML(IntervalSet *&res, Formula *fullFML) {
     /*
      * TODO: Traverse through the STL formula
      * Strategies is post-order
      */
-    IntervalSet *res = 0;
+    res = 0;
     IntervalSet *iSetLeft;
     IntervalSet *iSetRight;
-    if (fullFML->getLeftChild() != 0) { iSetLeft = traverseISetFML(fullFML->getLeftChild()); }
-    if (fullFML->getRightChild() != 0) { iSetRight = traverseISetFML(fullFML->getRightChild()); }
+    if (fullFML->getLeftChild() != 0) { if (!traverseISetFML(iSetLeft, fullFML->getLeftChild())) return false; }
+    if (fullFML->getRightChild() != 0) { if (!traverseISetFML(iSetRight,fullFML->getRightChild())) return false; }
     /*
      * Actual actions of the formulas
      */
 
+    if (iSetLeft == 0 || iSetRight == 0) {
+        return false;
+    }
+
     switch (fullFML->getType())
     {
-    case DISCRETE: res = iSetAtomDis((AtomDisFormula*)fullFML);
+    case DISCRETE:
+        /*
+        * Since parser does not know anything about the model the placeIndeces need to be discovered.
+        */
+        if (((AtomDisFormula*)fullFML)->setPlaceIndex(model)) {
+            if(!iSetAtomDis(res,(AtomDisFormula*)fullFML)) return false;
+        } else {
+            guic->addError(QString("There is an incorrect fluid place name called '%1' in your formula.").arg(((AtomDisFormula*)fullFML)->getPlaceName()).toStdString());
+            res = 0;
+        }
     break;
-    case CONTINUOUS: res = iSetAtomCont((AtomContFormula*)fullFML);
+    case CONTINUOUS:
+        /*
+        * Since parser does not know anything about the model the placeIndeces need to be discovered.
+        */
+        if (((AtomContFormula*)fullFML)->setPlaceIndex(model)) {
+            if (!iSetAtomCont(res,(AtomContFormula*)fullFML)) return false;
+        } else {
+            guic->addError(QString("There is an incorrect fluid place name called '%1' in your formula.").arg(((AtomContFormula*)fullFML)->getPlaceName()).toStdString());
+            res = 0;
+        }
     break;
-    case TT: res = iSetTT();
+    case TT: if(!iSetTT(res)) return false;
     break;
     case AND:
         if (fullFML->getLeftChild() != 0 && fullFML->getRightChild() != 0) {
             IntervalSet *iSetLeft;
-            iSetLeft = traverseISetFML(fullFML->getLeftChild());
+            if(!traverseISetFML(iSetLeft,fullFML->getLeftChild())) return false;
             IntervalSet *iSetRight;
-            iSetRight = traverseISetFML(fullFML->getRightChild());
-            res = iSetAnd(iSetLeft,iSetRight);
-            delete iSetLeft;
-            delete iSetRight;
+            if(!traverseISetFML(iSetRight,fullFML->getRightChild())) return false;
+            if(!iSetAnd(res,iSetLeft,iSetRight)) return false;
         }
     break;
     case NEG:
         if (fullFML->getLeftChild() != 0) {
             IntervalSet *iSetLeft;
-            iSetLeft = traverseISetFML(fullFML->getLeftChild());
-            res = iSetNeg(iSetLeft);
+            if(!traverseISetFML(iSetLeft,fullFML->getLeftChild())) return false;
+            if (!iSetNeg(res,iSetLeft)) return false;
         }
     break;
     case UNTIL:
         if (fullFML->getLeftChild() != 0 && fullFML->getRightChild() != 0) {
-            Interval bound;
+            Interval bound = ((UntilFormula*)fullFML)->getBound();
             /*
              * Start the Until procedure with polygons.
              */
-            res = until(fullFML->getLeftChild(),fullFML->getRightChild(),bound);
+            if(!until(res,fullFML->getLeftChild(),fullFML->getRightChild(),bound)) return false;
         }
+    break;
+    default:
+        guic->addError("An unknown formula is detected.");
+        res = 0;
     break;
     }
     return res;
@@ -499,21 +592,23 @@ IntervalSet* ModelChecker::calcAtomDisISetAtTime(double time, int pIndex, double
     IntervalSet *iSet = new IntervalSet();
     Point p1, p2;
 
-    std::cout << "RegionList size : " << TimedDiagram::getInstance()->regionList.size() << std::endl;
-    std::cout << "DtrmEventList size : " << TimedDiagram::getInstance()->dtrmEventList.size() << std::endl;
+//    std::cout << "RegionList size : " << TimedDiagram::getInstance()->regionList.size() << std::endl;
+//    std::cout << "DtrmEventList size : " << TimedDiagram::getInstance()->dtrmEventList.size() << std::endl;
 
     /* First iterate over all the regions in the stochastic area. */
     if (time > TimedDiagram::getInstance()->getTrEnabledTime()) {
         for (int i = 0; (unsigned)i < TimedDiagram::getInstance()->regionList.size(); i++) {
-            Line timeLine(time);
-            if (TimedDiagram::getInstance()->regionList[i]->intersect(timeLine, p1, p2)) {
+            double sFrameTime = time - TimedDiagram::getInstance()->getTrEnabledTime();
+
+            Segment timeSeg(0, sFrameTime , 0, model->MaxTime - TimedDiagram::getInstance()->getTrEnabledTime());
+            if (TimedDiagram::getInstance()->regionList[i]->intersect(timeSeg, p1, p2)) {
                 s1 = p1.X; s2 = p2.X;
                 if (TimedDiagram::getInstance()->regionList[i]->marking->tokens[model->places[pIndex].idInMarking] == amount) {
-                    std::cout << "Interval : ["<< s1 << "," << s2 << "]" << std::endl;
+                    //std::cout << "Interval : ["<< s1 << "," << s2 << "]" << std::endl;
                     Interval I(s1, s2);
-                    std::cout << "Interval : [" << I.end << "," << I.start << "]" << std::endl;
+                    //std::cout << "Interval : [" << I.end << "," << I.start << "]" << std::endl;
                     iSet->intervals.push_back(I);
-                    iSet->print(std::cout);
+                    //iSet->print(std::cout);
                 }
             }
         }
@@ -532,12 +627,12 @@ IntervalSet* ModelChecker::calcAtomDisISetAtTime(double time, int pIndex, double
         t = time - TimedDiagram::getInstance()->dtrmEventList[cc - 1]->time;
     if (TimedDiagram::getInstance()->dtrmEventList[cc]->preRegionMarking->tokens[model->places[pIndex].idInMarking] == amount) {
         Interval I(time > TimedDiagram::getInstance()->getTrEnabledTime() ? s1 - TimedDiagram::getInstance()->getTrEnabledTime() : s1, time > TimedDiagram::getInstance()->getTrEnabledTime() ? s2 - TimedDiagram::getInstance()->getTrEnabledTime() : s2);
-        std::cout << "Interval : [" << I.end << "," << I.start << "]" << std::endl;
+        //std::cout << "Interval : [" << I.end << "," << I.start << "]" << std::endl;
         iSet->intervals.push_back(I);
-        std::streambuf * buf;
-        buf = std::cout.rdbuf();
-        std::ostream out(buf);
-        iSet->print(out);
+//        std::streambuf * buf;
+//        buf = std::cout.rdbuf();
+//        std::ostream out(buf);
+//        iSet->print(out);
     }
     return iSet;
 }

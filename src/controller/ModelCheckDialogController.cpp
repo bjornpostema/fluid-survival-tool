@@ -19,9 +19,17 @@ QString ModelCheckDialogController::getTTC() {
 }
 
 QString ModelCheckDialogController::getFormula() {
-    return ui->comboFormula->currentText();
+    return checkTextInput() ? ui->lineEditFormula->text() : ui->comboFormula->currentText();
 }
 
 double ModelCheckDialogController::getMaxTime() {
     return ui->lineEditMaxTime->text().toDouble();
+}
+
+bool ModelCheckDialogController::checkTextInput() {
+    return ui->radioTextInput->isChecked();
+}
+
+bool ModelCheckDialogController::checkDemoInput() {
+    return ui->radioDemoInput->isChecked();
 }

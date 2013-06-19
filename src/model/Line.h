@@ -33,9 +33,9 @@ struct Point{
  */
 class Line {
 public:
-	double a;
-	double b;
     double X; //in case a = INF, the equation is x=X.
+    double a;
+	double b;    
 
 	Line();
 	Line(double _a, double _b): a(_a), b(_b) {};

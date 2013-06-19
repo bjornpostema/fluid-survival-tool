@@ -20,6 +20,18 @@ extern "C" {
 #include <matheval.h>
 }
 
+#define yyconst const
+#define STR_EQUAL 0
+typedef struct yy_buffer_state *YY_BUFFER_STATE;
+
+extern int yyparse();
+extern YY_BUFFER_STATE yy_scan_string (yyconst char *yy_str);
+extern class model::Formula *PARSER_FML;
+extern int yylex_destroy (void );
+extern model::Formula* parser_results();
+extern void reset_lexer(void);
+extern int getColError();
+
 namespace model {
 
 class ModelChecker {
@@ -35,13 +47,13 @@ private:
     /*
      * Helper variables for the spdf functions
      */
-    double mu = 0;
+    double mu;
     double lambda;
     double a,b;
     void *f;
-    double sigma = 1;
-    int K = 9;
-    double dtrm = 0;
+    double sigma;
+    int K;
+    double dtrm;
     Distribution distr;
 
     IntervalSet* visitStocRegion(Region* region, Formula* psi1, Formula* psi2, IntervalSet* potentialSatSet, double t, Interval bound);
@@ -58,17 +70,17 @@ public:
     /*
      * Functions that will calculate the intervalsets by traversal.
      */
-    IntervalSet* iSetTT();
-    IntervalSet* iSetNeg(IntervalSet* iset1);
-    IntervalSet* iSetAnd(IntervalSet* iset1, IntervalSet* iset2);
-    IntervalSet* iSetAtomDis(AtomDisFormula* psi1);
-    IntervalSet* iSetAtomCont(AtomContFormula* psi1);
+    bool iSetTT(IntervalSet *&res);
+    bool iSetNeg(IntervalSet *&res, IntervalSet* iset1);
+    bool iSetAnd(IntervalSet *&res, IntervalSet* iset1, IntervalSet* iset2);
+    bool iSetAtomDis(IntervalSet *&res, AtomDisFormula* psi1);
+    bool iSetAtomCont(IntervalSet *&res, AtomContFormula* psi1);
 
     /*
      * The limitations of the until function, due to the clipping of polygons is
      * that only one atomic formula can be compared to another atomic formula
      */
-    IntervalSet* until(Formula* psi1, Formula* psi2, Interval bound);
+    bool until(IntervalSet *&satSet, Formula* psi1, Formula* psi2, Interval bound);
 
     IntervalSet* tempUntil(Formula* psi1, Formula* psi2, Interval bound, double time);
 
@@ -109,9 +121,9 @@ public:
 
     bool compareProbs(double calculatedProb, double probInput);
 
-    Formula parseFML(QString rawFML);
-    bool traverseFML(Formula *fullFML);
-    IntervalSet* traverseISetFML(Formula *fullFML);
+    bool parseFML(Formula *&fullFML, QString rawFormula);
+    bool traverseFML(bool &res, Formula *fullFML);
+    bool traverseISetFML(IntervalSet *&res, Formula *fullFML);
 
     /*
      * Helper functions as in DFPN2, although this one is more generalised independant.

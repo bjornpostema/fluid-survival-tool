@@ -1,0 +1,623 @@
+Eindsymbolen die niet gebruikt worden in de grammatica
+
+   S_OR
+
+
+Grammatica
+
+    0 $accept: main $end
+
+    1 main: S_PR S_LEQ DOUBLE LPAREN expr RPAREN
+    2     | S_PR S_LESSER DOUBLE LPAREN expr RPAREN
+    3     | S_PR S_GREATER DOUBLE LPAREN expr RPAREN
+    4     | S_PR S_GEQ DOUBLE LPAREN expr RPAREN
+
+    5 expr: expr S_AND expr
+    6     | S_NEG expr
+    7     | expr S_UNTIL LCOLON DOUBLE COMMA DOUBLE RCOLON expr
+    8     | atomdisexpr
+    9     | atomcontexpr
+   10     | trueexpr
+   11     | LPAREN expr RPAREN
+
+   12 atomdisexpr: S_DISCRETE VARIABLE S_EQUALS DOUBLE
+
+   13 atomcontexpr: S_FLUID VARIABLE S_LEQ DOUBLE
+
+   14 trueexpr: S_TRUE
+
+
+Eindsymbolen, met de regels waarin ze voorkomen
+
+$end (0) 0
+error (256)
+DOUBLE (258) 1 2 3 4 7 12 13
+VARIABLE (259) 12 13
+S_PR (260) 1 2 3 4
+S_LEQ (261) 1 13
+S_LESSER (262) 2
+S_GREATER (263) 3
+S_GEQ (264) 4
+LPAREN (265) 1 2 3 4 11
+RPAREN (266) 1 2 3 4 11
+S_NEG (267) 6
+S_AND (268) 5
+S_UNTIL (269) 7
+LCOLON (270) 7
+RCOLON (271) 7
+COMMA (272) 7
+S_FLUID (273) 13
+S_DISCRETE (274) 12
+S_EQUALS (275) 12
+S_TRUE (276) 14
+S_OR (277)
+
+
+Niet-eindsymbolen, met de regels waarin ze voorkomen
+
+$accept (23)
+    links: 0
+main (24)
+    links: 1 2 3 4, rechts: 0
+expr (25)
+    links: 5 6 7 8 9 10 11, rechts: 1 2 3 4 5 6 7 11
+atomdisexpr (26)
+    links: 12, rechts: 8
+atomcontexpr (27)
+    links: 13, rechts: 9
+trueexpr (28)
+    links: 14, rechts: 10
+
+
+toestand 0
+
+    0 $accept: . main $end
+    1 main: . S_PR S_LEQ DOUBLE LPAREN expr RPAREN
+    2     | . S_PR S_LESSER DOUBLE LPAREN expr RPAREN
+    3     | . S_PR S_GREATER DOUBLE LPAREN expr RPAREN
+    4     | . S_PR S_GEQ DOUBLE LPAREN expr RPAREN
+
+    S_PR  shift, en ga naar staat 1
+
+    main  ga naar toestand 2
+
+
+toestand 1
+
+    1 main: S_PR . S_LEQ DOUBLE LPAREN expr RPAREN
+    2     | S_PR . S_LESSER DOUBLE LPAREN expr RPAREN
+    3     | S_PR . S_GREATER DOUBLE LPAREN expr RPAREN
+    4     | S_PR . S_GEQ DOUBLE LPAREN expr RPAREN
+
+    S_LEQ      shift, en ga naar staat 3
+    S_LESSER   shift, en ga naar staat 4
+    S_GREATER  shift, en ga naar staat 5
+    S_GEQ      shift, en ga naar staat 6
+
+
+toestand 2
+
+    0 $accept: main . $end
+
+    $end  shift, en ga naar staat 7
+
+
+toestand 3
+
+    1 main: S_PR S_LEQ . DOUBLE LPAREN expr RPAREN
+
+    DOUBLE  shift, en ga naar staat 8
+
+
+toestand 4
+
+    2 main: S_PR S_LESSER . DOUBLE LPAREN expr RPAREN
+
+    DOUBLE  shift, en ga naar staat 9
+
+
+toestand 5
+
+    3 main: S_PR S_GREATER . DOUBLE LPAREN expr RPAREN
+
+    DOUBLE  shift, en ga naar staat 10
+
+
+toestand 6
+
+    4 main: S_PR S_GEQ . DOUBLE LPAREN expr RPAREN
+
+    DOUBLE  shift, en ga naar staat 11
+
+
+toestand 7
+
+    0 $accept: main $end .
+
+    $standaard  accepteer
+
+
+toestand 8
+
+    1 main: S_PR S_LEQ DOUBLE . LPAREN expr RPAREN
+
+    LPAREN  shift, en ga naar staat 12
+
+
+toestand 9
+
+    2 main: S_PR S_LESSER DOUBLE . LPAREN expr RPAREN
+
+    LPAREN  shift, en ga naar staat 13
+
+
+toestand 10
+
+    3 main: S_PR S_GREATER DOUBLE . LPAREN expr RPAREN
+
+    LPAREN  shift, en ga naar staat 14
+
+
+toestand 11
+
+    4 main: S_PR S_GEQ DOUBLE . LPAREN expr RPAREN
+
+    LPAREN  shift, en ga naar staat 15
+
+
+toestand 12
+
+    1 main: S_PR S_LEQ DOUBLE LPAREN . expr RPAREN
+    5 expr: . expr S_AND expr
+    6     | . S_NEG expr
+    7     | . expr S_UNTIL LCOLON DOUBLE COMMA DOUBLE RCOLON expr
+    8     | . atomdisexpr
+    9     | . atomcontexpr
+   10     | . trueexpr
+   11     | . LPAREN expr RPAREN
+   12 atomdisexpr: . S_DISCRETE VARIABLE S_EQUALS DOUBLE
+   13 atomcontexpr: . S_FLUID VARIABLE S_LEQ DOUBLE
+   14 trueexpr: . S_TRUE
+
+    LPAREN      shift, en ga naar staat 16
+    S_NEG       shift, en ga naar staat 17
+    S_FLUID     shift, en ga naar staat 18
+    S_DISCRETE  shift, en ga naar staat 19
+    S_TRUE      shift, en ga naar staat 20
+
+    expr          ga naar toestand 21
+    atomdisexpr   ga naar toestand 22
+    atomcontexpr  ga naar toestand 23
+    trueexpr      ga naar toestand 24
+
+
+toestand 13
+
+    2 main: S_PR S_LESSER DOUBLE LPAREN . expr RPAREN
+    5 expr: . expr S_AND expr
+    6     | . S_NEG expr
+    7     | . expr S_UNTIL LCOLON DOUBLE COMMA DOUBLE RCOLON expr
+    8     | . atomdisexpr
+    9     | . atomcontexpr
+   10     | . trueexpr
+   11     | . LPAREN expr RPAREN
+   12 atomdisexpr: . S_DISCRETE VARIABLE S_EQUALS DOUBLE
+   13 atomcontexpr: . S_FLUID VARIABLE S_LEQ DOUBLE
+   14 trueexpr: . S_TRUE
+
+    LPAREN      shift, en ga naar staat 16
+    S_NEG       shift, en ga naar staat 17
+    S_FLUID     shift, en ga naar staat 18
+    S_DISCRETE  shift, en ga naar staat 19
+    S_TRUE      shift, en ga naar staat 20
+
+    expr          ga naar toestand 25
+    atomdisexpr   ga naar toestand 22
+    atomcontexpr  ga naar toestand 23
+    trueexpr      ga naar toestand 24
+
+
+toestand 14
+
+    3 main: S_PR S_GREATER DOUBLE LPAREN . expr RPAREN
+    5 expr: . expr S_AND expr
+    6     | . S_NEG expr
+    7     | . expr S_UNTIL LCOLON DOUBLE COMMA DOUBLE RCOLON expr
+    8     | . atomdisexpr
+    9     | . atomcontexpr
+   10     | . trueexpr
+   11     | . LPAREN expr RPAREN
+   12 atomdisexpr: . S_DISCRETE VARIABLE S_EQUALS DOUBLE
+   13 atomcontexpr: . S_FLUID VARIABLE S_LEQ DOUBLE
+   14 trueexpr: . S_TRUE
+
+    LPAREN      shift, en ga naar staat 16
+    S_NEG       shift, en ga naar staat 17
+    S_FLUID     shift, en ga naar staat 18
+    S_DISCRETE  shift, en ga naar staat 19
+    S_TRUE      shift, en ga naar staat 20
+
+    expr          ga naar toestand 26
+    atomdisexpr   ga naar toestand 22
+    atomcontexpr  ga naar toestand 23
+    trueexpr      ga naar toestand 24
+
+
+toestand 15
+
+    4 main: S_PR S_GEQ DOUBLE LPAREN . expr RPAREN
+    5 expr: . expr S_AND expr
+    6     | . S_NEG expr
+    7     | . expr S_UNTIL LCOLON DOUBLE COMMA DOUBLE RCOLON expr
+    8     | . atomdisexpr
+    9     | . atomcontexpr
+   10     | . trueexpr
+   11     | . LPAREN expr RPAREN
+   12 atomdisexpr: . S_DISCRETE VARIABLE S_EQUALS DOUBLE
+   13 atomcontexpr: . S_FLUID VARIABLE S_LEQ DOUBLE
+   14 trueexpr: . S_TRUE
+
+    LPAREN      shift, en ga naar staat 16
+    S_NEG       shift, en ga naar staat 17
+    S_FLUID     shift, en ga naar staat 18
+    S_DISCRETE  shift, en ga naar staat 19
+    S_TRUE      shift, en ga naar staat 20
+
+    expr          ga naar toestand 27
+    atomdisexpr   ga naar toestand 22
+    atomcontexpr  ga naar toestand 23
+    trueexpr      ga naar toestand 24
+
+
+toestand 16
+
+    5 expr: . expr S_AND expr
+    6     | . S_NEG expr
+    7     | . expr S_UNTIL LCOLON DOUBLE COMMA DOUBLE RCOLON expr
+    8     | . atomdisexpr
+    9     | . atomcontexpr
+   10     | . trueexpr
+   11     | . LPAREN expr RPAREN
+   11     | LPAREN . expr RPAREN
+   12 atomdisexpr: . S_DISCRETE VARIABLE S_EQUALS DOUBLE
+   13 atomcontexpr: . S_FLUID VARIABLE S_LEQ DOUBLE
+   14 trueexpr: . S_TRUE
+
+    LPAREN      shift, en ga naar staat 16
+    S_NEG       shift, en ga naar staat 17
+    S_FLUID     shift, en ga naar staat 18
+    S_DISCRETE  shift, en ga naar staat 19
+    S_TRUE      shift, en ga naar staat 20
+
+    expr          ga naar toestand 28
+    atomdisexpr   ga naar toestand 22
+    atomcontexpr  ga naar toestand 23
+    trueexpr      ga naar toestand 24
+
+
+toestand 17
+
+    5 expr: . expr S_AND expr
+    6     | . S_NEG expr
+    6     | S_NEG . expr
+    7     | . expr S_UNTIL LCOLON DOUBLE COMMA DOUBLE RCOLON expr
+    8     | . atomdisexpr
+    9     | . atomcontexpr
+   10     | . trueexpr
+   11     | . LPAREN expr RPAREN
+   12 atomdisexpr: . S_DISCRETE VARIABLE S_EQUALS DOUBLE
+   13 atomcontexpr: . S_FLUID VARIABLE S_LEQ DOUBLE
+   14 trueexpr: . S_TRUE
+
+    LPAREN      shift, en ga naar staat 16
+    S_NEG       shift, en ga naar staat 17
+    S_FLUID     shift, en ga naar staat 18
+    S_DISCRETE  shift, en ga naar staat 19
+    S_TRUE      shift, en ga naar staat 20
+
+    expr          ga naar toestand 29
+    atomdisexpr   ga naar toestand 22
+    atomcontexpr  ga naar toestand 23
+    trueexpr      ga naar toestand 24
+
+
+toestand 18
+
+   13 atomcontexpr: S_FLUID . VARIABLE S_LEQ DOUBLE
+
+    VARIABLE  shift, en ga naar staat 30
+
+
+toestand 19
+
+   12 atomdisexpr: S_DISCRETE . VARIABLE S_EQUALS DOUBLE
+
+    VARIABLE  shift, en ga naar staat 31
+
+
+toestand 20
+
+   14 trueexpr: S_TRUE .
+
+    $standaard  reduceren via regel 14 (trueexpr)
+
+
+toestand 21
+
+    1 main: S_PR S_LEQ DOUBLE LPAREN expr . RPAREN
+    5 expr: expr . S_AND expr
+    7     | expr . S_UNTIL LCOLON DOUBLE COMMA DOUBLE RCOLON expr
+
+    RPAREN   shift, en ga naar staat 32
+    S_AND    shift, en ga naar staat 33
+    S_UNTIL  shift, en ga naar staat 34
+
+
+toestand 22
+
+    8 expr: atomdisexpr .
+
+    $standaard  reduceren via regel 8 (expr)
+
+
+toestand 23
+
+    9 expr: atomcontexpr .
+
+    $standaard  reduceren via regel 9 (expr)
+
+
+toestand 24
+
+   10 expr: trueexpr .
+
+    $standaard  reduceren via regel 10 (expr)
+
+
+toestand 25
+
+    2 main: S_PR S_LESSER DOUBLE LPAREN expr . RPAREN
+    5 expr: expr . S_AND expr
+    7     | expr . S_UNTIL LCOLON DOUBLE COMMA DOUBLE RCOLON expr
+
+    RPAREN   shift, en ga naar staat 35
+    S_AND    shift, en ga naar staat 33
+    S_UNTIL  shift, en ga naar staat 34
+
+
+toestand 26
+
+    3 main: S_PR S_GREATER DOUBLE LPAREN expr . RPAREN
+    5 expr: expr . S_AND expr
+    7     | expr . S_UNTIL LCOLON DOUBLE COMMA DOUBLE RCOLON expr
+
+    RPAREN   shift, en ga naar staat 36
+    S_AND    shift, en ga naar staat 33
+    S_UNTIL  shift, en ga naar staat 34
+
+
+toestand 27
+
+    4 main: S_PR S_GEQ DOUBLE LPAREN expr . RPAREN
+    5 expr: expr . S_AND expr
+    7     | expr . S_UNTIL LCOLON DOUBLE COMMA DOUBLE RCOLON expr
+
+    RPAREN   shift, en ga naar staat 37
+    S_AND    shift, en ga naar staat 33
+    S_UNTIL  shift, en ga naar staat 34
+
+
+toestand 28
+
+    5 expr: expr . S_AND expr
+    7     | expr . S_UNTIL LCOLON DOUBLE COMMA DOUBLE RCOLON expr
+   11     | LPAREN expr . RPAREN
+
+    RPAREN   shift, en ga naar staat 38
+    S_AND    shift, en ga naar staat 33
+    S_UNTIL  shift, en ga naar staat 34
+
+
+toestand 29
+
+    5 expr: expr . S_AND expr
+    6     | S_NEG expr .  [RPAREN]
+    7     | expr . S_UNTIL LCOLON DOUBLE COMMA DOUBLE RCOLON expr
+
+    S_AND    shift, en ga naar staat 33
+    S_UNTIL  shift, en ga naar staat 34
+
+    $standaard  reduceren via regel 6 (expr)
+
+    Conflict tussen regel 6 en token S_AND opgelost als shift (S_NEG < S_AND).
+    Conflict tussen regel 6 en token S_UNTIL opgelost als shift (S_NEG < S_UNTIL).
+
+
+toestand 30
+
+   13 atomcontexpr: S_FLUID VARIABLE . S_LEQ DOUBLE
+
+    S_LEQ  shift, en ga naar staat 39
+
+
+toestand 31
+
+   12 atomdisexpr: S_DISCRETE VARIABLE . S_EQUALS DOUBLE
+
+    S_EQUALS  shift, en ga naar staat 40
+
+
+toestand 32
+
+    1 main: S_PR S_LEQ DOUBLE LPAREN expr RPAREN .
+
+    $standaard  reduceren via regel 1 (main)
+
+
+toestand 33
+
+    5 expr: . expr S_AND expr
+    5     | expr S_AND . expr
+    6     | . S_NEG expr
+    7     | . expr S_UNTIL LCOLON DOUBLE COMMA DOUBLE RCOLON expr
+    8     | . atomdisexpr
+    9     | . atomcontexpr
+   10     | . trueexpr
+   11     | . LPAREN expr RPAREN
+   12 atomdisexpr: . S_DISCRETE VARIABLE S_EQUALS DOUBLE
+   13 atomcontexpr: . S_FLUID VARIABLE S_LEQ DOUBLE
+   14 trueexpr: . S_TRUE
+
+    LPAREN      shift, en ga naar staat 16
+    S_NEG       shift, en ga naar staat 17
+    S_FLUID     shift, en ga naar staat 18
+    S_DISCRETE  shift, en ga naar staat 19
+    S_TRUE      shift, en ga naar staat 20
+
+    expr          ga naar toestand 41
+    atomdisexpr   ga naar toestand 22
+    atomcontexpr  ga naar toestand 23
+    trueexpr      ga naar toestand 24
+
+
+toestand 34
+
+    7 expr: expr S_UNTIL . LCOLON DOUBLE COMMA DOUBLE RCOLON expr
+
+    LCOLON  shift, en ga naar staat 42
+
+
+toestand 35
+
+    2 main: S_PR S_LESSER DOUBLE LPAREN expr RPAREN .
+
+    $standaard  reduceren via regel 2 (main)
+
+
+toestand 36
+
+    3 main: S_PR S_GREATER DOUBLE LPAREN expr RPAREN .
+
+    $standaard  reduceren via regel 3 (main)
+
+
+toestand 37
+
+    4 main: S_PR S_GEQ DOUBLE LPAREN expr RPAREN .
+
+    $standaard  reduceren via regel 4 (main)
+
+
+toestand 38
+
+   11 expr: LPAREN expr RPAREN .
+
+    $standaard  reduceren via regel 11 (expr)
+
+
+toestand 39
+
+   13 atomcontexpr: S_FLUID VARIABLE S_LEQ . DOUBLE
+
+    DOUBLE  shift, en ga naar staat 43
+
+
+toestand 40
+
+   12 atomdisexpr: S_DISCRETE VARIABLE S_EQUALS . DOUBLE
+
+    DOUBLE  shift, en ga naar staat 44
+
+
+toestand 41
+
+    5 expr: expr . S_AND expr
+    5     | expr S_AND expr .  [RPAREN, S_AND]
+    7     | expr . S_UNTIL LCOLON DOUBLE COMMA DOUBLE RCOLON expr
+
+    S_UNTIL  shift, en ga naar staat 34
+
+    $standaard  reduceren via regel 5 (expr)
+
+    Conflict tussen regel 5 en token S_AND opgelost als reductie (%left S_AND).
+    Conflict tussen regel 5 en token S_UNTIL opgelost als shift (S_AND < S_UNTIL).
+
+
+toestand 42
+
+    7 expr: expr S_UNTIL LCOLON . DOUBLE COMMA DOUBLE RCOLON expr
+
+    DOUBLE  shift, en ga naar staat 45
+
+
+toestand 43
+
+   13 atomcontexpr: S_FLUID VARIABLE S_LEQ DOUBLE .
+
+    $standaard  reduceren via regel 13 (atomcontexpr)
+
+
+toestand 44
+
+   12 atomdisexpr: S_DISCRETE VARIABLE S_EQUALS DOUBLE .
+
+    $standaard  reduceren via regel 12 (atomdisexpr)
+
+
+toestand 45
+
+    7 expr: expr S_UNTIL LCOLON DOUBLE . COMMA DOUBLE RCOLON expr
+
+    COMMA  shift, en ga naar staat 46
+
+
+toestand 46
+
+    7 expr: expr S_UNTIL LCOLON DOUBLE COMMA . DOUBLE RCOLON expr
+
+    DOUBLE  shift, en ga naar staat 47
+
+
+toestand 47
+
+    7 expr: expr S_UNTIL LCOLON DOUBLE COMMA DOUBLE . RCOLON expr
+
+    RCOLON  shift, en ga naar staat 48
+
+
+toestand 48
+
+    5 expr: . expr S_AND expr
+    6     | . S_NEG expr
+    7     | . expr S_UNTIL LCOLON DOUBLE COMMA DOUBLE RCOLON expr
+    7     | expr S_UNTIL LCOLON DOUBLE COMMA DOUBLE RCOLON . expr
+    8     | . atomdisexpr
+    9     | . atomcontexpr
+   10     | . trueexpr
+   11     | . LPAREN expr RPAREN
+   12 atomdisexpr: . S_DISCRETE VARIABLE S_EQUALS DOUBLE
+   13 atomcontexpr: . S_FLUID VARIABLE S_LEQ DOUBLE
+   14 trueexpr: . S_TRUE
+
+    LPAREN      shift, en ga naar staat 16
+    S_NEG       shift, en ga naar staat 17
+    S_FLUID     shift, en ga naar staat 18
+    S_DISCRETE  shift, en ga naar staat 19
+    S_TRUE      shift, en ga naar staat 20
+
+    expr          ga naar toestand 49
+    atomdisexpr   ga naar toestand 22
+    atomcontexpr  ga naar toestand 23
+    trueexpr      ga naar toestand 24
+
+
+toestand 49
+
+    5 expr: expr . S_AND expr
+    7     | expr . S_UNTIL LCOLON DOUBLE COMMA DOUBLE RCOLON expr
+    7     | expr S_UNTIL LCOLON DOUBLE COMMA DOUBLE RCOLON expr .  [RPAREN, S_AND, S_UNTIL]
+
+    $standaard  reduceren via regel 7 (expr)
+
+    Conflict tussen regel 7 en token S_AND opgelost als reductie (S_AND < RCOLON).
+    Conflict tussen regel 7 en token S_UNTIL opgelost als reductie (S_UNTIL < RCOLON).

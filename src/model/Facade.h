@@ -7,8 +7,6 @@
 #include "Logger.h"
 #include "cmath"
 
-#define STR_EQUAL 0
-
 namespace model {
 
 class Facade
@@ -22,7 +20,7 @@ public:
     bool virtual showSTD(QString rawFileName, double maxTime, int imageScale);
     bool virtual showProbFunc(double cStart, double cEnd, double cStep, double tStep, double maxTime);
     bool virtual showProbFunc(double c, double tStep, double maxTime);
-    bool virtual modelCheck(QString rawFormula, QString rawCheckTime, double maxTime);
+    bool virtual modelCheck(bool &res, QString rawFormula, QString rawCheckTime, double maxTime);
 //    bool virtual tempUntilModelCheck();
 
     Model *model;

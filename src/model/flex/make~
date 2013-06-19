@@ -1,0 +1,14 @@
+fml: crcy.o crcl.o Formula.o IntervalSet.o
+        G++ -DEXTERNC -I/. fmll.o  fmly.o Formula.o IntervalSet.o -o fml
+fmll.o: lexer.l
+        flex --c++ lexer.l
+        mv lex.yy.c fmll.cxx
+        g++ -c fmll.cxx -o fmll.o
+fmly.o: crc.y
+        yacc++ -dvt parser_yacc.y
+        mv y.tab.c fmly.cpp
+        g++ -c fmly.cpp -o fmly.o
+Formula.o:Formula.cpp
+        g++ -c Formula.cpp -o Formula.o
+IntervalSet.o:IntervalSet.cpp
+        g++ -c IntervalSet.cpp -o IntervalSet.o

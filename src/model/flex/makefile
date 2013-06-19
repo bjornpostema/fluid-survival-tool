@@ -1,0 +1,13 @@
+fml: fmly.o fmll.o Formula.o IntervalSet.o
+fmly.o: parser_bison_class.y
+	bison -d --report=all parser_bison_class.y
+	mv parser_bison_class.tab.c fmly.cpp
+	g++ -c fmly.cpp -o fmly.o
+fmll.o: lexer.l
+	flex lexer.l
+	mv lex.yy.c fmll.cpp
+	g++ -c fmll.cpp -o fmll.o
+Formula.o:Formula.cpp
+	g++ -c Formula.cpp -o Formula.o
+IntervalSet.o:IntervalSet.cpp
+	g++ -c IntervalSet.cpp -o IntervalSet.o

@@ -6,5 +6,7 @@
         <file>resources/introduction2.png</file>
         <file>resources/introduction3.png</file>
         <file>resources/introduction4.png</file>
+        <file>resources/no.png</file>
+        <file>resources/yes.png</file>
     </qresource>
 </RCC>

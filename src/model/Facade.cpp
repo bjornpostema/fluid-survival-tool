@@ -52,7 +52,7 @@ bool Facade::setPlace(QString rawPlaceName) {
         guic->addText(QString("Place name is set to: ").append(placeName).toStdString());
         return true;
     } else {
-        guic->addText("Place name is not set.");
+        guic->addText("Place name was already set.");
         return false;
     }
 }
@@ -62,13 +62,13 @@ bool Facade::setFile(QString rawFileName) {
         fileName = rawFileName;
         guic->addText(QString("File name set to: ").append(fileName).toStdString());
     } else {
-        guic->addText("File name is not set.");
+        guic->addText("File name was already set.");
         return false;
     }
 
     model = ReadModel(QString2Char(fileName), guic);
     if (model == NULL) {
-        guic->addText(QString("Model could not be read or parsed.").toStdString());
+        guic->addError(QString("Model could not be read or parsed.").toStdString());
         return false;
     } else {
         guic->addText(QString("Model is read and parsed.").toStdString());
@@ -95,7 +95,7 @@ bool Facade::showSTD(QString rawFileName, double maxTime, int imageScale) {
 
     unsigned int tIndex = 0;
     for (int i = 0; i < model->N_transitions; i++) {
-        if (model->places[i].type != TT_DETERMINISTIC) continue;
+        if (model->places[i].type != PT_DISCRETE) continue;
         if (strncmp(model->transitions[i].id, "failure", strlen("failure")) != 0) continue;
 
         tIndex = i;
@@ -232,7 +232,7 @@ bool Facade::showProbFunc(double cStart, double cEnd, double cStep, double tStep
     }
 
     if (pIndex == (unsigned)-1) {
-        guic->addText("The place name is set to an invalid place name. This functionality only works for fluid place names.");
+        guic->addError("The place name is set to an invalid place name. This functionality only works for fluid place names.");
 //        delete fv;
         delete modelChecker;
         freeMarking(initialMarking);
@@ -461,7 +461,7 @@ bool Facade::showProbFunc(double c, double tStep, double maxTime) {
     }
 
     if (pIndex == (unsigned)-1) {
-        guic->addText("The place name is set to an invalid place name. This functionality only works for fluid place names.");
+        guic->addError("The place name is set to an invalid place name. This functionality only works for fluid place names.");
         delete modelChecker;
         freeMarking(initialMarking);
         return false;
@@ -575,10 +575,26 @@ bool Facade::showProbFunc(double c, double tStep, double maxTime) {
     FILE* gnuplotPipe;
     if ( (gnuplotPipe = popen("gnuplot -persist","w")) )
     {
+
+        char buffer[400];
+//                sprintf(buffer, "set title 'Place constant 2d-plot '\n "
+//                        "set xlabel \"Time\" \n"
+//                        "set ylabel \"Probability\"\n"
+//        //                "set term gif\n"
+//        //                "set output \"./output/%s_2d.gif\"\n"
+
+//                        "set xtics (\"%d\" %d, \"%d\" %d, \"%d\" %d,\"%d\" %d, \"%d\" %d, \"%d\" %d) \n "
+//                        /*"set xrange[1:%f] \n "*//*,placeName.toAscii().data()*/,(int)0,(int)0,(int)(model->MaxTime*0.2),(int)(model->MaxTime*0.2/tStep),(int)(model->MaxTime*0.4),(int)(model->MaxTime*0.4/tStep),(int)(model->MaxTime*0.6),(int)(model->MaxTime*0.6/tStep),(int)(model->MaxTime*0.8),(int)(model->MaxTime*0.8/tStep),(int)(model->MaxTime),(int)(model->MaxTime/tStep)/*,model->MaxTime*/);
+
+                std::cout << buffer << std::endl;
         fprintf(gnuplotPipe,"set title 'Place constant 2d-plot '\n "
                 "set xlabel \"Time\" \n"
                 "set ylabel \"Probability\"\n"
-                "set xrange[1:%f] \n ",model->MaxTime);
+//                "set term gif\n"
+//                "set output \"./output/%s_2d.gif\"\n"
+
+                "set xtics (\"%d\" %d, \"%d\" %d, \"%d\" %d,\"%d\" %d, \"%d\" %d, \"%d\" %d) \n "
+                /*"set xrange[1:%f] \n "*//*,placeName.toAscii().data()*/,(int)0,(int)0,(int)(model->MaxTime*0.2),(int)(model->MaxTime*0.2/tStep),(int)(model->MaxTime*0.4),(int)(model->MaxTime*0.4/tStep),(int)(model->MaxTime*0.6),(int)(model->MaxTime*0.6/tStep),(int)(model->MaxTime*0.8),(int)(model->MaxTime*0.8/tStep),(int)(model->MaxTime),(int)(model->MaxTime/tStep)/*,model->MaxTime*/);
 
         fflush(gnuplotPipe);
         fprintf(gnuplotPipe,"plot \"%s\" title \"probability\" with lp \n",QString2Char(QString("./output/%1_2d.dat").arg(placeName)));
@@ -591,7 +607,8 @@ bool Facade::showProbFunc(double c, double tStep, double maxTime) {
     return true;
 }
 
-bool Facade::modelCheck(QString rawFormula, QString rawCheckTime, double maxTime) {
+bool Facade::modelCheck(bool &res, QString rawFormula, QString rawCheckTime, double maxTime) {
+
     /*
      * TODO: Parse the STL formula
      * Use Flex + Lemon, YACC or Bison, rather than ANTLR or own implementation.
@@ -599,49 +616,7 @@ bool Facade::modelCheck(QString rawFormula, QString rawCheckTime, double maxTime
      * Lemon (Parser) : Creates the datastructure of the AST and gives initial values to the different type of formulas.
      */
 
-    /*
-     * Some intermediate datastructures that should work as test cases.
-     */
-    unsigned int placeIndex1 = 1, placeIndex2 = 6, placeIndex3 = 9; // placeIndex1 should be discrete and placeIndex2, placeIndex3 should be fluid.
-    double n1 = 1, c2 = 0.1, c3 = 0.2;
-    double t1 = 0, t2 = 10;
-    double ttc = 2.00, prob = 0.2;
-    Interval bound;
-    Formula *fullFML;
-    if (QString::compare(rawFormula, QString("Pr<=0.2 (P(1) == 1)")) == STR_EQUAL) {
-        // P(1)=1
-        fullFML = new ProbFormula(new AtomDisFormula(0,0,placeIndex1,n1),0,prob,LEQ);
-        guic->addText("Checking demo formula 1 : Pr<=0.2 (P(1) == 1)");
-    } else if (QString::compare(rawFormula, QString("Pr<=0.2 (P(6) <= 0.1)")) == STR_EQUAL) {
-        // P(8)<=0.1
-        fullFML = new ProbFormula(new AtomContFormula(0,0,placeIndex2,c2),0,prob,LEQ);
-        guic->addText("Checking demo formula 2 : Pr<=0.2 (P(6) <= 0.1)");
-    } else if (QString::compare(rawFormula, QString("Pr<=0.2 (P(6) <= 0.2 AND P(6) <= 0.1)")) == STR_EQUAL) {
-        // P(1)=1 ^ P(8)<=0.1
-        fullFML = new ProbFormula (new AndFormula(new AtomContFormula(0,0,placeIndex2, c3),new AtomContFormula(0,0,placeIndex2,c2)),0,prob,LEQ);
-        guic->addText("Checking demo formula 3 : Pr<=0.2 (P(6) <= 0.2 AND P(6) <= 0.1)");
-    } else if (QString::compare(rawFormula, QString("Pr<=0.2 ~(P(6) == 0.1)")) == STR_EQUAL) {
-        // ~P(8)<=0.1
-        fullFML = new ProbFormula (new NegFormula(new AtomContFormula(0,0,placeIndex2,c2),0),0,prob,LEQ);
-        guic->addText("Checking demo formula 4 : Pr<=0.2 ~(P(6) == 0.1)");
-    } else if (QString::compare(rawFormula, QString("Pr<=0.2 ~(P(1) == 1)")) == STR_EQUAL) {
-        // ~P(1)=1
-        fullFML = new ProbFormula (new NegFormula(new AtomDisFormula(0,0,placeIndex1, n1),0),0,prob,LEQ);
-        guic->addText("Checking demo formula 5 : Pr<=0.2 ~(P(1) == 1)");
-    } else if (QString::compare(rawFormula, QString("Pr<=0.2 (tt)")) == STR_EQUAL) {
-        // tt
-        fullFML = new ProbFormula(new TrueFormula(0,0),0,prob,LEQ);
-        guic->addText("Checking demo formula 6 : Pr<=0.2 (tt)");
-    } else if (QString::compare(rawFormula, QString("Pr<=0.2 (P(1)=1 U[0,10] P(8)=0.1)")) == STR_EQUAL) {
-        // P(1)=1 U[0,10] P(8)=0.1
-        fullFML = new ProbFormula(new UntilFormula(new AtomDisFormula(0,0,placeIndex1, n1),new AtomContFormula(0,0,placeIndex3,c3),bound),0,prob,LEQ);
-        guic->addText("Checking demo formula 7 : Pr<=0.2 (P(1)=1 U[0,10] P(8)=0.1)");
-    } else if (QString::compare(rawFormula, QString("Pr<=0.2 ((P(1)=1 AND P(8)<=0.1) U[0,10] P(9)=0.2)")) == STR_EQUAL) {
-        // (P(1)=1 ^ P(8)<=0.1) U[0,10] P(9)=0.2
-        fullFML = new ProbFormula(new UntilFormula(new AndFormula(new AtomDisFormula(0,0,placeIndex1, n1),new AtomContFormula(0,0,placeIndex2,c2)),new AtomContFormula(0,0,placeIndex3,c3),bound),0,prob,LEQ);
-        guic->addText("Checking demo formula 8 : Pr<=0.2 ((P(1)=1 AND P(8)<=0.1) U[0,10] P(9)=0.2)");
-    } else {
-        guic->addText("The model checker does not accept arbitrary formulas yet.");
+    if (model == 0) {
         return false;
     }
 
@@ -652,7 +627,7 @@ bool Facade::modelCheck(QString rawFormula, QString rawCheckTime, double maxTime
 
     double checkTime = rawCheckTime.toDouble();
     if (!(checkTime >= 0)) {
-        guic->addText("The chosen time to check is invalid, please specify a new time.");
+        guic->addError("The chosen time to check is invalid, please specify a new time.");
     }
 
 //    unsigned int tIndex = 0;
@@ -677,8 +652,15 @@ bool Facade::modelCheck(QString rawFormula, QString rawCheckTime, double maxTime
 
     TimedDiagram::getInstance()->generateDiagram(initialMarking);
 
-    ModelChecker *modelChecker = new ModelChecker(model, TimedDiagram::getInstance(), guic,checkTime);
+    ModelChecker *modelChecker = new ModelChecker(model, TimedDiagram::getInstance(), guic, checkTime);
 
+    Formula *fullFML;
+    if (!modelChecker->parseFML(fullFML, rawFormula)) {
+        delete modelChecker;
+        freeMarking(initialMarking);
+//        delete fullFML;
+        return false;
+    };
     std::cout << "starting measure computation..." << std::endl;
 
     //InitializeModel(model);
@@ -694,80 +676,14 @@ bool Facade::modelCheck(QString rawFormula, QString rawCheckTime, double maxTime
         return false;
     }
 
-//    char *argFinder;
-//    int a;
-
-//    switch (model->transitions[gTransitionId(model)].df_distr)
-//    {
-//    case Exp: modelChecker->setLambda(atof(model->transitions[gTransitionId(model)].df_argument));
-//        modelChecker->setDistr(Exp);
-//        break;
-//    case Gamma: modelChecker->setLambda(atof(model->transitions[gTransitionId(model)].df_argument));
-//        modelChecker->setDistr(Gamma);
-//        break;
-//    case Uni:
-//        argFinder = strtok(model->transitions[gTransitionId(model)].df_argument,",");
-//        if (argFinder == NULL) {
-//            guic->addText(QString("Transition #%1 : %2 has an invalid cumulative distribution function (cdf) for uni{a,b}, since this requires two arguments.").arg(gTransitionId(model)+1).arg(model->transitions[gTransitionId(model)].id).toStdString());
-//            freeMarking(initialMarking);
-//            return false;
-//        }
-//        a = atof(argFinder);
-//        argFinder = strtok(NULL,",");
-//        if (argFinder == NULL) {
-//            guic->addText(QString("Transition #%1 : %2 has an invalid cumulative distribution function (cdf) for uni{a,b}, since this requires two arguments.").arg(gTransitionId(model)+1).arg(model->transitions[gTransitionId(model)].id).toStdString());
-//            freeMarking(initialMarking);
-//            return false;
-//        }
-//        modelChecker->setAB(a,atof(argFinder));
-//        modelChecker->setDistr(Uni);
-//        break;
-//    case Gen:
-//        modelChecker->setF(evaluator_create (model->transitions[gTransitionId(model)].df_argument));
-//        modelChecker->setDistr(Gen);
-//        break;
-//    case FoldedNorm:
-//        argFinder = strtok(model->transitions[gTransitionId(model)].df_argument,",");
-//        if (argFinder == NULL) {
-//            guic->addText(QString("Transition #%1 : %2 has an invalid cumulative distribution function (cdf) for norm{mu,sigma}, since this requires two arguments.").arg(gTransitionId(model)+1).arg(model->transitions[gTransitionId(model)].id).toStdString());
-//            freeMarking(initialMarking);
-//            return false;
-//        }
-//        modelChecker->setMu(atof(argFinder));
-//        argFinder = strtok(NULL,",");
-//        if (argFinder == NULL) {
-//            guic->addText(QString("Transition #%1 : %2 has an invalid cumulative distribution function (cdf) for norm{mu,sigma}, since this requires two arguments.").arg(gTransitionId(model)+1).arg(model->transitions[gTransitionId(model)].id).toStdString());
-//            freeMarking(initialMarking);
-//            return false;
-//        }
-//        modelChecker->setSigma(atof(argFinder));
-//        modelChecker->setDistr(FoldedNorm);
-//        break;
-//    case Norm:
-//        argFinder = strtok(model->transitions[gTransitionId(model)].df_argument,",");
-//        if (argFinder == NULL) {
-//            guic->addText(QString("Transition #%1 : %2 has an invalid cumulative distribution function (cdf) for norm{mu,sigma}, since this requires two arguments.").arg(gTransitionId(model)+1).arg(model->transitions[gTransitionId(model)].id).toStdString());
-//            freeMarking(initialMarking);
-//            return false;
-//        }
-//        modelChecker->setMu(atof(argFinder));
-//        argFinder = strtok(NULL,",");
-//        if (argFinder == NULL) {
-//            guic->addText(QString("Transition #%1 : %2 has an invalid cumulative distribution function (cdf) for norm{mu,sigma}, since this requires two arguments.").arg(gTransitionId(model)+1).arg(model->transitions[gTransitionId(model)].id).toStdString());
-//            freeMarking(initialMarking);
-//            return false;
-//        }
-//        modelChecker->setSigma(atof(argFinder));
-//        modelChecker->setDistr(Norm);
-//        break;
-//    case Dtrm:
-//        modelChecker->setDtrm(atof(model->transitions[gTransitionId(model)].df_argument));
-//        modelChecker->setDistr(Dtrm);
-//        break;
-//    }
-
-    bool res = modelChecker->traverseFML(fullFML);
-    res ? guic->addText("Yes! The formula is satisfied.") : guic->addText("No! The formula is not satisfied.");
+    if (!modelChecker->traverseFML(res, fullFML)) {
+        // Clean-up code
+        delete modelChecker;
+        freeMarking(initialMarking);
+        delete fullFML;
+        return false;
+    }
+    res ? guic->addSuccess("Yes! The formula is satisfied.") : guic->addSuccess("No! The formula is not satisfied.");
 
     switch (model->transitions[gTransitionId(model)].df_distr)
     {

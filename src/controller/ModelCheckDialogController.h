@@ -17,6 +17,8 @@ public:
     QString getTTC();
     QString getFormula();
     double getMaxTime();
+    bool checkTextInput();
+    bool checkDemoInput();
     
 private:
     Ui::ModelCheckDialogController *ui;

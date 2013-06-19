@@ -544,7 +544,10 @@ p, li { white-space: pre-wrap; }
      <property name="title">
       <string>Examples</string>
      </property>
-     <addaction name="actionWater_Treatment_Facility"/>
+     <addaction name="actionReservoir"/>
+     <addaction name="actionWater_cleaning_facility"/>
+     <addaction name="actionSewage_water_cleaning"/>
+     <addaction name="actionOverflow"/>
     </widget>
     <addaction name="menuNew"/>
     <addaction name="menuOpen"/>
@@ -727,9 +730,9 @@ p, li { white-space: pre-wrap; }
     <string>Test</string>
    </property>
   </action>
-  <action name="actionWater_Treatment_Facility">
+  <action name="actionReservoir">
    <property name="text">
-    <string>Water Treatment Facility</string>
+    <string>Reservoir</string>
    </property>
    <property name="font">
     <font>
@@ -849,6 +852,21 @@ p, li { white-space: pre-wrap; }
    </property>
    <property name="iconVisibleInMenu">
     <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionWater_cleaning_facility">
+   <property name="text">
+    <string>Water cleaning facility</string>
+   </property>
+  </action>
+  <action name="actionSewage_water_cleaning">
+   <property name="text">
+    <string>Sewage water cleaning</string>
+   </property>
+  </action>
+  <action name="actionOverflow">
+   <property name="text">
+    <string>Overflow</string>
    </property>
   </action>
  </widget>
@@ -1033,6 +1051,70 @@ p, li { white-space: pre-wrap; }
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionReservoir</sender>
+   <signal>triggered()</signal>
+   <receiver>GUIController</receiver>
+   <slot>exampleReservoir()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>445</x>
+     <y>278</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionWater_cleaning_facility</sender>
+   <signal>triggered()</signal>
+   <receiver>GUIController</receiver>
+   <slot>exampleWater()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>445</x>
+     <y>278</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionSewage_water_cleaning</sender>
+   <signal>triggered()</signal>
+   <receiver>GUIController</receiver>
+   <slot>exampleSewage()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>445</x>
+     <y>278</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionOverflow</sender>
+   <signal>triggered()</signal>
+   <receiver>GUIController</receiver>
+   <slot>exampleOverflow()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>445</x>
+     <y>278</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>about()</slot>
@@ -1051,5 +1133,9 @@ p, li { white-space: pre-wrap; }
   <slot>generateProbFunc()</slot>
   <slot>modelCheck()</slot>
   <slot>tempModelCheck()</slot>
+  <slot>exampleReservoir()</slot>
+  <slot>exampleWater()</slot>
+  <slot>exampleSewage()</slot>
+  <slot>exampleOverflow()</slot>
  </slots>
 </ui>

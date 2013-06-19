@@ -1,0 +1,80 @@
+/*
+ * Formula.h
+ *
+ *      Author: Bjorn
+ */
+
+#ifndef FORMULA_STRUCT_H_
+#define FORMULA_STRUCT_H_
+#include "Interval_struct.h"
+
+enum Formula_type {FORMULA, DISCRETE, CONTINUOUS, COMBI, AND, NEG, UNTIL, TT, PROB, ADFORMULA};
+enum Operator {LEQ, LESSER, GREATER, GEQ};
+
+struct Formula {
+public:
+	Formula *leftChild;
+	Formula *rightChild;
+	double prob;
+	Operator op;
+	char* placeIndex;
+	double constant;
+	Interval bound;
+	Formula_type type;
+};
+
+struct ProbFormula : public Formula {
+public:
+    double prob; // probability to compare with
+    Operator op;
+};
+
+
+struct AtomDisFormula : public Formula {
+
+public:
+	char* placeIndex;
+	double n;
+};
+
+struct AtomContFormula : public Formula {
+public:
+    char* placeIndex;
+    double c;
+};
+
+struct TrueFormula : public Formula {
+
+public:
+
+};
+
+struct NegFormula : public Formula {
+
+public:
+
+};
+
+struct AndFormula : public Formula {
+
+public:
+
+};
+
+struct UntilFormula : public Formula {
+
+public:
+Interval bound;
+
+};
+
+///*
+// * Temporary class! because of deadline!
+// */
+struct ADFormula: public Formula{
+public:
+    AtomContFormula* contFormula;
+    AtomDisFormula* disFormula;
+};
+
+#endif /* FORMULA_STRUCT_H_ */

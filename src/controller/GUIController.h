@@ -11,6 +11,7 @@
 #include "STDDialogController.h"
 #include "PlaceProbDialogController.h"
 #include "ModelCheckDialogController.h"
+#include <string.h>
 
 namespace Ui {
 class GUIController;
@@ -25,6 +26,9 @@ public:
     ~GUIController();
 
     void addText(std::string str);
+    void addSuccess(std::string str);
+    void addWarning(std::string str);
+    void addError(std::string str);
     void setText(std::string str);
     std::string getText();
 
@@ -39,7 +43,9 @@ private:
     void openFile(const QString &fileName, QTextEdit *editor);
     bool saveFile(const QString &fileName, QTextEdit *editor);
     void modelSetCurrentFile(const QString &fileName);
+    void modelOpen(QString filename);
     QString strippedName(const QString &fullFileName, QTextEdit *editor);
+    std::string escapeHTML(std::string & Str);
 
     QString modelCurFile;
     QString modelFileName;
@@ -52,6 +58,10 @@ private:
 private slots:
     void modelNew();
     void modelOpen();
+    void exampleReservoir();
+    void exampleWater();
+    void exampleSewage();
+    void exampleOverflow();
     bool modelSave();
     bool modelSaveAs();
     void modelModified();

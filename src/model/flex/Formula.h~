@@ -8,8 +8,6 @@
 #ifndef FORMULA_H_
 #define FORMULA_H_
 #include "IntervalSet.h"
-#include "DFPN2.h"
-#include <string.h>
 
 namespace model {
 
@@ -54,7 +52,6 @@ public:
 class AtomDisFormula : public Formula {
 
 private:
-    int placeIndex;
     char *placeName;
     int n;
 
@@ -69,26 +66,13 @@ public:
         return placeName;
 	}
 
-    bool setPlaceIndex(Model *m) {
-        int pIndex = -1;
-        for (int i = 0; pIndex == -1 && i < m->N_places; i++) {
-            if (m->places[i].type != PT_DISCRETE) continue;
-            if (strncmp(m->places[i].id,placeName, strlen(m->places[i].id)) != 0) continue;
-            pIndex = i;
-        }
-
-        placeIndex = pIndex;
-        return (pIndex != -1);
-    }
-
-    unsigned int getPlaceIndex() {
-        return placeIndex;
+    unsigned int getPlaceIndex(Model *m) {
+        return 0;
     }
 };
 
 class AtomContFormula : public Formula {
 private:
-    int placeIndex;
     char *placeName;
 	double c;
 
@@ -111,20 +95,8 @@ public:
         return placeName;
 	}
 
-    bool setPlaceIndex(Model *m) {
-        int pIndex = -1;
-        for (int i = 0; pIndex == -1 && i < m->N_places; i++) {
-            if (m->places[i].type != PT_FLUID) continue;
-            if (strncmp(m->places[i].id,placeName, strlen(m->places[i].id)) != 0) continue;
-            pIndex = i;
-        }
-
-        placeIndex = pIndex;
-        return (pIndex != -1);
-    }
-
-    unsigned int getPlaceIndex() {
-        return placeIndex;
+    unsigned int getPlaceIndex(Model *m) {
+        return 0;
     }
 };
 

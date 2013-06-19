@@ -82,7 +82,7 @@ void GUIController::modelNew()
         ui->modelEditor->clear();
         modelSetCurrentFile("");
         modelModified();
-        this->addText("New model file created.");
+        this->addSuccess("New model file created.");
     }
 }
 
@@ -108,9 +108,46 @@ void GUIController::modelOpen()
         QString fileName = QFileDialog::getOpenFileName(this, tr("Open HPnG model"),"untitled.hpng",tr("HPnG files (*.hpng *.m);;All Files (*.*)"));
         if (!fileName.isEmpty()) {
             openFile(fileName,ui->modelEditor);
-            this->addText("Model file loaded.");
+            this->addSuccess("Model file loaded.");
         }
     }
+}
+
+/**
+ * @brief GUIController::modelOpen Open the file with the given filename.
+ */
+void GUIController::modelOpen(QString fileName)
+{
+    if (checkSave(ui->modelEditor)) {
+        if (!fileName.isEmpty()) {
+            openFile(fileName,ui->modelEditor);
+            this->addSuccess("Model file loaded.");
+        }
+    }
+}
+
+void GUIController::exampleReservoir()
+{
+    this->addText("Loading Reservoir model file...");
+    this->modelOpen("./examples/reservoir.hpng");
+}
+
+void GUIController::exampleWater()
+{
+    this->addText("Loading Water cleaning facility model file...");
+    this->modelOpen("./examples/dsn_2filter.hpng");
+}
+
+void GUIController::exampleSewage()
+{
+    this->addText("Loading Sewage water cleaning model file...");
+    this->modelOpen("./examples/overstroombasis.hpng");
+}
+
+void GUIController::exampleOverflow()
+{
+    this->addText("Loading Overflow model file...");
+    this->modelOpen("./examples/overflow.hpng");
 }
 
 ///**
@@ -140,7 +177,7 @@ bool GUIController::modelSave()
         res = saveFile(modelCurFile,ui->modelEditor);
     }
 
-    res ? this->addText("Model file is succesfully saved.") : this->addText("Model file is NOT saved.");
+    res ? this->addSuccess("Model file is succesfully saved.") : this->addError("Model file is NOT saved.");
     return res;
 }
 
@@ -193,9 +230,9 @@ void GUIController::about()
             tr("Fluid Survival Tool is developed at the University of Twente.\n"
                "The application is for academic and non-commercial use only.\n\n"
                "Tool contributors:\n"
+               "B.F. Postema, BSc.\n"
                "H. Ghasemieh, MSc.\n"
-               "Dr. A.K.I. Remke\n"
-               "B.F. Postema, BSc.\n"));
+               "Dr. A.K.I. Remke\n"));
 }
 
 /**
@@ -360,16 +397,16 @@ void GUIController::openProjectWebsite() {
 void GUIController::generateSTD() {
     STDDialogController dialogSTD(this,modelFileName);
     if (!checkSave(ui->modelEditor) || modelCurFile.isEmpty()) {
-        this->addText("The model file should be saved before execution.");
+        this->addError("The model file must be saved before execution.");
     } else if(dialogSTD.exec() == QDialog::Accepted )
     {
         try {
             model::Facade *f;
             f = new model::Facade(modelCurFile,this);
             if (f->showSTD(modelFileName, dialogSTD.getMaxTime(), dialogSTD.getImageScale())) {
-                this->addText("Displaying STD...");
+                this->addSuccess("Displaying STD...");
             } else {
-                this->addText("The STD could not be displayed.");
+                this->addError("The STD could not be displayed.");
             }
         } catch (const std::exception & e)  {
             QMessageBox msgBox;
@@ -391,7 +428,7 @@ void GUIController::generateSTD() {
 void GUIController::generateProbFunc() {
     PlaceProbDialogController dialogPlaceProb(this,modelFileName);
     if (!checkSave(ui->modelEditor) || modelCurFile.isEmpty()) {
-        this->addText("The model file should be saved before execution.");
+        this->addError("The model file must be saved before execution.");
     } else if(dialogPlaceProb.exec() == QDialog::Accepted )
     {
         try {
@@ -399,17 +436,17 @@ void GUIController::generateProbFunc() {
                 model::Facade *f;
                 f = new model::Facade(modelCurFile,dialogPlaceProb.getPlaceName(),this);
                 if (f->showProbFunc(dialogPlaceProb.getConstStart(),dialogPlaceProb.getConstEnd(),dialogPlaceProb.getConstStep(),dialogPlaceProb.getTimeStep(),dialogPlaceProb.getMaxTime())) {
-                    this->addText("Displaying Probability Distribution Pr-t plot...");
+                    this->addSuccess("Displaying Probability Distribution Pr-t plot...");
                 } else {
-                    this->addText("The Probability Distribution Pr-t plot could not be displayed.");
+                    this->addError("The Probability Distribution Pr-t plot could not be displayed.");
                 }
             } if (dialogPlaceProb.checkSpecConst()) {
                 model::Facade *f;
                 f = new model::Facade(modelCurFile,dialogPlaceProb.getPlaceName(),this);
                 if (f->showProbFunc(dialogPlaceProb.getConst(),dialogPlaceProb.getTimeStep(),dialogPlaceProb.getMaxTime())) {
-                    this->addText("Displaying Probability Distribution Pr-t plot...");
+                    this->addSuccess("Displaying Probability Distribution Pr-t plot...");
                 } else {
-                    this->addText("The Probability Distribution Pr-t plot could not be displayed.");
+                    this->addError("The Probability Distribution Pr-t plot could not be displayed.");
                 }
             }
         } catch (const std::exception & e)  {
@@ -429,34 +466,46 @@ void GUIController::generateProbFunc() {
 void GUIController::modelCheck(){
     ModelCheckDialogController dialogModelCheck(this,modelFileName);
     if (!checkSave(ui->modelEditor) || modelCurFile.isEmpty()) {
-        this->addText("The model file should be saved before execution.");
+        this->addError("The model file must be saved before execution.");
     } else if(dialogModelCheck.exec() == QDialog::Accepted )
     {
         this->addText("Model Checking procedure initialized.");
         try {
-                if (!modelCurFile.isEmpty() && checkSave(ui->modelEditor)) {
-                    model::Facade *f;
-                    f = new model::Facade(modelCurFile,this);
-                    if (f->modelCheck(dialogModelCheck.getFormula(), dialogModelCheck.getTTC(),dialogModelCheck.getMaxTime())) {
-                        this->addText("Model checking...");
-                    } else {
-                        this->addText("The model checking could not be performed.");
-                    }
+            model::Facade *f;
+            f = new model::Facade(modelCurFile,this);
+            bool res;
+            if (f->modelCheck(res, dialogModelCheck.getFormula(), dialogModelCheck.getTTC(),dialogModelCheck.getMaxTime())) {
+                this->addSuccess("Model checking is done.");
+                QMessageBox msg(this);
+                msg.setWindowTitle(QString("Model Checking Verdict"));
+                if (res) {
+                    msg.setWindowIcon(QPixmap(":/resources/resources/yes.png"));
+                    msg.setIconPixmap(QPixmap(":/resources/resources/yes.png"));
+                    msg.setInformativeText(QString("Yes! The formula %1 is satisfied.").arg(dialogModelCheck.getFormula()));
                 } else {
-                    this->addText("The model file and the spec file should be saved before execution.");
+                    msg.setWindowIcon(QPixmap(":/resources/resources/no.png"));
+                    msg.setIconPixmap(QPixmap(":/resources/resources/no.png"));
+                    msg.setInformativeText(QString("No! The formula %1 is not satisfied.").arg(dialogModelCheck.getFormula()));
                 }
-            } catch (const std::exception & e)  {
-                QMessageBox msgBox;
-                msgBox.setWindowTitle("Exception.");
-                msgBox.setInformativeText(e.what());
-                msgBox.exec();
-            } catch (...) {
-                QMessageBox msgBox;
-                msgBox.setWindowTitle("Exception.");
-                msgBox.setInformativeText("An unknown exception is caught.");
-                msgBox.exec();
+                QSpacerItem* horizontalSpacer = new QSpacerItem(500, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
+                QGridLayout* layout = (QGridLayout*)msg.layout();
+                layout->addItem(horizontalSpacer, layout->rowCount(), 0, 1, layout->columnCount());
+                msg.exec();
+            } else {
+                this->addError("The model checking could not be performed.");
             }
-    }  
+        } catch (const std::exception & e)  {
+            QMessageBox msgBox;
+            msgBox.setWindowTitle("Exception.");
+            msgBox.setInformativeText(e.what());
+            msgBox.exec();
+        } catch (...) {
+            QMessageBox msgBox;
+            msgBox.setWindowTitle("Exception.");
+            msgBox.setInformativeText("An unknown exception is caught.");
+            msgBox.exec();
+        }
+    }
 }
 
 //void GUIController::tempModelCheck(){
@@ -489,7 +538,7 @@ void GUIController::modelCheck(){
 //}
 
 /**
- * @brief GUIController::addText Add a text to the build-in terminal
+ * @brief GUIController::addText Add a normal text to the build-in terminal
  * @param str String containing the text to be added.
  */
 void GUIController::addText(std::string str)
@@ -501,7 +550,58 @@ void GUIController::addText(std::string str)
     //this->setText("<font color=\"Black\"> \>" + str + "</font>" + "\n" + "<font color=\"Grey\">" + this->getText() + "</font>");
     std::stringstream sstream;
     sstream << pc;
-    this->setText(this->getText() + "\n" + sstream.str() + " : " + str);
+    this->setText(this->getText() + "<b>" + sstream.str() + "</b> : " + escapeHTML(str));
+    pc++;
+}
+
+/**
+ * @brief GUIController::addText Add an information text to the build-in terminal
+ * @param str String containing the text to be added.
+ */
+void GUIController::addSuccess(std::string str)
+{
+//    std::ofstream log("log.txt", std::ios_base::app | std::ios_base::out);
+
+//    log << this->getText();
+    std::stringstream sstream;
+    sstream << pc;
+//    QString qStr = QString::fromAscii(str.data(),str.size());
+    this->setText(this->getText() + "<b>" + sstream.str() + "</b> : " + "<font color=\"#4F8A10\">" + escapeHTML(str) + "</font>");
+//    this->setText(this->getText() + "\n" + sstream.str() + " : " + str);
+    pc++;
+}
+
+/**
+ * @brief GUIController::addText Add a warning text to the build-in terminal
+ * @param str String containing the text to be added.
+ */
+void GUIController::addWarning(std::string str)
+{
+//    std::ofstream log("log.txt", std::ios_base::app | std::ios_base::out);
+
+//    log << this->getText();
+    std::stringstream sstream;
+    sstream << pc;
+//    QString qStr = QString::fromAscii(str.data(),str.size());
+    this->setText(this->getText() + "<b>" + sstream.str() + "</b> : " + "<font color=\"#9F6000\">" + escapeHTML(str) + "</font>");
+//    this->setText(this->getText() + "\n" + sstream.str() + " : " + str);
+    pc++;
+}
+
+/**
+ * @brief GUIController::addText Add an error text to the build-in terminal
+ * @param str String containing the text to be added.
+ */
+void GUIController::addError(std::string str)
+{
+//    std::ofstream log("log.txt", std::ios_base::app | std::ios_base::out);
+
+//    log << this->getText();
+    std::stringstream sstream;
+    sstream << pc;
+//    QString qStr = QString::fromAscii(str.data(),str.size());
+    this->setText(this->getText() + "<b>" + sstream.str() + "</b> : " + "<font color=\"#D8000C\">" + escapeHTML(str) + "</font>");
+//    this->setText(this->getText() + "\n" + sstream.str() + " : " + str);
     pc++;
 }
 
@@ -512,8 +612,8 @@ void GUIController::addText(std::string str)
 void GUIController::setText(std::string str)
 {
     QString qStr = QString::fromAscii(str.data(),str.size());
-    //ui->outputEditor->setHtml(str);
-    ui->outputEditor->setText(qStr);
+    ui->outputEditor->setHtml(qStr);
+    //ui->outputEditor->setText(qStr);
     QScrollBar *sb = ui->outputEditor->verticalScrollBar();
     sb->triggerAction(QScrollBar::SliderToMaximum);
 }
@@ -524,5 +624,27 @@ void GUIController::setText(std::string str)
  */
 std::string GUIController::getText()
 {
-    return ui->outputEditor->toPlainText().toStdString();
+    return ui->outputEditor->toHtml().toStdString();
+//    return ui->outputEditor->toPlainText().toStdString();
 }
+
+std::string GUIController::escapeHTML(std::string & Str)
+  /* returns Str with all characters with special HTML meanings converted to
+    entity references. */
+  {
+    std::string Escaped="";
+    for (int i = 0; i < Str.size(); ++i)
+      {
+        std::string ThisCh = Str.substr(i,1);
+        if (ThisCh == "&")
+            ThisCh = "&amp;";
+        else if (ThisCh == "<")
+            ThisCh = "&lt;";
+        else if (ThisCh == "\"")
+            ThisCh = "&quot;";
+        else if (ThisCh == ">")
+            ThisCh = "&gt;";
+        Escaped += ThisCh;
+      } /*for*/
+    return Escaped;
+  } /*EscapeHTML*/
