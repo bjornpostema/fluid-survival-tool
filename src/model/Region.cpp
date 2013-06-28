@@ -7,8 +7,6 @@
 
 #include "Region.h"
 
-#include <iostream>
-
 namespace model {
 
 Region::Region(std::vector<StochasticEvent*> * eventList, Segment * lowerBoundray) {

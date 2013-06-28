@@ -8,6 +8,8 @@
 #ifndef LINE_H_
 #define LINE_H_
 
+#include <iostream>
+
 namespace model {
 
 #define ZERO_PREC  1.0e-10

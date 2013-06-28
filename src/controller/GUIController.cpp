@@ -1,5 +1,5 @@
 /**
- * @file FSTGui.cpp
+ * @file GUIController.cpp
  * @author B.F. Postema
  * @brief The GUI for the tool with some simple internal QT features.
  */
@@ -13,15 +13,6 @@
 #include "../model/Facade.h"
 #include "../model/Logger.h"
 
-/**
- * @brief GUIController::GUIController is the constructor of the main window.
- * The main window constructs all the elements via the ui file.
- * The title of the main window is set to the tool name.
- * The position of the main window is adjusted to the center.
- * The default empty files are initiated.
- *
- * @param parent the parent QWidget
- */
 GUIController::GUIController(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::GUIController),
@@ -51,19 +42,11 @@ GUIController::GUIController(QWidget *parent) :
     pc = 0;
 }
 
-/**
- * @brief GUIController::~GUIController The destroyer that frees the memory
- * The ui is deleted and the memory is freed.
- */
 GUIController::~GUIController()
 {
     delete ui;
 }
 
-/**
- * @brief GUIController::closeEvent Check if the files are saved when the window is closed.
- * @param[out] event The closing event.
- */
 void GUIController::closeEvent(QCloseEvent *event)
 {
     if (checkSave(ui->modelEditor)) {
@@ -73,9 +56,6 @@ void GUIController::closeEvent(QCloseEvent *event)
     }
 }
 
-/**
- * @brief GUIController::modelNew Creates a new model file in the model text editor.
- */
 void GUIController::modelNew()
 {
     if (checkSave(ui->modelEditor)) {
@@ -99,9 +79,6 @@ void GUIController::modelNew()
 //    }
 //}
 
-/**
- * @brief GUIController::modelOpen Ask to define a file name for the model and open the file.
- */
 void GUIController::modelOpen()
 {
     if (checkSave(ui->modelEditor)) {
@@ -113,9 +90,6 @@ void GUIController::modelOpen()
     }
 }
 
-/**
- * @brief GUIController::modelOpen Open the file with the given filename.
- */
 void GUIController::modelOpen(QString fileName)
 {
     if (checkSave(ui->modelEditor)) {
@@ -150,24 +124,6 @@ void GUIController::exampleOverflow()
     this->modelOpen("./examples/overflow.hpng");
 }
 
-///**
-// * @brief GUIController::specOpen Ask to define a file name for the specification and open the file.
-// */
-//void GUIController::specOpen()
-//{
-//    if (checkSave(ui->specEditor)) {
-//        QString fileName = QFileDialog::getOpenFileName(this, tr("Open STL specification"),"untitled.stl",tr("STL files (*.stl);;All Files (*.*)"));
-//        if (!fileName.isEmpty()) {
-//            openFile(fileName,ui->specEditor);
-//            ui->tabWidget->setCurrentIndex(ui->tabWidget->indexOf(ui->SpecTab));
-//        }
-//    }
-//}
-
-/**
- * @brief GUIController::modelSave Saves the current model file.
- * @return Gives true if the model file is saved else false.
- */
 bool GUIController::modelSave()
 {
     bool res = false;
@@ -181,24 +137,6 @@ bool GUIController::modelSave()
     return res;
 }
 
-///**
-// * @brief GUIController::specSave Saves the current specification file.
-// * @return Gives true if the specification file is saved else false.
-// */
-//bool GUIController::specSave()
-//{
-//    ui->tabWidget->setCurrentIndex(ui->tabWidget->indexOf(ui->SpecTab));
-//    if (specCurFile.isEmpty()) {
-//        return specSaveAs();
-//    } else {
-//        return saveFile(specCurFile,ui->specEditor);
-//    }
-//}
-
-/**
- * @brief GUIController::modelSaveAs Gives a dialog where to save the model file and saves the file.
- * @return Gives true if the model file is saved else false.
- */
 bool GUIController::modelSaveAs()
 {
     QString fileName = QFileDialog::getSaveFileName(this, tr("Save HPnG model"),"untitled.hpng",tr("HPnG files (*.hpng *.m);;All Files (*.*)"));
@@ -208,22 +146,6 @@ bool GUIController::modelSaveAs()
     return saveFile(fileName,ui->modelEditor);
 }
 
-///**
-// * @brief GUIController::specSaveAs Gives a dialog where to save the specification file and saves the file.
-// * @return Gives true if the specification file is saved else false.
-// */
-//bool GUIController::specSaveAs()
-//{
-//    QString fileName = QFileDialog::getSaveFileName(this, tr("Save STL specification"),"untitled.stl",tr("STL files (*.stl);;All Files (*.*)"));
-//    if (fileName.isEmpty())
-//        return false;
-
-//    return saveFile(fileName,ui->specEditor);
-//}
-
-/**
- * @brief GUIController::about Gives some information about the tool in a small about pop-up.
- */
 void GUIController::about()
 {
    QMessageBox::about(this, tr("About FST"),
@@ -235,27 +157,11 @@ void GUIController::about()
                "Dr. A.K.I. Remke\n"));
 }
 
-/**
- * @brief GUIController::modelModified Places an asterix near the filename to indicate that the model file was modified.
- */
 void GUIController::modelModified()
 {
     ui->modelFileName->setText((modelCurFile == "" ? "untitled.hpng" : modelFileName) + (ui->modelEditor->document()->isModified() ? "*":""));
 }
 
-///**
-// * @brief GUIController::specModified Places an asterix near the filename to indicate that the specificaiton file was modified.
-// */
-//void GUIController::specModified()
-//{
-//    ui->specFileName->setText((specCurFile == "" ? "untitled.stl" : specFileName) + (ui->specEditor->document()->isModified() ? "*":""));
-//}
-
-/**
- * @brief GUIController::checkSave Saves a modified file from an text editor.
- * @param[in] editor The editor that should be saved.
- * @return Gives true when the file is saved else false.
- */
 bool GUIController::checkSave(QTextEdit *editor)
 {
     if (editor->document()->isModified()) {
@@ -276,11 +182,6 @@ bool GUIController::checkSave(QTextEdit *editor)
     return true;
 }
 
-/**
- * @brief GUIController::openFile Opens the file of a specific filename and text editor.
- * @param[in] fileName The name of the file that should be opened.
- * @param[out] editor The editor that get the file content.
- */
 void GUIController::openFile(const QString &fileName, QTextEdit *editor)
 {
     QFile file(fileName);
@@ -308,12 +209,6 @@ void GUIController::openFile(const QString &fileName, QTextEdit *editor)
     statusBar()->showMessage(tr("File loaded"), 2000);
 }
 
-/**
- * @brief GUIController::saveFile Saves the file of a specific filename and text editor.
- * @param[out] fileName The name of the file that should be saved.
- * @param[in] editor The editor that contains the content that should be saved.
- * @return Gives true when the file is saved else false.
- */
 bool GUIController::saveFile(const QString &fileName, QTextEdit *editor)
 {
     QFile file(fileName);
@@ -326,7 +221,7 @@ bool GUIController::saveFile(const QString &fileName, QTextEdit *editor)
     }
 
     QTextStream out(&file);
-#ifndef QT_NO_CFSTGuiURSOR
+#ifndef QT_NO_CURSOR
     QApplication::setOverrideCursor(Qt::WaitCursor);
 #endif
     out << editor->toPlainText();
@@ -342,10 +237,6 @@ bool GUIController::saveFile(const QString &fileName, QTextEdit *editor)
     return true;
 }
 
-/**
- * @brief GUIController::modelSetCurrentFile Displays the current model file name.
- * @param fileName The name of the current model file.
- */
 void GUIController::modelSetCurrentFile(const QString &fileName)
 {
     modelCurFile = fileName;
@@ -361,28 +252,6 @@ void GUIController::modelSetCurrentFile(const QString &fileName)
     modelFileName = parts.at(parts.size()-1);
 }
 
-///**
-// * @brief GUIController::specSetCurrentFile Displays the current specification file name.
-// * @param fileName The name of the current specification file.
-// */
-//void GUIController::specSetCurrentFile(const QString &fileName)
-//{
-//    specCurFile = fileName;
-//    ui->specEditor->document()->setModified(false);
-//    setWindowModified(false);
-
-//    QString shownName = specCurFile;
-//    if (specCurFile.isEmpty())
-//        shownName = "untitled.stl";
-//    setWindowFilePath(shownName);
-
-//    QStringList parts = fileName.split("/");
-//    specFileName = parts.at(parts.size()-1);
-//}
-
-/**
- * @brief GUIController::openProjectWebsite Opens the googlecode project website.
- */
 void GUIController::openProjectWebsite() {
      if (QDesktopServices::openUrl(QUrl("https://code.google.com/p/fluid-survival-tool/", QUrl::TolerantMode))) {
          statusBar()->showMessage("Opened URL in default browser",2000);
@@ -391,9 +260,6 @@ void GUIController::openProjectWebsite() {
      }
 }
 
-/**
- * @brief GUIController::generateSTD Generates an STD.
- */
 void GUIController::generateSTD() {
     STDDialogController dialogSTD(this,modelFileName);
     if (!checkSave(ui->modelEditor) || modelCurFile.isEmpty()) {
@@ -422,9 +288,6 @@ void GUIController::generateSTD() {
     }
 }
 
-/**
- * @brief GUIController::generateProbFunc Generates an probability function for a given place.
- */
 void GUIController::generateProbFunc() {
     PlaceProbDialogController dialogPlaceProb(this,modelFileName);
     if (!checkSave(ui->modelEditor) || modelCurFile.isEmpty()) {
@@ -543,11 +406,6 @@ void GUIController::modelCheck(){
  */
 void GUIController::addText(std::string str)
 {
-//    std::ofstream log("log.txt", std::ios_base::app | std::ios_base::out);
-
-//    log << this->getText();
-    //QString qStr = QString::fromAscii(str.data(),str.size());
-    //this->setText("<font color=\"Black\"> \>" + str + "</font>" + "\n" + "<font color=\"Grey\">" + this->getText() + "</font>");
     std::stringstream sstream;
     sstream << pc;
     this->setText(this->getText() + "<b>" + sstream.str() + "</b> : " + escapeHTML(str));
@@ -560,14 +418,9 @@ void GUIController::addText(std::string str)
  */
 void GUIController::addSuccess(std::string str)
 {
-//    std::ofstream log("log.txt", std::ios_base::app | std::ios_base::out);
-
-//    log << this->getText();
     std::stringstream sstream;
     sstream << pc;
-//    QString qStr = QString::fromAscii(str.data(),str.size());
     this->setText(this->getText() + "<b>" + sstream.str() + "</b> : " + "<font color=\"#4F8A10\">" + escapeHTML(str) + "</font>");
-//    this->setText(this->getText() + "\n" + sstream.str() + " : " + str);
     pc++;
 }
 
@@ -577,14 +430,9 @@ void GUIController::addSuccess(std::string str)
  */
 void GUIController::addWarning(std::string str)
 {
-//    std::ofstream log("log.txt", std::ios_base::app | std::ios_base::out);
-
-//    log << this->getText();
     std::stringstream sstream;
     sstream << pc;
-//    QString qStr = QString::fromAscii(str.data(),str.size());
     this->setText(this->getText() + "<b>" + sstream.str() + "</b> : " + "<font color=\"#9F6000\">" + escapeHTML(str) + "</font>");
-//    this->setText(this->getText() + "\n" + sstream.str() + " : " + str);
     pc++;
 }
 
@@ -594,38 +442,23 @@ void GUIController::addWarning(std::string str)
  */
 void GUIController::addError(std::string str)
 {
-//    std::ofstream log("log.txt", std::ios_base::app | std::ios_base::out);
-
-//    log << this->getText();
     std::stringstream sstream;
     sstream << pc;
-//    QString qStr = QString::fromAscii(str.data(),str.size());
     this->setText(this->getText() + "<b>" + sstream.str() + "</b> : " + "<font color=\"#D8000C\">" + escapeHTML(str) + "</font>");
-//    this->setText(this->getText() + "\n" + sstream.str() + " : " + str);
     pc++;
 }
 
-/**
- * @brief GUIController::setText Set the text in the build-in terminal
- * @param str String containing the text to be set.
- */
 void GUIController::setText(std::string str)
 {
     QString qStr = QString::fromAscii(str.data(),str.size());
     ui->outputEditor->setHtml(qStr);
-    //ui->outputEditor->setText(qStr);
     QScrollBar *sb = ui->outputEditor->verticalScrollBar();
     sb->triggerAction(QScrollBar::SliderToMaximum);
 }
 
-/**
- * @brief GUIController::getText Give the current text of the build-in terminal
- * @return Gives a QString text of the build-in terminal.
- */
 std::string GUIController::getText()
 {
     return ui->outputEditor->toHtml().toStdString();
-//    return ui->outputEditor->toPlainText().toStdString();
 }
 
 std::string GUIController::escapeHTML(std::string & Str)

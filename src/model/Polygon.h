@@ -10,6 +10,7 @@
 
 #include "Line.h"
 #include <vector>
+#include <iostream>
 
 namespace model {
 

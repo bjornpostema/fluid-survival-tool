@@ -39,6 +39,7 @@ IntervalSet* IntervalSet::intersect(const IntervalSet* intSet) {
 
 IntervalSet* IntervalSet::unionWith(const IntervalSet* uSet) {
 	if (uSet == NULL) return this;
+    //if (this == NULL) return this;
 	IntervalSet *unionSet = new IntervalSet();
 	for (unsigned int i = 0; i < intervals.size(); i++)
 		unionSet->intervals.push_back(intervals.at(i));

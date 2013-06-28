@@ -21,9 +21,10 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">Fluid Survival Tool
-   &#160;<span id="projectnumber">0.01</span>
+   &#160;<span id="projectnumber">0.03</span>
    </div>
   </td>
  </tr>
@@ -61,6 +62,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow2" class="tabs2">
     <ul class="tablist">
       <li><a href="files.html"><span>File&#160;List</span></a></li>
+      <li><a href="globals.html"><span>File&#160;Members</span></a></li>
     </ul>
   </div>
 <!-- window showing the filter options -->
@@ -68,7 +70,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -92,80 +94,83 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor"></span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;DFPN2.h&quot;</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;Line.h&quot;</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &quot;STDRegion.h&quot;</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &quot;Region.h&quot;</span></div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;</div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="keyword">enum</span> EventType { TRANSITION, PLACE_LOWER_BOUNDRY, PLACE_UPPER_BOUNDRY, MAX_TIME_REACHED, FIRST_NULL_EVENT};</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="keyword">namespace </span>model {</div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keyword">class </span><a class="code" href="classSTDRegion.html">STDRegion</a>;</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="keyword">class </span><a class="code" href="structDtrmEvent.html">DtrmEvent</a>;</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;</div>
-<div class="line"><a name="l00016"></a><span class="lineno"><a class="code" href="structStochasticEvent.html">   16</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structStochasticEvent.html">StochasticEvent</a>{</div>
-<div class="line"><a name="l00020"></a><span class="lineno"><a class="code" href="structStochasticEvent.html#a39fc3833721f4066c15044e6772a5435">   20</a></span>&#160;    <a class="code" href="classSegment.html">Segment</a>* <a class="code" href="structStochasticEvent.html#a39fc3833721f4066c15044e6772a5435">timeSegment</a>;</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    EventType eventType;</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keyword">enum</span> EventType { TRANSITION, PLACE_LOWER_BOUNDRY, PLACE_UPPER_BOUNDRY, MAX_TIME_REACHED, FIRST_NULL_EVENT};</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="keyword">class </span>Region;</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="keyword">class </span>DtrmEvent;</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;</div>
+<div class="line"><a name="l00018"></a><span class="lineno"><a class="code" href="structmodel_1_1StochasticEvent.html">   18</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structmodel_1_1StochasticEvent.html">StochasticEvent</a>{</div>
+<div class="line"><a name="l00022"></a><span class="lineno"><a class="code" href="structmodel_1_1StochasticEvent.html#a5ef3fd53ce53c35008fa8a569fd153e0">   22</a></span>&#160;    <a class="code" href="classmodel_1_1Segment.html">Segment</a>* <a class="code" href="structmodel_1_1StochasticEvent.html#a5ef3fd53ce53c35008fa8a569fd153e0">timeSegment</a>;</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
-<div class="line"><a name="l00027"></a><span class="lineno"><a class="code" href="structStochasticEvent.html#a359f6c7f5e9d624744e35fb187adcc73">   27</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structStochasticEvent.html#a359f6c7f5e9d624744e35fb187adcc73">id</a>;</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;</div>
-<div class="line"><a name="l00032"></a><span class="lineno"><a class="code" href="structStochasticEvent.html#a3179b1980d441007158d7a9c77b8ca1d">   32</a></span>&#160;    <a class="code" href="structMarking.html">Marking</a>* <a class="code" href="structStochasticEvent.html#a3179b1980d441007158d7a9c77b8ca1d">preRegionMarking</a>;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="comment">/*</span></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="comment">     * If the pre-event for this stochastic event were in stochastic area. this variable has a value.</span></div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <a class="code" href="classSTDRegion.html">STDRegion</a>* preRegion;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="comment">/*</span></div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="comment">     * If the pre-event for this stochastic event were in deterministic area. this variable has a value.</span></div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <a class="code" href="structDtrmEvent.html">DtrmEvent</a>* preDtrmEvent;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="comment">/* TODO[IMPORTANT]: Only one of the above variables is allowed to have value. I know this is NASTY.</span></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="comment">     * the solution is to have a parent region class and then stochastic and deterministic regions as its child class.</span></div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="comment">     * and then STD will have the list of region class. this is nicer for model checking. But so far I keep as it is for time being.</span></div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;</div>
-<div class="line"><a name="l00052"></a><span class="lineno"><a class="code" href="structStochasticEvent.html#a9c694991cdb06b9499b9c4295af4d98b">   52</a></span>&#160;    <a class="code" href="structMarking.html">Marking</a>* <a class="code" href="structStochasticEvent.html#a9c694991cdb06b9499b9c4295af4d98b">postRegionMarking</a>;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">bool</span> greaterSlopeFirst(<a class="code" href="structStochasticEvent.html">StochasticEvent</a>* e1, <a class="code" href="structStochasticEvent.html">StochasticEvent</a>* e2){<span class="keywordflow">return</span> e1-&gt;<a class="code" href="structStochasticEvent.html#a39fc3833721f4066c15044e6772a5435">timeSegment</a>-&gt;a &gt; e2-&gt;<a class="code" href="structStochasticEvent.html#a39fc3833721f4066c15044e6772a5435">timeSegment</a>-&gt;a;};</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    EventType eventType;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;</div>
+<div class="line"><a name="l00029"></a><span class="lineno"><a class="code" href="structmodel_1_1StochasticEvent.html#a276914632c97a55be0215ceac18ba8bb">   29</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structmodel_1_1StochasticEvent.html#a276914632c97a55be0215ceac18ba8bb">id</a>;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div>
+<div class="line"><a name="l00034"></a><span class="lineno"><a class="code" href="structmodel_1_1StochasticEvent.html#a92daf8b26f7f3dcd59a34ef046576a78">   34</a></span>&#160;    <a class="code" href="structmodel_1_1Marking.html">Marking</a>* <a class="code" href="structmodel_1_1StochasticEvent.html#a92daf8b26f7f3dcd59a34ef046576a78">preRegionMarking</a>;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="comment">/*</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="comment">     * If the pre-event for this stochastic event were in stochastic area. this variable has a value.</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <a class="code" href="classmodel_1_1Region.html">Region</a>* preRegion;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <span class="comment">/*</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="comment">     * If the pre-event for this stochastic event were in deterministic area. this variable has a value.</span></div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <a class="code" href="structmodel_1_1DtrmEvent.html">DtrmEvent</a>* preDtrmEvent;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="comment">/* TODO[IMPORTANT]: Only one of the above variables is allowed to have value. I know this is NASTY.</span></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="comment">     * the solution is to have a parent region class and then stochastic and deterministic regions as its child class.</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="comment">     * and then STD will have the list of region class. this is nicer for model checking. But so far I keep as it is for time being.</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;</div>
+<div class="line"><a name="l00054"></a><span class="lineno"><a class="code" href="structmodel_1_1StochasticEvent.html#a3d3e7e0ecc4de49f29a145f03be75b2a">   54</a></span>&#160;    <a class="code" href="structmodel_1_1Marking.html">Marking</a>* <a class="code" href="structmodel_1_1StochasticEvent.html#a3d3e7e0ecc4de49f29a145f03be75b2a">postRegionMarking</a>;</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <a class="code" href="structStochasticEvent.html">StochasticEvent</a>(<a class="code" href="classSegment.html">Segment</a> *line, EventType type) : <a class="code" href="structStochasticEvent.html#a39fc3833721f4066c15044e6772a5435">timeSegment</a>(line), eventType(type), preRegion(0), preDtrmEvent(0){};</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <a class="code" href="structStochasticEvent.html">StochasticEvent</a>(<a class="code" href="structStochasticEvent.html">StochasticEvent</a>* se){</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <a class="code" href="structStochasticEvent.html#a39fc3833721f4066c15044e6772a5435">timeSegment</a> = se-&gt;<a class="code" href="structStochasticEvent.html#a39fc3833721f4066c15044e6772a5435">timeSegment</a>;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        eventType = se-&gt;eventType;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <span class="keywordtype">id</span> = se-&gt;<a class="code" href="structStochasticEvent.html#a359f6c7f5e9d624744e35fb187adcc73">id</a>;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <a class="code" href="structStochasticEvent.html#a3179b1980d441007158d7a9c77b8ca1d">preRegionMarking</a> = se-&gt;<a class="code" href="structStochasticEvent.html#a3179b1980d441007158d7a9c77b8ca1d">preRegionMarking</a>;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <a class="code" href="structStochasticEvent.html#a9c694991cdb06b9499b9c4295af4d98b">postRegionMarking</a> = se-&gt;<a class="code" href="structStochasticEvent.html#a9c694991cdb06b9499b9c4295af4d98b">postRegionMarking</a>;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    };</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <a class="code" href="structStochasticEvent.html">StochasticEvent</a>(){};</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">bool</span> greaterSlopeFirst(<a class="code" href="structmodel_1_1StochasticEvent.html">StochasticEvent</a>* e1, <a class="code" href="structmodel_1_1StochasticEvent.html">StochasticEvent</a>* e2){<span class="keywordflow">return</span> e1-&gt;<a class="code" href="structmodel_1_1StochasticEvent.html#a5ef3fd53ce53c35008fa8a569fd153e0">timeSegment</a>-&gt;a &gt; e2-&gt;<a class="code" href="structmodel_1_1StochasticEvent.html#a5ef3fd53ce53c35008fa8a569fd153e0">timeSegment</a>-&gt;a;};</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <a class="code" href="structmodel_1_1StochasticEvent.html">StochasticEvent</a>(<a class="code" href="classmodel_1_1Segment.html">Segment</a> *line, EventType type) : <a class="code" href="structmodel_1_1StochasticEvent.html#a5ef3fd53ce53c35008fa8a569fd153e0">timeSegment</a>(line), eventType(type), preRegion(0), preDtrmEvent(0){};</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    StochasticEvent(StochasticEvent* se){</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <a class="code" href="structmodel_1_1StochasticEvent.html#a5ef3fd53ce53c35008fa8a569fd153e0">timeSegment</a> = se-&gt;timeSegment;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        eventType = se-&gt;eventType;</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <span class="keywordtype">id</span> = se-&gt;id;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <a class="code" href="structmodel_1_1StochasticEvent.html#a92daf8b26f7f3dcd59a34ef046576a78">preRegionMarking</a> = se-&gt;preRegionMarking;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        <a class="code" href="structmodel_1_1StochasticEvent.html#a3d3e7e0ecc4de49f29a145f03be75b2a">postRegionMarking</a> = se-&gt;postRegionMarking;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    };</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;};</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    StochasticEvent(){};</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;</div>
-<div class="line"><a name="l00072"></a><span class="lineno"><a class="code" href="structDtrmEvent.html">   72</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structDtrmEvent.html">DtrmEvent</a>{</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    EventType eventType;</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;</div>
-<div class="line"><a name="l00078"></a><span class="lineno"><a class="code" href="structDtrmEvent.html#ab5e19522a82d496b8a66791bce168d81">   78</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structDtrmEvent.html#ab5e19522a82d496b8a66791bce168d81">id</a>;</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;</div>
-<div class="line"><a name="l00083"></a><span class="lineno"><a class="code" href="structDtrmEvent.html#a23d94e3ab2a80c673f5e42aac1b6ecb0">   83</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="structDtrmEvent.html#a23d94e3ab2a80c673f5e42aac1b6ecb0">time</a>;</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;</div>
-<div class="line"><a name="l00088"></a><span class="lineno"><a class="code" href="structDtrmEvent.html#acaa9ee345f104aee09a01fe0594eab70">   88</a></span>&#160;    <a class="code" href="structMarking.html">Marking</a>* <a class="code" href="structDtrmEvent.html#acaa9ee345f104aee09a01fe0594eab70">preRegionMarking</a>;</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <a class="code" href="structDtrmEvent.html">DtrmEvent</a>* nextDtrmEvent;</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    <span class="comment">/*</span></div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="comment">     * Set of next stochastic regions which could be entered after this deterministic event.</span></div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    std::vector&lt;STDRegion*&gt;* nextRegions;</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;</div>
-<div class="line"><a name="l00099"></a><span class="lineno"><a class="code" href="structDtrmEvent.html#adb35b6b002efbadbb2c01c36ff9bffb0">   99</a></span>&#160;    <a class="code" href="structMarking.html">Marking</a>* <a class="code" href="structDtrmEvent.html#adb35b6b002efbadbb2c01c36ff9bffb0">postRegionMarking</a>;</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    <a class="code" href="structDtrmEvent.html">DtrmEvent</a>(EventType type) : eventType(type){nextRegions = <span class="keyword">new</span> std::vector&lt;STDRegion*&gt;();};</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;};</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;<span class="comment">//bool lineGreaterSlopeFirst(Line &amp; l1, Line &amp; l2);</span></div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;};</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;</div>
+<div class="line"><a name="l00074"></a><span class="lineno"><a class="code" href="structmodel_1_1DtrmEvent.html">   74</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structmodel_1_1DtrmEvent.html">DtrmEvent</a>{</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    EventType eventType;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;</div>
+<div class="line"><a name="l00080"></a><span class="lineno"><a class="code" href="structmodel_1_1DtrmEvent.html#ac83590cca30f9ddd6e8975e3af563207">   80</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structmodel_1_1DtrmEvent.html#ac83590cca30f9ddd6e8975e3af563207">id</a>;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;</div>
+<div class="line"><a name="l00085"></a><span class="lineno"><a class="code" href="structmodel_1_1DtrmEvent.html#a93b16ee47d2a884f6b32eb35e5080551">   85</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="structmodel_1_1DtrmEvent.html#a93b16ee47d2a884f6b32eb35e5080551">time</a>;</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;</div>
+<div class="line"><a name="l00090"></a><span class="lineno"><a class="code" href="structmodel_1_1DtrmEvent.html#ab8edd58a3acad10955f3343c9314cc12">   90</a></span>&#160;    <a class="code" href="structmodel_1_1Marking.html">Marking</a>* <a class="code" href="structmodel_1_1DtrmEvent.html#ab8edd58a3acad10955f3343c9314cc12">preRegionMarking</a>;</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    <a class="code" href="structmodel_1_1DtrmEvent.html">DtrmEvent</a>* nextDtrmEvent;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <span class="comment">/*</span></div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="comment">     * Set of next stochastic regions which could be entered after this deterministic event.</span></div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    std::vector&lt;Region*&gt;* nextRegions;</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;</div>
+<div class="line"><a name="l00101"></a><span class="lineno"><a class="code" href="structmodel_1_1DtrmEvent.html#acb14e16cd23f7afb81866bda8f07be5b">  101</a></span>&#160;    <a class="code" href="structmodel_1_1Marking.html">Marking</a>* <a class="code" href="structmodel_1_1DtrmEvent.html#acb14e16cd23f7afb81866bda8f07be5b">postRegionMarking</a>;</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    <a class="code" href="structmodel_1_1DtrmEvent.html">DtrmEvent</a>(EventType type) : eventType(type){nextRegions = <span class="keyword">new</span> std::vector&lt;Region*&gt;();};</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;};</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;}</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="comment">//bool lineGreaterSlopeFirst(Line &amp; l1, Line &amp; l2);</span></div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Apr 10 2013 11:10:03 for Fluid Survival Tool by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jun 24 2013 16:58:29 for Fluid Survival Tool by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.3.1
 </small></address>

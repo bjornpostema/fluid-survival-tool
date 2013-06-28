@@ -1,8 +1,7 @@
-/*
- * ModelChecker.cpp
- *
- *  Created on: Mar 1, 2013
- *      Author: hamed
+/**
+ * @file ModelChecker.cpp
+ * @author B.F. Postema
+ * @brief The model checker class for model checking HPNGs against STL.
  */
 
 #include "ModelChecker.h"
@@ -27,12 +26,6 @@ IntervalSet* ModelChecker::visitStocRegion(Region* region, Formula* psi1, Formul
 	if (psi1_poly != NULL) psi1_poly->print();
 	if (psi2_poly != NULL) psi2_poly->print();
 
-//	cout << "PotentialSatSet: ";
-//	potentialSatSet->print();
-//	psi1_poly->print();
-//	std::cout<< "------------------------------" << std::endl;
-//	psi2_poly->print();
-
 	if (!debugImage.empty()){
 		if (psi1_poly != NULL) geometryHelper->drawPolygon(debugImage, psi1_poly, scale, cv::Scalar(0, 0, 255));
 		if (psi2_poly != NULL) geometryHelper->drawPolygon(debugImage, psi2_poly, scale, cv::Scalar(255, 255, 0));
@@ -41,9 +34,6 @@ IntervalSet* ModelChecker::visitStocRegion(Region* region, Formula* psi1, Formul
 		cv::imshow("test", flipped);
 		cv::waitKey(0);
 	}
-
-
-	//potentialSatSet->print();
 
 	// First interval set.
 	if (psi2_poly != NULL){
@@ -55,7 +45,6 @@ IntervalSet* ModelChecker::visitStocRegion(Region* region, Formula* psi1, Formul
             satSet = satSet->unionWith(geometryHelper->getIntersectionIntervals(psi2_poly, seg));
 		}
 	}
-//	satSet->print();
 
 	if (psi1_poly != NULL){
 		IntervalSet* psi1_Int = new IntervalSet();
@@ -66,17 +55,13 @@ IntervalSet* ModelChecker::visitStocRegion(Region* region, Formula* psi1, Formul
 			Segment* seg = new Segment(p1, p2);
 
 			psi1_Int = psi1_Int->unionWith(geometryHelper->getIntersectionIntervals(psi1_poly, seg));
-			cout << "psi1_Int: ";
-//			psi1_Int->print();
 			//In general case here the psi1_poly should be reformed.
 		}
 
 		if (psi2_poly != NULL){
 			IntervalSet* psi12_Int = geometryHelper->getIntersectionIntervals(psi1_poly, psi2_poly);
-			if (psi12_Int != NULL){
-//				psi12_Int->print();
+            if (psi12_Int != NULL){
                 satSet = satSet->unionWith(psi1_Int->intersect(psi12_Int));
-//				satSet->print();
 			}
 		}
 
@@ -174,8 +159,6 @@ ModelChecker::~ModelChecker() {
 }
 
 IntervalSet* ModelChecker::visitDtrmRegion(DtrmEvent* dtrmRegion, Formula* psi1, Formula* psi2, double t, Interval bound) {
-//	satSet->print();
-
 	if (dtrmRegion->time >= bound.end || dtrmRegion->time >= model->MaxTime || dtrmRegion == NULL)
 		return satSet;
 
@@ -213,14 +196,9 @@ IntervalSet* ModelChecker::visitDtrmRegion(DtrmEvent* dtrmRegion, Formula* psi1,
 	else if(state1 == ENTIRE)
         satSet = satSet->unionWith(visitDtrmRegion(dtrmRegion->nextDtrmEvent, psi1, psi2, t, bound));
 
-//	satSet->print();
-
 	IntervalSet* iSet = new IntervalSet();
     iSet->intervals.push_back(Interval(dtrmRegion->time, (state1 == ENTIRE)? dtrmRegion->nextDtrmEvent->time : t1));
 	iSet = iSet->minus(satSet);
-
-//	iSet->print();
-
 
     for (unsigned int i =0; i < dtrmRegion->nextRegions->size(); i++)
         satSet = satSet->unionWith(visitStocRegion(dtrmRegion->nextRegions->at(i), psi1, psi2, iSet, t, bound));
@@ -229,13 +207,11 @@ IntervalSet* ModelChecker::visitDtrmRegion(DtrmEvent* dtrmRegion, Formula* psi1,
 
 }
 
-bool ModelChecker::until(IntervalSet *&satSet, Formula* psi1, Formula* psi2, Interval bound) {
+bool ModelChecker::until(IntervalSet *&res, Formula* psi1, Formula* psi2, Interval bound) {
 	// TODO: Currently I have assumed that the given bound starts at 0 ie. T_1 = 0.
     // TODO: Traverse through the formulas retrieving the polygons. Then in the end retrieve the intervalset.
-//	if (satSet != NULL)
-//		satSet->clear();
-//	else
-	satSet = new IntervalSet();
+
+    satSet = new IntervalSet();
 
     double t = ttc; // - std->getTrEnabledTime();
 	std::cout << "t" << t << std::endl;
@@ -245,15 +221,12 @@ bool ModelChecker::until(IntervalSet *&satSet, Formula* psi1, Formula* psi2, Int
 	if (!debugImage.empty())
 		geometryHelper->drawVerticalLine(debugImage, bound.end, UP, scale, cv::Scalar(0, 0, 0));
 
-
-//	satSet->print();
 	//iterating over all deterministic events.
 	// the last event regards the maximum time reached. so should not be considered.
 	for (unsigned int i = 0; i < std->dtrmEventList.size() - 1; i++){
 		std::cout << i << std::endl;
         if (std->dtrmEventList[i]->time <= ttc && std->dtrmEventList[i]->nextDtrmEvent->time > ttc){
 			satSet = satSet->unionWith(visitDtrmRegion(std->dtrmEventList[i], psi1, psi2,t, bound));
-//			satSet->print();
 			break;
 		}
 	}
@@ -267,7 +240,7 @@ bool ModelChecker::until(IntervalSet *&satSet, Formula* psi1, Formula* psi2, Int
 			satSet = satSet->unionWith(visitStocRegion(std->regionList[i], psi1, psi2, potSet, t, bound));
 		}
 	}
-
+    res = satSet;
     return true;
 }
 
@@ -364,10 +337,6 @@ bool ModelChecker::iSetAtomCont(IntervalSet *&res, AtomContFormula* psi1) {
 double ModelChecker::calcProb(IntervalSet* iSet, double shift) {
     double prob = 0;
     for(std::vector<Interval>::size_type i = 0; i != iSet->intervals.size(); i++) {
-//        std::cout << iSet->intervals[i].end << " : " << scdfExp(iSet->intervals[i].end - shift) << std::endl;
-//        std::cout << iSet->intervals[i].start << " : " << scdfExp(iSet->intervals[i].start - shift) << std::endl;
-//        std::cout << " Total : " << scdfExp(iSet->intervals[i].end - shift) - scdfExp(iSet->intervals[i].start - shift) << std::endl;
-//        std::cout << " Distribution : " << this->distr << std::endl;
         switch (this->distr)
         {
         case Exp: prob += ( this->scdfExp(iSet->intervals[i].end - shift) - this->scdfExp(iSet->intervals[i].start - shift));
@@ -386,7 +355,6 @@ double ModelChecker::calcProb(IntervalSet* iSet, double shift) {
         break;
         }
     }
-//    std::cout << prob << std::endl;
     return prob;
 }
 
@@ -397,78 +365,21 @@ bool ModelChecker::parseFML(Formula *&fullFML, QString rawFormula) {
      * Flex (Lexer) : Scans the lines and transforms it into tokens.
      * Bison (Parser) : Creates the datastructure of the AST and gives initial values to the different type of formulas.
      */
-    yy_scan_string(rawFormula.toAscii().data());
+    struct yy_buffer_state* bufferState;
+    bufferState = yy_scan_string(rawFormula.toAscii().data());
     yyparse();
-    yylex_destroy();
+    yy_delete_buffer(bufferState);
+//    yylex_destroy();
     reset_lexer();
+
     if (getColError() == -1) {
         guic->addText("The formula is succesfully parsed.");
     } else {
         guic->addError(QString("Syntax error for character %1 in formula %2: The formula could not be parsed.").arg(getColError()).arg(rawFormula).toStdString());
         return false;
     }
-    //fullFML = parser_results();
-    double prob = 0.2;
-    Interval bound(0,10);
-    fullFML = new ProbFormula(new UntilFormula(new AtomContFormula(0,0,"reservoir",5.00),new AtomDisFormula(0,0,"pumpon",0),bound),0,prob,LEQ);
-//    /*
-//     * Some intermediate datastructures that should work as test cases.
-//     */
-//    double n1 = 1, c2 = 0.1, c3 = 0.2;
-//    double t1 = 0, t2 = 10;
-//    double ttc = 2.00, prob = 0.2;
-//    Interval bound(0,10);
+    fullFML = parser_results();
 
-//    if (QString::compare(rawFormula, QString("Pr<=0.2 (P(1) == 1)")) == STR_EQUAL) {
-//        // P(1)=1
-//        fullFML = new ProbFormula(new AtomDisFormula(0,0,"Input1On",n1),0,prob,LEQ);
-//        guic->addText("Checking demo formula 1 : Pr&lt;=0.2 (P(1) == 1)");
-//    } else if (QString::compare(rawFormula, QString("Pr<=0.2 (P(6) <= 0.1)")) == STR_EQUAL) {
-//        // P(8)<=0.1
-//        fullFML = new ProbFormula(new AtomContFormula(0,0,"soft1",c2),0,prob,LEQ);
-//        guic->addText("Checking demo formula 2 : Pr&lt;=0.2 (P(6) &lt;= 0.1)");
-//    } else if (QString::compare(rawFormula, QString("Pr<=0.2 (P(6) <= 0.2 AND P(6) <= 0.1)")) == STR_EQUAL) {
-//        // P(1)=1 ^ P(8)<=0.1
-//        fullFML = new ProbFormula (new AndFormula(new AtomContFormula(0,0,"soft1", c3),new AtomContFormula(0,0,"soft1",c2)),0,prob,LEQ);
-//        guic->addText("Checking demo formula 3 : Pr&lt;=0.2 (P(6) &lt;= 0.2 AND P(6) &lt;= 0.1)");
-//    } else if (QString::compare(rawFormula, QString("Pr<=0.2 ~(P(6) == 0.1)")) == STR_EQUAL) {
-//        // ~P(8)<=0.1
-//        fullFML = new ProbFormula (new NegFormula(new AtomContFormula(0,0,"soft1",c2),0),0,prob,LEQ);
-//        guic->addText("Checking demo formula 4 : Pr&lt;=0.2 ~(P(6) == 0.1)");
-//    } else if (QString::compare(rawFormula, QString("Pr<=0.2 ~(P(1) == 1)")) == STR_EQUAL) {
-//        // ~P(1)=1
-//        fullFML = new ProbFormula (new NegFormula(new AtomDisFormula(0,0,"Input1On", n1),0),0,prob,LEQ);
-//        guic->addText("Checking demo formula 5 : Pr&lt;=0.2 ~(P(1) == 1)");
-//    } else if (QString::compare(rawFormula, QString("Pr<=0.2 (tt)")) == STR_EQUAL) {
-//        // tt
-//        fullFML = new ProbFormula(new TrueFormula(0,0),0,prob,LEQ);
-//        guic->addText("Checking demo formula 6 : Pr&lt;=0.2 (tt)");
-//    } else if (QString::compare(rawFormula, QString("Pr<=0.2 (P(1)=1 U[0,10] P(8)=0.1)")) == STR_EQUAL) {
-//        // P(1)=1 U[0,10] P(8)=0.1
-//        fullFML = new ProbFormula(new UntilFormula(new AtomDisFormula(0,0,"Input1On", n1),new AtomContFormula(0,0,"stor2",c3),bound),0,prob,LEQ);
-//        guic->addText("Checking demo formula 7 : Pr&lt;=0.2 (P(1)=1 U[0,10] P(8)=0.1)");
-//    } else if (QString::compare(rawFormula, QString("Pr<=0.2 ((P(1)=1 AND P(8)<=0.1) U[0,10] P(9)=0.2)")) == STR_EQUAL) {
-//        // (P(1)=1 ^ P(8)<=0.1) U[0,10] P(9)=0.2
-//        fullFML = new ProbFormula(new UntilFormula(new AndFormula(new AtomDisFormula(0,0,"Input1On", n1),new AtomContFormula(0,0,"soft1",c2)),new AtomContFormula(0,0,"stor2",c3),bound),0,prob,LEQ);
-//        guic->addText("Checking demo formula 8 : Pr&lt;=0.2 ((P(1)=1 AND P(8)&lt;=0.1) U[0,10] P(9)=0.2)");
-//    } else if (QString::compare(rawFormula, QString("Pr<=0.2 (P(2) <= 5)")) == STR_EQUAL) {
-//        fullFML = new ProbFormula(new AtomContFormula(0,0,"reservoir",5.00),0,prob,LEQ);
-//        guic->addText("Checking demo formula 1 : Pr&lt;=0.2 (P(2) &lt;= 5)");
-//    } else if (QString::compare(rawFormula, QString("Pr<=0.2 (P(0) == 0)")) == STR_EQUAL) {
-//        fullFML = new ProbFormula(new AtomDisFormula(0,0,"pumpOn",0),0,prob,LEQ);
-//        guic->addText("Checking demo formula 2 : Pr&lt;=0.2 (P(0) == 0)");
-//    } else if (QString::compare(rawFormula, QString("Pr<=0.2 (~P(0) == 0)")) == STR_EQUAL) {
-//        fullFML = new ProbFormula(new NegFormula(new AtomDisFormula(0,0,"pumpOn",0),0),0,prob,LEQ);
-//        guic->addText("Checking demo formula 3 : Pr&lt;=0.2 (~ P(0) == 0)");
-//    } else if (QString::compare(rawFormula, QString("Pr<=0.2 (P(0) == 0 AND P(2) <= 5)")) == STR_EQUAL) {
-//        fullFML = new ProbFormula(new AndFormula(new AtomDisFormula(0,0,"pumpOn",0),new AtomContFormula(0,0,"reservoir",5.00)),0,prob,LEQ);
-//        guic->addText("Checking demo formula 4 : Pr&lt;=0.2 (P(0) == 0 AND P(2) &lt;= 5)");
-//    } else if (QString::compare(rawFormula, QString("Pr<=0.2 (P(0) == 0 U[0,10] P(2) <= 5)")) == STR_EQUAL) {
-//        fullFML = new ProbFormula(new UntilFormula(new AtomContFormula(0,0,"reservoir",5.00),new AtomDisFormula(0,0,"pumpOn",0),bound),0,prob,LEQ);
-//        guic->addText("Checking demo formula 5 : Pr&lt;=0.2 (P(0) == 0 U[0,10] P(2) &lt;= 5)");
-//    } else {
-        //guic->addText("Checking the input formula.");
-//    }
 return true;
 }
 
@@ -592,9 +503,6 @@ IntervalSet* ModelChecker::calcAtomDisISetAtTime(double time, int pIndex, double
     IntervalSet *iSet = new IntervalSet();
     Point p1, p2;
 
-//    std::cout << "RegionList size : " << TimedDiagram::getInstance()->regionList.size() << std::endl;
-//    std::cout << "DtrmEventList size : " << TimedDiagram::getInstance()->dtrmEventList.size() << std::endl;
-
     /* First iterate over all the regions in the stochastic area. */
     if (time > TimedDiagram::getInstance()->getTrEnabledTime()) {
         for (int i = 0; (unsigned)i < TimedDiagram::getInstance()->regionList.size(); i++) {
@@ -627,12 +535,7 @@ IntervalSet* ModelChecker::calcAtomDisISetAtTime(double time, int pIndex, double
         t = time - TimedDiagram::getInstance()->dtrmEventList[cc - 1]->time;
     if (TimedDiagram::getInstance()->dtrmEventList[cc]->preRegionMarking->tokens[model->places[pIndex].idInMarking] == amount) {
         Interval I(time > TimedDiagram::getInstance()->getTrEnabledTime() ? s1 - TimedDiagram::getInstance()->getTrEnabledTime() : s1, time > TimedDiagram::getInstance()->getTrEnabledTime() ? s2 - TimedDiagram::getInstance()->getTrEnabledTime() : s2);
-        //std::cout << "Interval : [" << I.end << "," << I.start << "]" << std::endl;
         iSet->intervals.push_back(I);
-//        std::streambuf * buf;
-//        buf = std::cout.rdbuf();
-//        std::ostream out(buf);
-//        iSet->print(out);
     }
     return iSet;
 }
@@ -641,12 +544,8 @@ IntervalSet* ModelChecker::calcAtomContISetAtTime(double time, int pIndex, doubl
     //TODO: by sorting region in more genuine way this function could be more effecient.
 
     double s1, s2;
-    //double prob = 0;
     IntervalSet *iSet = new IntervalSet();
     Point p1, p2;
-
-//    std::cout << "RegionList size : " << TimedDiagram::getInstance()->regionList.size() << std::endl;
-//    std::cout << "DtrmEventList size : " << TimedDiagram::getInstance()->dtrmEventList.size() << std::endl;
 
     if (time > TimedDiagram::getInstance()->getTrEnabledTime()) {
         //stochastic part : only if at the given time g-transition could have been enabled.
@@ -664,13 +563,8 @@ IntervalSet* ModelChecker::calcAtomContISetAtTime(double time, int pIndex, doubl
                 double t0 = sFrameTime - TimedDiagram::getInstance()->regionList[i]->lowerBoundry->b /*- regionList[i]->timeBias*/;
                 double t1 = - TimedDiagram::getInstance()->regionList[i]->lowerBoundry->a;
                 if (this->propertyXleqCTest(model, TimedDiagram::getInstance()->regionList[i]->marking, t0, t1, s1, s2, pIndex, amount)){
-                    //prob += fabs(sPdfInt(s1, fv) - sPdfInt(s2, fv));
-//                    std::cout << "Interval : ["<< s1 << "," << s2 << "]" << std::endl;
-//                    iSet->unionWith(Interval(s1,s2));
                     Interval I(s1, s2);
-//                    std::cout << "Interval : [" << I.end << "," << I.start << "]" << std::endl;
                     iSet->intervals.push_back(I);
-//                    iSet->print(std::cout);
                 }
             }
         }
@@ -681,8 +575,6 @@ IntervalSet* ModelChecker::calcAtomContISetAtTime(double time, int pIndex, doubl
     for (cc = 0; (unsigned)cc < TimedDiagram::getInstance()->dtrmEventList.size() && time > TimedDiagram::getInstance()->dtrmEventList[cc]->time ; cc++);
     s1 = time > TimedDiagram::getInstance()->getTrEnabledTime() ? time : 0;
     s2 = INFINITY;/*model->MaxTime;*/ // Rather infinity right?
-//    std::cout << "s1: " << s1 << " s2: " << s2 << " ";
-//    std::cout << prob + fabs(sPdfInt(time > gTrEnabledTime ? s1 - gTrEnabledTime : s1,fv) - sPdfInt(time > gTrEnabledTime ? s2 - gTrEnabledTime : s2,fv)) << " = " << prob << " + " << sPdfInt(time > gTrEnabledTime ? s1 - gTrEnabledTime : s1,fv) << "-" << sPdfInt(time > gTrEnabledTime ? s2 - gTrEnabledTime : s2,fv) << " = " << fabs(sPdfInt(time > gTrEnabledTime ? s1 - gTrEnabledTime : s1,fv) - sPdfInt(time > gTrEnabledTime ? s2 - gTrEnabledTime : s2,fv)) << std::endl;
 
     double t;
     if (cc == 0)
@@ -691,13 +583,7 @@ IntervalSet* ModelChecker::calcAtomContISetAtTime(double time, int pIndex, doubl
         t = time - TimedDiagram::getInstance()->dtrmEventList[cc - 1]->time;
     if (this->propertyXleqCTest(model, TimedDiagram::getInstance()->dtrmEventList[cc]->preRegionMarking, t , 0, s1, s2, pIndex, amount)) {
         Interval I(time > TimedDiagram::getInstance()->getTrEnabledTime() ? s1 - TimedDiagram::getInstance()->getTrEnabledTime() : s1, time > TimedDiagram::getInstance()->getTrEnabledTime() ? s2 - TimedDiagram::getInstance()->getTrEnabledTime() : s2);
-//        std::cout << "Interval : [" << I.end << "," << I.start << "]" << std::endl;
         iSet->intervals.push_back(I);
-        //prob += fabs(sPdfInt(time > gTrEnabledTime ? s1 - gTrEnabledTime : s1, fv) - sPdfInt(time > gTrEnabledTime ? s2 - gTrEnabledTime : s2, fv));
-//        std::streambuf * buf;
-//        buf = std::cout.rdbuf();
-//        std::ostream out(buf);
-//        iSet->print(out);
     }
     return iSet;
 }
@@ -738,13 +624,6 @@ double ModelChecker::scdfExp(double s){
 /*
  * The uniform probability density function.
  */
-//double ModelChecker::scdfUni(double s){
-//    return s != INFINITY ? ((s-this->a)/(this->b-this->a)) : 1;
-//}
-
-/*
- * The uniform probability density function.
- */
 double ModelChecker::scdfUni(double s){
     double res;
     if (s < this->a) {
@@ -755,7 +634,6 @@ double ModelChecker::scdfUni(double s){
         res = 1;
     }
     return res;
-//    return s != INFINITY ? ((s-fv->a)/(fv->b-fv->a)) : 1;
 }
 
 /* The general probability density function defined by user.
@@ -811,22 +689,18 @@ double ModelChecker::scdfGamma(double s){
 }
 
 double ModelChecker::scdfNormal(double s){
-    //-.5*(1 - erf((s - fv->mu)/(fv->sigma*1.414213562)))
     return s != INFINITY ? .5*(1 + erf((s - this->mu)/(sqrt(2.0*this->sigma*this->sigma)))) : 1;
 }
 
 //double scdfTruncatedNormal(double s, FunctionVars* fv){
-//    //-.5*(1 - erf((s - fv->mu)/(fv->sigma*1.414213562)))
 //    return s != INFINITY ? (scdfNormal(((s-fv->mu)/fv->sigma),fv) - scdfNormal((fv->mu/fv->sigma),fv))/(1-scdfNormal((fv->mu/fv->sigma)),fv): 1;
 //}
 
 double ModelChecker::scdfFoldedNormal(double s){
-    //-.5*(1 - erf((s - fv->mu)/(fv->sigma*1.414213562)))
     return s != INFINITY ? .5*(erf((s + this->mu)/(sqrt(2)*this->sigma)) + erf((s - this->mu)/(sqrt(2)*this->sigma))) : 1;
 }
 
 double ModelChecker::scdfDtrm(double s){
-    //-.5*(1 - erf((s - fv->mu)/(fv->sigma*1.414213562)))
     return (s < this->dtrm) ? 0 : 1;
 }
 

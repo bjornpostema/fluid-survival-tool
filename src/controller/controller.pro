@@ -17,7 +17,7 @@ LIBS += -L../model -L../libs -lmodel -lmatheval -lopencv_core -lopencv_imgproc -
 #LIBS += ../libs/libopencv_highgui.a
 #-lopencv_core -lopencv_imgproc -lopencv_highgui -ltbb
 
-#Make the tool run with the actual shared library of the model.
+#Make the tool run with the actual shared libraries of the model and some external packages.
 QMAKE_LFLAGS += -Wl,--rpath=\\\$\$ORIGIN
 QMAKE_LFLAGS += -Wl,--rpath=\\\$\$ORIGIN/model
 QMAKE_LFLAGS += -Wl,--rpath=\\\$\$ORIGIN/libs_64
@@ -35,21 +35,16 @@ SOURCES +=  main.cpp\
             STDDialogController.cpp \
             PlaceProbDialogController.cpp \
             ModelCheckDialogController.cpp \
-            #GUIController_old2.cpp \
 
 HEADERS +=  GUIController.h\
             STDDialogController.h \
             PlaceProbDialogController.h \
             ModelCheckDialogController.h \
-            #GUIController_old2.h \
 
 
 FORMS       +=  ../view/GUIView.ui\
-                #../view/GUIViewDesign.ui\
                 ../view/PlaceProbDialogView.ui \
                 ../view/STDDialogView.ui \
                 ../view/ModelCheckDialogView.ui \
-                #../view/GUIView_old2.ui \
-
 
 RESOURCES   +=  ../view/GUIResources.qrc\

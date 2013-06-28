@@ -29,7 +29,6 @@ INCLUDEPATH += ../includes_64/opencv \
 
 
 SOURCES +=  DFPN2.cpp\
-            Formula.cpp\
             GeometryHelper.cpp\
             IntervalSet.cpp\
             Line.cpp\

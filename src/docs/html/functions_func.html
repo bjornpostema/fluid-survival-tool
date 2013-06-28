@@ -21,9 +21,10 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">Fluid Survival Tool
-   &#160;<span id="projectnumber">0.01</span>
+   &#160;<span id="projectnumber">0.03</span>
    </div>
   </td>
  </tr>
@@ -79,7 +80,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -90,38 +91,83 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <div class="contents">
 &#160;<ul>
+<li>addError()
+: <a class="el" href="classGUIController.html#a8b5677300791307f8597dc427772ad11">GUIController</a>
+</li>
+<li>addSuccess()
+: <a class="el" href="classGUIController.html#ac57ebab895a0f83ca9c09fd60d835585">GUIController</a>
+</li>
 <li>addText()
-: <a class="el" href="classGUIController.html#a0390fd1bc1646e4a6df44e275a847ef4">GUIController</a>
+: <a class="el" href="classGUIController.html#a3e67be4bfe8c3ebdf943540e1b06949b">GUIController</a>
+</li>
+<li>addWarning()
+: <a class="el" href="classGUIController.html#a5ea3697ae0408cb521e82a0b315d2661">GUIController</a>
 </li>
 <li>AtomContFormula()
-: <a class="el" href="classAtomContFormula.html#a57d79f06baad31ddb734cb1b7ac128bb">AtomContFormula</a>
+: <a class="el" href="classmodel_1_1AtomContFormula.html#a69fd2c7ea08cf7cca1f5aca1bbd9626b">model::AtomContFormula</a>
+</li>
+<li>calcAtomContISetAtTime()
+: <a class="el" href="classmodel_1_1ModelChecker.html#aabdaa6c4fd346e8427c0536108c16199">model::ModelChecker</a>
+</li>
+<li>calcAtomDisISetAtTime()
+: <a class="el" href="classmodel_1_1ModelChecker.html#a3bd2d3a1163b3f89f9077eea8c2b2b63">model::ModelChecker</a>
+</li>
+<li>calcProb()
+: <a class="el" href="classmodel_1_1ModelChecker.html#a7979c717b349078284ea8d5e4af2a183">model::ModelChecker</a>
 </li>
 <li>calProbAtTime()
-: <a class="el" href="classTimedDiagram.html#a45ef38a01bcffd182224747bd2a96041">TimedDiagram</a>
+: <a class="el" href="classmodel_1_1TimedDiagram.html#afa006780d7d0e44bdb2c9d48a7b7cc8b">model::TimedDiagram</a>
 </li>
 <li>closeEvent()
 : <a class="el" href="classGUIController.html#ae675a28ff6534f3443910cdf1c8d6603">GUIController</a>
 </li>
+<li>columns()
+: <a class="el" href="classmodel_1_1location.html#a13ca76a66ecb008f6d7be31187d8b2aa">model::location</a>
+, <a class="el" href="classmodel_1_1position.html#ac5913cff81c3d2c1ed9bb529c801f023">model::position</a>
+</li>
 <li>computeNextEvents()
-: <a class="el" href="classTimedDiagram.html#aed76b48c2a65ee7ea16a393de058e581">TimedDiagram</a>
+: <a class="el" href="classmodel_1_1TimedDiagram.html#acf1114fe4d7673167de0217b3ab18a31">model::TimedDiagram</a>
 </li>
 <li>generateDiagram()
-: <a class="el" href="classTimedDiagram.html#a55bc9188cb14b08bc95dde3778579f90">TimedDiagram</a>
+: <a class="el" href="classmodel_1_1TimedDiagram.html#a5aebcfa972fbb24032a1fb6200407000">model::TimedDiagram</a>
 </li>
 <li>getText()
-: <a class="el" href="classGUIController.html#a56423f7cdd1f3fd60d1692efd39220c4">GUIController</a>
+: <a class="el" href="classGUIController.html#a494d1c2423ce3e7d44633edc50269803">GUIController</a>
 </li>
 <li>getY()
-: <a class="el" href="classLine.html#a3d15d876c9e5405948078bcaa20fa1ce">Line</a>
+: <a class="el" href="classmodel_1_1Line.html#a06427de20f24ae5d09813134814d54a5">model::Line</a>
 </li>
 <li>GUIController()
 : <a class="el" href="classGUIController.html#a3f85fdeac642a3c52c0f0b586462eb8a">GUIController</a>
 </li>
+<li>initialize()
+: <a class="el" href="classmodel_1_1location.html#afefa8da4664df3f6ebeea468cb4bfd69">model::location</a>
+, <a class="el" href="classmodel_1_1position.html#af6df3c4d89cb4632989b77c8b8011240">model::position</a>
+</li>
+<li>lines()
+: <a class="el" href="classmodel_1_1location.html#aea5de53b65c317e4bc09a7dd1040d0ed">model::location</a>
+, <a class="el" href="classmodel_1_1position.html#a5deb90946adaf2f3f516ba66007b5e3d">model::position</a>
+</li>
+<li>location()
+: <a class="el" href="classmodel_1_1location.html#a03faa501dca65cb09883c212a7e5c0fe">model::location</a>
+</li>
+<li>position()
+: <a class="el" href="classmodel_1_1position.html#ae8b9e05e96517afb7a741cb1fdeb4dda">model::position</a>
+</li>
+<li>propertyXleqCTest()
+: <a class="el" href="classmodel_1_1ModelChecker.html#ad6fd5e46baface19ad84a80f02836d70">model::ModelChecker</a>
+</li>
 <li>segmentizeStochasticRegion()
-: <a class="el" href="classTimedDiagram.html#aa8d8af4ac9f2e51d12b6ae23b8c506c1">TimedDiagram</a>
+: <a class="el" href="classmodel_1_1TimedDiagram.html#af08836e8afe8b7b9f5073bcd9b1ea516">model::TimedDiagram</a>
 </li>
 <li>setText()
-: <a class="el" href="classGUIController.html#a82a41d70f2487920ea372ea3f24faf74">GUIController</a>
+: <a class="el" href="classGUIController.html#aff7752195a9d8c86d326f212ccda1e7b">GUIController</a>
+</li>
+<li>showSTD()
+: <a class="el" href="classmodel_1_1Facade.html#ac9245825494be74c69e31f7f51301324">model::Facade</a>
+</li>
+<li>step()
+: <a class="el" href="classmodel_1_1location.html#a64cb3babdbbd8ab708e156352063c7f3">model::location</a>
 </li>
 <li>~GUIController()
 : <a class="el" href="classGUIController.html#acf3b4a6d7ab7be45f20ab41831644444">GUIController</a>
@@ -130,7 +176,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Apr 10 2013 11:10:04 for Fluid Survival Tool by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jun 24 2013 16:58:31 for Fluid Survival Tool by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.3.1
 </small></address>

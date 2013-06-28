@@ -1,11 +1,22 @@
-#ifndef CALCULATOR_H
-#define CALCULATOR_H
+
+#ifndef FACADE_H
+#define FACADE_H
 
 #include "DFPN2.h"
+#include "TimedDiagram.h"
+#include "Logger.h"
+#include "Formula.h"
+#include "ModelChecker.h"
+
 #include <QString>
 #include <QTextEdit>
-#include "Logger.h"
-#include "cmath"
+#include <cmath>
+#include <iostream>
+#include <ostream>
+#include <sstream>
+#include <cstring>
+#include <fstream>
+#include <sys/time.h>
 
 namespace model {
 
@@ -34,4 +45,4 @@ private:
 
 }
 
-#endif // CALCULATOR_H
+#endif // FACADE_H

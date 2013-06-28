@@ -259,36 +259,11 @@ Model *ReadModel(const char *FileName, Logger *guic) {
 
             printf("%s",buffLine);
 			M->transitions[i].id = strdup(idBuff);
-//            guic->addText(QString(distrBuff));
-//            guic->addText(QString("%1").arg(M->transitions[i].type));
-//            char *distrFunc = strdup(distrBuff);
-//            char distrTypeBuff[MAX_ID_LEN], distrFuncBuff[MAX_ID_LEN];
-//            if (sscanf(distrBuff, "%s(%s)", distrTypeBuff, distrFuncBuff) != 2) {
-//                guic->addText(QString(distrTypeBuff));
-//                guic->addText(QString(distrFuncBuff));
-//                if (M->transitions[i].type == TT_GENERAL) {
-//                    guic->addText(QString("Transition #%1 : %2 has an cumulative distribution function (cdf) with an unknown format.").arg(i+1).arg(M->transitions[i].id));
-//                    return NULL;
-//                }
-//            }
 
-//            char *distrTypeFunc = strdup(distrTypeBuff);
-//            if (strcmp ("exp",distrTypeFunc) == 0) {
-//                M->transitions[i].df_distr = Exp;
-//            } else if (strcmp ("uni",distrTypeFunc) == 0) {
-//                M->transitions[i].df_distr = Uni;
-//            } else if (strcmp ("gen",distrTypeFunc) == 0) {
-//                M->transitions[i].df_distr = Gen;
-//            } else if (M->transitions[i].type == TT_GENERAL) {
-//                guic->addText(QString("Transition #%1 : %2 has an incorrect cumulative distribution function (cdf). The supported cdfs are: exp{<lambda>}, uni{<a>,<b>}, gen{<f(s)>}. For example: exp{10} and gen{(1-exp(-s/10))}.").arg(i+1).arg(M->transitions[i].id));
-//                res = false;
-//            }
-
-//            M->transitions[i].df_argument = strdup(distrTypeBuff);
             char *distrFunc = strdup(distrBuff);
             char delims[] = "{}";
             char *distrFinder = strtok(distrFunc,delims);
-//            printf("%s",distrFinder);
+
             if (distrFinder != NULL && strcmp ("exp",distrFinder) == 0) {
                 M->transitions[i].df_distr = Exp;
             } else if (strcmp ("uni",distrFinder) == 0) {
@@ -311,8 +286,6 @@ Model *ReadModel(const char *FileName, Logger *guic) {
 
             M->transitions[i].df_argument = distrFinder;
 
-			//M->transitions[i].distr = strdup(distrBuff);
-			//M->transitions[i].distr = Distribution::Exp;
 			free(buffLine);
 
 			printf("Transition %d: %s %s %lg %lg %d %lg %s\n", i,
@@ -1116,157 +1089,5 @@ int gTransitionId(Model* M){
 	}
 	return -1;
 }
-
-/* Helper functions */
-
-///*
-// * The exponential probability density function.
-// */
-//double scdfExp(double s, FunctionVars* fv){
-//    //return s < 10 ? 0 : 1;
-//    return s != INFINITY ? (1 - exp(-fv->lambda*s)) : 1;
-//}
-
-///*
-// * The uniform probability density function.
-// */
-////double scdfUni(double s, FunctionVars* fv){
-////    return s != INFINITY ? ((s-fv->a)/(fv->b-fv->a)) : 1;
-////}
-
-///*
-// * The uniform probability density function.
-// */
-//double scdfUni(double s, FunctionVars* fv){
-//    double res;
-//    if (s < fv->a) {
-//        res = 0;
-//    } else if (s >= fv->a && s < fv->b) {
-//        res = ((s-fv->a)/(fv->b-fv->a));
-//    } else if (s >= fv->b || s == INFINITY){
-//        res = 1;
-//    }
-//    return res;
-////    return s != INFINITY ? ((s-fv->a)/(fv->b-fv->a)) : 1;
-//}
-
-///* The general probability density function defined by user.
-//The math library supports the following functionalities:
-// *
-// * -> e (e), log2(e) (log2e), log10(e) (log10e), ln(2) (ln2), ln(10) (ln10), pi (pi),
-// * pi / 2 (pi_2), pi / 4 (pi_4), 1 / pi (1_pi), 2 / pi (2_pi), 2 / sqrt(pi) (2_sqrtpi),
-// * sqrt(2) (sqrt) and sqrt(1 / 2) (sqrt1_2).
-// * -> exponential (exp), logarithmic (log), square root (sqrt), sine (sin), cosine (cos),
-// * tangent (tan), cotangent (cot), secant (sec), cosecant (csc), inverse sine (asin),
-// * inverse cosine (acos), inverse tangent (atan), inverse cotangent (acot),
-// * inverse secant (asec), inverse cosecant (acsc), hyperbolic sine (sinh),
-// * cosine (cosh), hyperbolic tangent (tanh), hyperbolic cotangent (coth),
-// * hyperbolic secant (sech), hyperbolic cosecant (csch), hyperbolic inverse sine (asinh),
-// * hyperbolic inverse cosine (acosh), hyperbolic inverse tangent (atanh),
-// * hyperbolic inverse cotangent (acoth), hyperbolic inverse secant (asech),
-// * hyperbolic inverse cosecant (acsch), absolute value (abs),
-// * Heaviside step function (step) with value 1 defined for x = 0,
-// * Dirac delta function with infinity (delta) and not-a-number (nandelta)
-// * values defined for x = 0, and error function (erf).
-// * -> unary minus ('-'),addition ('+'), subtraction ('+'), multiplication ('*'),
-// * division multiplication ('/') and exponentiation ('^')
-// * -> Parenthesis ('(' and ')') could be used to change priority order
-// *
-// * For more details visit: http://www.gnu.org/software/libmatheval/manual/libmatheval.html
-// */
-//double scdfGen(double s, FunctionVars* fv){
-//    char *names[] = { "s" };
-//    double values[] = { s };
-
-//    return s != INFINITY ? evaluator_evaluate (fv->f, sizeof(names)/sizeof(names[0]), names, values) : 1;
-//}
-
-//int fact(int n){
-//    if (n == 0)
-//        return 1;
-//    else
-//        return n*fact(n-1);
-//}
-
-//double scdfGamma(double s, FunctionVars* fv){
-//    double res = 0;
-//    if (s != INFINITY) {
-//        double sum = 0;
-//        for (int i = 0; i < fv->K; i++){
-//            sum += (1/fact(i))*pow((s/fv->lambda), i)*exp(-s/fv->lambda);
-//        }
-//        res = 1 - sum;
-//    } else {
-//        res = 1;
-//    }
-//    return res;
-//}
-
-//double scdfNormal(double s, FunctionVars* fv){
-//    //-.5*(1 - erf((s - fv->mu)/(fv->sigma*1.414213562)))
-//    return s != INFINITY ? .5*(1 + erf((s - fv->mu)/(sqrt(2.0*fv->sigma*fv->sigma)))) : 1;
-//}
-
-////double scdfTruncatedNormal(double s, FunctionVars* fv){
-////    //-.5*(1 - erf((s - fv->mu)/(fv->sigma*1.414213562)))
-////    return s != INFINITY ? (scdfNormal(((s-fv->mu)/fv->sigma),fv) - scdfNormal((fv->mu/fv->sigma),fv))/(1-scdfNormal((fv->mu/fv->sigma)),fv): 1;
-////}
-
-//double scdfFoldedNormal(double s, FunctionVars* fv){
-//    //-.5*(1 - erf((s - fv->mu)/(fv->sigma*1.414213562)))
-//    return s != INFINITY ? .5*(erf((s + fv->mu)/(sqrt(2)*fv->sigma)) + erf((s - fv->mu)/(sqrt(2)*fv->sigma))) : 1;
-//}
-
-//double scdfDtrm(double s, FunctionVars* fv){
-//    //-.5*(1 - erf((s - fv->mu)/(fv->sigma*1.414213562)))
-//    return (s < fv->dtrm) ? 0 : 1;
-//}
-
-//#ifndef Pi
-//#define Pi 3.141592653589793238462643
-//#endif
-
-//double spdfNormal(double s, FunctionVars* fv)
-//{
-//  double L, K, w ;
-//  /* constants */
-//  double const a1 = 0.31938153, a2 = -0.356563782, a3 = 1.781477937;
-//  double const a4 = -1.821255978, a5 = 1.330274429;
-
-//  L = fabs(s);
-//  K = 1.0 / (1.0 + 0.2316419 * L);
-//  w = 1.0 - 1.0 / sqrt(2 * Pi) * exp(-L *L / 2) * (a1 * K + a2 * K *K + a3 * K * K * K/* pow(K,3)*/ + a4 * K * K * K * K /*pow(K,4)*/ + a5 * K * K * K * K * K/* pow(K,5)*/);
-
-//  if (x < 0 ){
-//    w= 1.0 - w;
-//  }
-//  return w;
-//}
-
-//bool propertyTest(Model* model, Marking* marking, double t0, double t1, double &s1, double &s2, unsigned int pIndex, double amount){
-//    /**
-//     * fluid level in a place is (as+b) + (t1s+t0)d. t1s+t0 is time that has passed after entering this region.
-//     */
-//    double b = marking->fluid0[model->places[pIndex].idInMarking] + t0*marking->fluidPlaceDeriv[model->places[pIndex].idInMarking];
-//    double a = marking->fluid1[model->places[pIndex].idInMarking] + t1*marking->fluidPlaceDeriv[model->places[pIndex].idInMarking];
-//    if (IS_ZERO(a)) {
-//        if (b <= amount)
-//            return true;
-//        else
-//            return false;
-//    }
-//    double p = (amount-b)/a;
-//    if (p < s2 && p > s1){
-//        if (a < -ZERO_PREC) s1 = p;
-//        if (a > +ZERO_PREC) s2 = p;
-//        return true;
-//    } else if (p > s2){
-//        if (a * s2 + b < amount) return true;
-//    } else if (p < s1){
-//        if (a * s1 + b < amount) return true;
-//    }
-
-//    return false;
-//}
 
 }

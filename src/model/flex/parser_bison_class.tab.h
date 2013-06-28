@@ -67,7 +67,7 @@ typedef union YYSTYPE
 {
 
 /* Line 2068 of yacc.c  */
-#line 22 "parser_bison_class.y"
+#line 28 "parser_bison_class.y"
  double dval; int ivar; class Formula *fml; 
 
 

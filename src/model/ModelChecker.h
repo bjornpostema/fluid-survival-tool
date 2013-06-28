@@ -15,6 +15,7 @@
 #include "GeometryHelper.h"
 #include "DFPN2.h"
 #include <math.h>
+#include <QString>
 
 extern "C" {
 #include <matheval.h>
@@ -31,6 +32,7 @@ extern int yylex_destroy (void );
 extern model::Formula* parser_results();
 extern void reset_lexer(void);
 extern int getColError();
+extern void yy_delete_buffer (YY_BUFFER_STATE  b );
 
 namespace model {
 

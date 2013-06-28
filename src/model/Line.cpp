@@ -7,8 +7,6 @@
 
 #include "Line.h"
 
-#include <iostream>
-
 namespace model {
 
 Line::Line() {

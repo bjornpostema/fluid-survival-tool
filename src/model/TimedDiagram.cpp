@@ -7,12 +7,6 @@
 
 #include "TimedDiagram.h"
 
-#include <algorithm>
-#include <iostream>
-#include <fstream>
-
-#include "DFPN2.h"
-
 namespace model {
 
 TimedDiagram* TimedDiagram::instance = NULL;

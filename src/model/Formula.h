@@ -128,36 +128,6 @@ public:
     }
 };
 
-//class BinaryFormula : public Formula {
-
-//private:
-//    Formula *leftFML;
-//    Formula *rightFML;
-
-//public:
-//    BinaryFormula(Formula *leftChild, Formula *rightChild): Formula(leftChild,rightChild){};
-//    Formula_type getType() {return BINARY;};
-
-//    virtual Formula* getLeftFML() {
-//        return leftFML;
-//    }
-
-//    virtual Formula* getRightFML() {
-//        return rightFML;
-//    }
-//};
-
-//class UnaryFormula : public Formula {
-
-//public:
-//    UnaryFormula(Formula *leftChild, Formula *rightChild): Formula(leftChild,rightChild) {};
-//    Formula_type getType() {return UNARY;};
-
-//    virtual Formula* getChildFML() const {
-//        return childFML;
-//    }
-//};
-
 class TrueFormula : public Formula {
 
 private:

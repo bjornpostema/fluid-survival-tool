@@ -21,9 +21,10 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">Fluid Survival Tool
-   &#160;<span id="projectnumber">0.01</span>
+   &#160;<span id="projectnumber">0.03</span>
    </div>
   </td>
  </tr>
@@ -71,7 +72,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -96,30 +97,37 @@ Inheritance diagram for GUIController:</div>
  <div class="center">
   <img src="classGUIController.png" usemap="#GUIController_map" alt=""/>
   <map id="GUIController_map" name="GUIController_map">
+<area href="classmodel_1_1Logger.html" alt="model::Logger" shape="rect" coords="208,0,302,24"/>
 </map>
  </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a3f85fdeac642a3c52c0f0b586462eb8a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGUIController.html#a3f85fdeac642a3c52c0f0b586462eb8a">GUIController</a> (QWidget *parent=0)</td></tr>
-<tr class="memdesc:a3f85fdeac642a3c52c0f0b586462eb8a"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classGUIController.html#a3f85fdeac642a3c52c0f0b586462eb8a" title="GUIController::GUIController is the constructor of the main window. The main window constructs all th...">GUIController::GUIController</a> is the constructor of the main window. The main window constructs all the elements via the ui file. The title of the main window is set to the tool name. The position of the main window is adjusted to the center. The default empty files are initiated.  <a href="#a3f85fdeac642a3c52c0f0b586462eb8a">More...</a><br/></td></tr>
+<tr class="memdesc:a3f85fdeac642a3c52c0f0b586462eb8a"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classGUIController.html">GUIController</a> is the constructor of the main window. The main window constructs all the elements via the ui file. The title of the main window is set to the tool name. The position of the main window is adjusted to the center. The default empty files are initiated.  <a href="#a3f85fdeac642a3c52c0f0b586462eb8a">More...</a><br/></td></tr>
 <tr class="separator:a3f85fdeac642a3c52c0f0b586462eb8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acf3b4a6d7ab7be45f20ab41831644444"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acf3b4a6d7ab7be45f20ab41831644444"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGUIController.html#acf3b4a6d7ab7be45f20ab41831644444">~GUIController</a> ()</td></tr>
-<tr class="memdesc:acf3b4a6d7ab7be45f20ab41831644444"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classGUIController.html#acf3b4a6d7ab7be45f20ab41831644444" title="GUIController::~GUIController The destroyer that frees the memory The ui is deleted and the memory is...">GUIController::~GUIController</a> The destroyer that frees the memory The ui is deleted and the memory is freed. <br/></td></tr>
+<tr class="memdesc:acf3b4a6d7ab7be45f20ab41831644444"><td class="mdescLeft">&#160;</td><td class="mdescRight">The destroyer that frees the memory The ui is deleted and the memory is freed. <br/></td></tr>
 <tr class="separator:acf3b4a6d7ab7be45f20ab41831644444"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0390fd1bc1646e4a6df44e275a847ef4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGUIController.html#a0390fd1bc1646e4a6df44e275a847ef4">addText</a> (QString str)</td></tr>
-<tr class="memdesc:a0390fd1bc1646e4a6df44e275a847ef4"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classGUIController.html#a0390fd1bc1646e4a6df44e275a847ef4" title="GUIController::addText Add a text to the build-in terminal.">GUIController::addText</a> Add a text to the build-in terminal.  <a href="#a0390fd1bc1646e4a6df44e275a847ef4">More...</a><br/></td></tr>
-<tr class="separator:a0390fd1bc1646e4a6df44e275a847ef4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a82a41d70f2487920ea372ea3f24faf74"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGUIController.html#a82a41d70f2487920ea372ea3f24faf74">setText</a> (QString str)</td></tr>
-<tr class="memdesc:a82a41d70f2487920ea372ea3f24faf74"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classGUIController.html#a82a41d70f2487920ea372ea3f24faf74" title="GUIController::setText Set the text in the build-in terminal.">GUIController::setText</a> Set the text in the build-in terminal.  <a href="#a82a41d70f2487920ea372ea3f24faf74">More...</a><br/></td></tr>
-<tr class="separator:a82a41d70f2487920ea372ea3f24faf74"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a56423f7cdd1f3fd60d1692efd39220c4"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGUIController.html#a56423f7cdd1f3fd60d1692efd39220c4">getText</a> ()</td></tr>
-<tr class="memdesc:a56423f7cdd1f3fd60d1692efd39220c4"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classGUIController.html#a56423f7cdd1f3fd60d1692efd39220c4" title="GUIController::getText Give the current text of the build-in terminal.">GUIController::getText</a> Give the current text of the build-in terminal.  <a href="#a56423f7cdd1f3fd60d1692efd39220c4">More...</a><br/></td></tr>
-<tr class="separator:a56423f7cdd1f3fd60d1692efd39220c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad8c4880ed56e51a2dfe8c095a43ab4b2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad8c4880ed56e51a2dfe8c095a43ab4b2"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>generatePrDistr</b> (QString rawFileName, QString rawFluidPlaceName)</td></tr>
-<tr class="separator:ad8c4880ed56e51a2dfe8c095a43ab4b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e67be4bfe8c3ebdf943540e1b06949b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGUIController.html#a3e67be4bfe8c3ebdf943540e1b06949b">addText</a> (std::string str)</td></tr>
+<tr class="memdesc:a3e67be4bfe8c3ebdf943540e1b06949b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a normal text to the build-in terminal.  <a href="#a3e67be4bfe8c3ebdf943540e1b06949b">More...</a><br/></td></tr>
+<tr class="separator:a3e67be4bfe8c3ebdf943540e1b06949b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac57ebab895a0f83ca9c09fd60d835585"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGUIController.html#ac57ebab895a0f83ca9c09fd60d835585">addSuccess</a> (std::string str)</td></tr>
+<tr class="memdesc:ac57ebab895a0f83ca9c09fd60d835585"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add an success text to the build-in terminal.  <a href="#ac57ebab895a0f83ca9c09fd60d835585">More...</a><br/></td></tr>
+<tr class="separator:ac57ebab895a0f83ca9c09fd60d835585"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ea3697ae0408cb521e82a0b315d2661"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGUIController.html#a5ea3697ae0408cb521e82a0b315d2661">addWarning</a> (std::string str)</td></tr>
+<tr class="memdesc:a5ea3697ae0408cb521e82a0b315d2661"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a warning text to the build-in terminal.  <a href="#a5ea3697ae0408cb521e82a0b315d2661">More...</a><br/></td></tr>
+<tr class="separator:a5ea3697ae0408cb521e82a0b315d2661"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b5677300791307f8597dc427772ad11"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGUIController.html#a8b5677300791307f8597dc427772ad11">addError</a> (std::string str)</td></tr>
+<tr class="memdesc:a8b5677300791307f8597dc427772ad11"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add an error text to the build-in terminal.  <a href="#a8b5677300791307f8597dc427772ad11">More...</a><br/></td></tr>
+<tr class="separator:a8b5677300791307f8597dc427772ad11"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aff7752195a9d8c86d326f212ccda1e7b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGUIController.html#aff7752195a9d8c86d326f212ccda1e7b">setText</a> (std::string str)</td></tr>
+<tr class="memdesc:aff7752195a9d8c86d326f212ccda1e7b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the text in the build-in terminal.  <a href="#aff7752195a9d8c86d326f212ccda1e7b">More...</a><br/></td></tr>
+<tr class="separator:aff7752195a9d8c86d326f212ccda1e7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a494d1c2423ce3e7d44633edc50269803"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGUIController.html#a494d1c2423ce3e7d44633edc50269803">getText</a> ()</td></tr>
+<tr class="memdesc:a494d1c2423ce3e7d44633edc50269803"><td class="mdescLeft">&#160;</td><td class="mdescRight">Give the current text of the build-in terminal.  <a href="#a494d1c2423ce3e7d44633edc50269803">More...</a><br/></td></tr>
+<tr class="separator:a494d1c2423ce3e7d44633edc50269803"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3f85fdeac642a3c52c0f0b586462eb8a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3f85fdeac642a3c52c0f0b586462eb8a"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>GUIController</b> (QWidget *parent=0)</td></tr>
 <tr class="separator:a3f85fdeac642a3c52c0f0b586462eb8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -127,7 +135,7 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>generatePrDis
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
 <tr class="memitem:ae675a28ff6534f3443910cdf1c8d6603"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGUIController.html#ae675a28ff6534f3443910cdf1c8d6603">closeEvent</a> (QCloseEvent *event)</td></tr>
-<tr class="memdesc:ae675a28ff6534f3443910cdf1c8d6603"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classGUIController.html#ae675a28ff6534f3443910cdf1c8d6603" title="GUIController::closeEvent Check if the files are saved when the window is closed.">GUIController::closeEvent</a> Check if the files are saved when the window is closed.  <a href="#ae675a28ff6534f3443910cdf1c8d6603">More...</a><br/></td></tr>
+<tr class="memdesc:ae675a28ff6534f3443910cdf1c8d6603"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the files are saved when the window is closed.  <a href="#ae675a28ff6534f3443910cdf1c8d6603">More...</a><br/></td></tr>
 <tr class="separator:ae675a28ff6534f3443910cdf1c8d6603"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae675a28ff6534f3443910cdf1c8d6603"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae675a28ff6534f3443910cdf1c8d6603"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>closeEvent</b> (QCloseEvent *event)</td></tr>
@@ -156,7 +164,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>closeEvent</b> (QClos
 </table>
 </div><div class="memdoc">
 
-<p><a class="el" href="classGUIController.html#a3f85fdeac642a3c52c0f0b586462eb8a" title="GUIController::GUIController is the constructor of the main window. The main window constructs all th...">GUIController::GUIController</a> is the constructor of the main window. The main window constructs all the elements via the ui file. The title of the main window is set to the tool name. The position of the main window is adjusted to the center. The default empty files are initiated. </p>
+<p><a class="el" href="classGUIController.html">GUIController</a> is the constructor of the main window. The main window constructs all the elements via the ui file. The title of the main window is set to the tool name. The position of the main window is adjusted to the center. The default empty files are initiated. </p>
 <p>FSTGui::FSTGui is the constructor of the main window. The main window constructs all the elements via the ui file. The title of the main window is set to the tool name. The position of the main window is adjusted to the center. The default empty files are initiated.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -168,27 +176,143 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>closeEvent</b> (QClos
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a0390fd1bc1646e4a6df44e275a847ef4"></a>
+<a class="anchor" id="a8b5677300791307f8597dc427772ad11"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void GUIController::addText </td>
+          <td class="memname">void GUIController::addError </td>
           <td>(</td>
-          <td class="paramtype">QString&#160;</td>
+          <td class="paramtype">std::string&#160;</td>
           <td class="paramname"><em>str</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
-<p><a class="el" href="classGUIController.html#a0390fd1bc1646e4a6df44e275a847ef4" title="GUIController::addText Add a text to the build-in terminal.">GUIController::addText</a> Add a text to the build-in terminal. </p>
+<p>Add an error text to the build-in terminal. </p>
+<p><a class="el" href="classGUIController.html#a3e67be4bfe8c3ebdf943540e1b06949b" title="Add a normal text to the build-in terminal.">GUIController::addText</a> Add an error text to the build-in terminal.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">str</td><td>String containing the text to be added. </td></tr>
   </table>
   </dd>
 </dl>
+
+<p>Implements <a class="el" href="classmodel_1_1Logger.html">model::Logger</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac57ebab895a0f83ca9c09fd60d835585"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void GUIController::addSuccess </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>str</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Add an success text to the build-in terminal. </p>
+<p><a class="el" href="classGUIController.html#a3e67be4bfe8c3ebdf943540e1b06949b" title="Add a normal text to the build-in terminal.">GUIController::addText</a> Add an information text to the build-in terminal.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td>String containing the text to be added. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implements <a class="el" href="classmodel_1_1Logger.html">model::Logger</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3e67be4bfe8c3ebdf943540e1b06949b"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void GUIController::addText </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>str</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Add a normal text to the build-in terminal. </p>
+<p><a class="el" href="classGUIController.html#a3e67be4bfe8c3ebdf943540e1b06949b" title="Add a normal text to the build-in terminal.">GUIController::addText</a> Add a normal text to the build-in terminal.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td>String containing the text to be added. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implements <a class="el" href="classmodel_1_1Logger.html">model::Logger</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5ea3697ae0408cb521e82a0b315d2661"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void GUIController::addWarning </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>str</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Add a warning text to the build-in terminal. </p>
+<p><a class="el" href="classGUIController.html#a3e67be4bfe8c3ebdf943540e1b06949b" title="Add a normal text to the build-in terminal.">GUIController::addText</a> Add a warning text to the build-in terminal.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td>String containing the text to be added. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implements <a class="el" href="classmodel_1_1Logger.html">model::Logger</a>.</p>
 
 </div>
 </div>
@@ -214,7 +338,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>closeEvent</b> (QClos
 </table>
 </div><div class="memdoc">
 
-<p><a class="el" href="classGUIController.html#ae675a28ff6534f3443910cdf1c8d6603" title="GUIController::closeEvent Check if the files are saved when the window is closed.">GUIController::closeEvent</a> Check if the files are saved when the window is closed. </p>
+<p>Check if the files are saved when the window is closed. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[out]</td><td class="paramname">event</td><td>The closing event. </td></tr>
@@ -224,39 +348,57 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>closeEvent</b> (QClos
 
 </div>
 </div>
-<a class="anchor" id="a56423f7cdd1f3fd60d1692efd39220c4"></a>
+<a class="anchor" id="a494d1c2423ce3e7d44633edc50269803"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">QString GUIController::getText </td>
+          <td class="memname">std::string GUIController::getText </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
-<p><a class="el" href="classGUIController.html#a56423f7cdd1f3fd60d1692efd39220c4" title="GUIController::getText Give the current text of the build-in terminal.">GUIController::getText</a> Give the current text of the build-in terminal. </p>
+<p>Give the current text of the build-in terminal. </p>
 <dl class="section return"><dt>Returns</dt><dd>Gives a QString text of the build-in terminal. </dd></dl>
+
+<p>Implements <a class="el" href="classmodel_1_1Logger.html">model::Logger</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a82a41d70f2487920ea372ea3f24faf74"></a>
+<a class="anchor" id="aff7752195a9d8c86d326f212ccda1e7b"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void GUIController::setText </td>
           <td>(</td>
-          <td class="paramtype">QString&#160;</td>
+          <td class="paramtype">std::string&#160;</td>
           <td class="paramname"><em>str</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
-<p><a class="el" href="classGUIController.html#a82a41d70f2487920ea372ea3f24faf74" title="GUIController::setText Set the text in the build-in terminal.">GUIController::setText</a> Set the text in the build-in terminal. </p>
+<p>Set the text in the build-in terminal. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">str</td><td>String containing the text to be set. </td></tr>
@@ -264,20 +406,20 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>closeEvent</b> (QClos
   </dd>
 </dl>
 
+<p>Implements <a class="el" href="classmodel_1_1Logger.html">model::Logger</a>.</p>
+
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>controller/<a class="el" href="controller_2GUIController_8h_source.html">GUIController.h</a></li>
 <li>view/<a class="el" href="view_2GUIController_8h_source.html">GUIController.h</a></li>
-<li>controller/<a class="el" href="GUIController__old_8h_source.html">GUIController_old.h</a></li>
 <li>controller/GUIController.cpp</li>
-<li>controller/GUIController_old.cpp</li>
 <li>view/GUIController.cpp</li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Apr 10 2013 11:10:04 for Fluid Survival Tool by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jun 24 2013 16:58:29 for Fluid Survival Tool by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.3.1
 </small></address>

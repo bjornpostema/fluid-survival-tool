@@ -7,8 +7,6 @@
 
 #include "Polygon.h"
 
-#include <iostream>
-
 namespace model {
 
 Polygon::Polygon() {

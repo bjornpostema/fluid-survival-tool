@@ -210,38 +210,6 @@ void fireGeneralTransition(Model *M, Marking *NewM);
 
 int gTransitionId(Model* M);
 
-//char *argument;
-//double mu = 0;
-//int pIndex = 16;
-//double amount = 0;
-//double lambda;
-//double a,b;
-//void *f;
-//double sigma = 1;
-//int K = 9;
-
-//typedef struct {
-//    unsigned int pIndex = 16;
-//    double amount = 0;
-//    double mu = 0;
-//    double lambda;
-//    double a,b;
-//    void *f;
-//    double sigma = 1;
-//    int K = 9;
-//    double dtrm = 0;
-//} FunctionVars;
-
-//int fact(int n);
-//bool propertyTest(Model* model, Marking* marking, double t0, double t1, double &s1, double &s2, unsigned int _pIndex, double _amount);
-//double scdfExp(double s, FunctionVars* fv);
-//double scdfUni(double s, FunctionVars* fv);
-//double scdfGen(double s, FunctionVars* fv);
-//double scdfGamma(double s, FunctionVars* fv);
-//double scdfNormal(double s, FunctionVars* fv);
-//double scdfFoldedNormal(double s, FunctionVars* fv);
-//double scdfDtrm(double s, FunctionVars* fv);
-
 }
 
 #endif /* DFPN_H_ */

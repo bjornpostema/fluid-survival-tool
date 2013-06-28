@@ -1,5 +1,5 @@
 var searchData=
 [
   ['doublepoint',['DoublePoint',['../structClipperLib_1_1DoublePoint.html',1,'ClipperLib']]],
-  ['dtrmevent',['DtrmEvent',['../structDtrmEvent.html',1,'']]]
+  ['dtrmevent',['DtrmEvent',['../structmodel_1_1DtrmEvent.html',1,'model']]]
 ];

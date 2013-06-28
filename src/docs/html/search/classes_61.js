@@ -1,7 +1,8 @@
 var searchData=
 [
-  ['adformula',['ADFormula',['../classADFormula.html',1,'']]],
-  ['arc',['Arc',['../structArc.html',1,'']]],
-  ['atomcontformula',['AtomContFormula',['../classAtomContFormula.html',1,'']]],
-  ['atomdisformula',['AtomDisFormula',['../classAtomDisFormula.html',1,'']]]
+  ['adformula',['ADFormula',['../classmodel_1_1ADFormula.html',1,'model']]],
+  ['andformula',['AndFormula',['../classmodel_1_1AndFormula.html',1,'model']]],
+  ['arc',['Arc',['../structmodel_1_1Arc.html',1,'model']]],
+  ['atomcontformula',['AtomContFormula',['../classmodel_1_1AtomContFormula.html',1,'model']]],
+  ['atomdisformula',['AtomDisFormula',['../classmodel_1_1AtomDisFormula.html',1,'model']]]
 ];

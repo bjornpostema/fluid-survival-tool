@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['formula',['Formula',['../classFormula.html',1,'']]]
+  ['facade',['Facade',['../classmodel_1_1Facade.html',1,'model']]],
+  ['formula',['Formula',['../structFormula.html',1,'']]],
+  ['formula',['Formula',['../classmodel_1_1Formula.html',1,'model']]]
 ];

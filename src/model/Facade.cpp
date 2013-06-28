@@ -1,20 +1,15 @@
-#include "Facade.h"
-#include "DFPN2.h"
-#include "TimedDiagram.h"
-#include "../includes/opencv/cv.h"
-#include <iostream>
-#include <ostream>
-#include <sstream>
-#include <cstring>
-#include <fstream>
-#include <sys/time.h>
+/**
+ * @file Facade.cpp
+ * @author B.F. Postema
+ * @brief The Facade following the facade pattern.
+ * The facade pattern gives a class to access the subsystem of the models. The controllers send requests to the facade.
+ */
 
+#include "Facade.h"
+#include "../includes/opencv/cv.h"
 extern "C" {
 #include "../includes/matheval.h"
 }
-
-#include "Formula.h"
-#include "ModelChecker.h"
 
 namespace model {
 
@@ -102,28 +97,7 @@ bool Facade::showSTD(QString rawFileName, double maxTime, int imageScale) {
     }
 
     double time = model->transitions[tIndex].time;
-    //    unsigned int pIndex, disPIndex;
-    //    for (int i = 0; i < model->N_places; i++) {
-    //        //if (model->places[i].type != PT_FLUID) continue;
-    //        if (model->places[i].type == PT_FLUID && strncmp(model->places[i].id, placeName, strlen(placeName)) == 0)  pIndex = i;;
-    //        if (model->places[i].type == PT_DISCRETE && strncmp(model->places[i].id, "Input1On", strlen("Input1On")) == 0)  disPIndex = i;;
-    //    }
 
-    //    unsigned int tIndex = 0;
-    //    for (int i = 0; i < model->N_transitions; i++) {
-    //            if (model->places[i].type != TT_DETERMINISTIC) continue;
-    //            if (strncmp(model->transitions[i].id, "failure", strlen("failure")) != 0) continue;
-
-    //            tIndex = i;
-    //    }
-
-    //    double time = model->transitions[tIndex].time;
-    //    std::cout << "time: " <<  time << std::endl;
-    //    std::cout << "pIndex: " <<  pIndex << std::endl;
-    //    std::cout << "disPIndex: " <<  disPIndex << std::endl;
-
-//    FunctionVars *fv = new FunctionVars;
-    //fv = (FunctionVars *) malloc(sizeof(FunctionVars));
     InitializeModel(model);
     //Input and output list of places and transitions are created and sorted wrt to their priority and share.
 
@@ -155,8 +129,6 @@ bool Facade::showSTD(QString rawFileName, double maxTime, int imageScale) {
     cv::Mat flipped;
     cv::flip(TimedDiagram::getInstance()->debugImage, flipped, 0);
     cv::imshow("STD Diagram Plot", flipped);
-    //cv::waitKey(0);
-//    delete fv;
     freeMarking(initialMarking);
     return true;
 }
@@ -169,22 +141,10 @@ bool Facade::showProbFunc(double cStart, double cEnd, double cStep, double tStep
     unsigned int pIndex = -1;
     double amount = 0;
 
-//    unsigned int tIndex = 0;
-//    for (int i = 0; i < model->N_transitions; i++) {
-//        if (model->places[i].type != TT_DETERMINISTIC) continue;
-//        if (strncmp(model->transitions[i].id, "failure", strlen("failure")) != 0) continue;
-
-//        tIndex = i;
-//    }
-
-//    double time = model->transitions[tIndex].time;
-
-//    FunctionVars *fv = new FunctionVars;
-
     InitializeModel(model);
     //Input and output list of places and transitions are created and sorted wrt to their priority and share.
     model->MaxTime = maxTime;
-    //model->MaxTime = 50 + time;
+
     Marking* initialMarking = createInitialMarking(model);
     long mtime, seconds, useconds;
 
@@ -199,21 +159,6 @@ bool Facade::showProbFunc(double cStart, double cEnd, double cStep, double tStep
     std::cout << "Number of regions: " <<TimedDiagram::getInstance()->getNumberOfRegions() << std::endl;
     std::cout << "Time to generate STD: " << mtime<< "ms" << std::endl;
 
-    //	if (argc == 4){
-    //		std::cout << "Writing the debug region diagram...." << std::endl;
-    //		std::stringstream ss;
-    //		ss << argv[1] << "_rd";
-    //		TimedDiagram::getInstance()->saveDiagram(ss.str());
-    //	}
-    //  TimedDiagram::getInstance()->scale = 20;
-    //    std::cout << "Writing the debug region diagram...." << std::endl;
-    //    std::stringstream ss;
-    //    ss << "temp" << "_rd";
-    //    TimedDiagram::getInstance()->saveDiagram(ss.str());
-    //    cv::Mat flipped;
-    //    cv::flip(TimedDiagram::getInstance()->debugImage, flipped, 0);
-    //    cv::imshow("STD Diagram Plot", flipped);
-
     ModelChecker *modelChecker = new ModelChecker(model, TimedDiagram::getInstance(), guic);
 
     if (!modelChecker->setVariables()) {
@@ -224,7 +169,7 @@ bool Facade::showProbFunc(double cStart, double cEnd, double cStep, double tStep
     }
 
     std::cout << "starting measure computation..." << std::endl;
-    //Model* model = TimedDiagram::getInstance()->model;
+
     for (int i = 0; pIndex == (unsigned)-1 && i < model->N_places; i++) {
         if (model->places[i].type != PT_FLUID) continue;
         if (strncmp(model->places[i].id,QString2Char(placeName), strlen(model->places[i].id)) != 0) continue;
@@ -233,7 +178,6 @@ bool Facade::showProbFunc(double cStart, double cEnd, double cStep, double tStep
 
     if (pIndex == (unsigned)-1) {
         guic->addError("The place name is set to an invalid place name. This functionality only works for fluid place names.");
-//        delete fv;
         delete modelChecker;
         freeMarking(initialMarking);
         return false;
@@ -244,100 +188,22 @@ bool Facade::showProbFunc(double cStart, double cEnd, double cStep, double tStep
 
     mtime = 0; seconds = 0; useconds = 0;
     timeval t0, t1;
-//    char *argFinder;
-//    switch (model->transitions[gTransitionId(model)].df_distr)
-//    {
-//    case Exp:
-//    case Gamma: fv->lambda = atof(model->transitions[gTransitionId(model)].df_argument);
-//        break;
-//    case Uni:
-//        argFinder = strtok(model->transitions[gTransitionId(model)].df_argument,",");
-//        if (argFinder == NULL) {
-//            guic->addText(QString("Transition #%1 : %2 has an invalid cumulative distribution function (cdf) for uni{a,b}, since this requires two arguments.").arg(gTransitionId(model)+1).arg(model->transitions[gTransitionId(model)].id).toStdString());
-//            delete fv;
-//            freeMarking(initialMarking);
-//            return false;
-//        }
-//        fv->a = atof(argFinder);
-//        argFinder = strtok(NULL,",");
-//        if (argFinder == NULL) {
-//            guic->addText(QString("Transition #%1 : %2 has an invalid cumulative distribution function (cdf) for uni{a,b}, since this requires two arguments.").arg(gTransitionId(model)+1).arg(model->transitions[gTransitionId(model)].id).toStdString());
-//            delete fv;
-//            freeMarking(initialMarking);
-//            return false;
-//        }
-//        fv->b = atof(argFinder);
-//        break;
-//    case Gen:
-//        fv->f = evaluator_create (model->transitions[gTransitionId(model)].df_argument);
-//        break;
-//    case FoldedNorm:
-//    case Norm:
-//        argFinder = strtok(model->transitions[gTransitionId(model)].df_argument,",");
-//        if (argFinder == NULL) {
-//            guic->addText(QString("Transition #%1 : %2 has an invalid cumulative distribution function (cdf) for norm{mu,sigma}, since this requires two arguments.").arg(gTransitionId(model)+1).arg(model->transitions[gTransitionId(model)].id).toStdString());
-//            delete fv;
-//            freeMarking(initialMarking);
-//            return false;
-//        }
-//        fv->mu = atof(argFinder);
-//        argFinder = strtok(NULL,",");
-//        if (argFinder == NULL) {
-//            guic->addText(QString("Transition #%1 : %2 has an invalid cumulative distribution function (cdf) for norm{mu,sigma}, since this requires two arguments.").arg(gTransitionId(model)+1).arg(model->transitions[gTransitionId(model)].id).toStdString());
-//            delete fv;
-//            freeMarking(initialMarking);
-//            return false;
-//        }
-//        fv->sigma = atof(argFinder);
-//        break;
-//    case Dtrm:
-//        fv->dtrm = atof(model->transitions[gTransitionId(model)].df_argument);
-//        break;
-//    }
-//    bool warn = false; // t += .5 en fv->amount += .2
+
     for (double t = .02; t <= model->MaxTime + .01; t += tStep){
         for (amount = cStart+.05; amount <= cEnd; amount += cStep){
-//            if (fv->amount <= model->places[fv->pIndex].f_bound) {
-            //std::cout << "t = " << t << "--amount = " << amount << std::endl;
             gettimeofday(&t0, NULL);
 
             double p = modelChecker->calcProb(modelChecker->calcAtomContISetAtTime(t, pIndex, amount),0.00);
-//            std::cout << "Tijd : " << t << " Amount : " << amount << " Prob : " << p << std::endl;
-            //double p = TimedDiagram::getInstance()->calProbAtTime(t, spdf, propertyTest);
-//            switch (model->transitions[gTransitionId(model)].df_distr)
-//            {
-//            case Exp: p = TimedDiagram::getInstance()->calProbAtTime(t, scdfExp, propertyTest, fv);
-//                break;
-//            case Uni: p = TimedDiagram::getInstance()->calProbAtTime(t, scdfUni, propertyTest, fv);
-//                break;
-//            case Gen: p = TimedDiagram::getInstance()->calProbAtTime(t, scdfGen, propertyTest, fv);
-//                break;
-//            case Gamma: p = TimedDiagram::getInstance()->calProbAtTime(t, scdfGamma, propertyTest, fv);
-//                break;
-//            case Norm: p = TimedDiagram::getInstance()->calProbAtTime(t, scdfNormal, propertyTest, fv);
-//                break;
-//            case FoldedNorm: p = TimedDiagram::getInstance()->calProbAtTime(t, scdfFoldedNormal, propertyTest, fv);
-//                break;
-//            case Dtrm: p = TimedDiagram::getInstance()->calProbAtTime(t, scdfDtrm, propertyTest, fv);
-//                break;
-//            }
+
             gettimeofday(&t1, NULL);
 
             seconds  += t1.tv_sec  - t0.tv_sec;
             useconds += t1.tv_usec - t0.tv_usec;
-            //if (p > 1) p = 1;
+
             oFile << " "<< p;
-            //std::cout << " "<< p;
-//            } else {
-//                oFile << " " << 0;
-//                warn = true;
-//            }
         }
         oFile << std::endl;
-        //std::cout << std::endl;
     }
-
-//    if (warn) guic->addText("Warning: The constant is greater than the fluid bound of that place.");
 
     switch (model->transitions[gTransitionId(model)].df_distr)
     {
@@ -351,6 +217,7 @@ bool Facade::showProbFunc(double cStart, double cEnd, double cStep, double tStep
     FILE* gnuplotPipe;
     if ( (gnuplotPipe = popen("gnuplot -persist","w")) )
     {
+////      GNUPlot debugging...
 //        std::cout<<cStart<<(cStart+(cEnd-cStart)*0.25)<<(cStart+(cEnd-cStart)*0.50)<<(cStart+(cEnd-cStart)*0.75)<<cEnd<<(model->MaxTime*0.2)<<(model->MaxTime*0.4)<<(model->MaxTime*0.6)<<(model->MaxTime*0.8)<<model->MaxTime <<std::endl;
 //        std::cout<<(int)cStart<<std::endl<<(int)(cStart+(cEnd-cStart)*0.25)<<std::endl<<(int)((cEnd-cStart)/cStep)*0.25<<std::endl<<(int)(cStart+(cEnd-cStart)*0.50)<<std::endl<<(int)((cEnd-cStart)/cStep)*0.50<<std::endl<<(int)(cStart+(cEnd-cStart)*0.75)<<std::endl<<(int)((cEnd-cStart)/cStep)*0.75<<std::endl<<(int)cEnd<<std::endl<<(int)((cEnd-cStart)/cStep)<<std::endl<<std::endl<<(int)(model->MaxTime*0.2)<<std::endl<<(int)(model->MaxTime*0.2/tStep)<<std::endl<<(int)(model->MaxTime*0.4)<<std::endl<<(int)(model->MaxTime*0.4/tStep)<<std::endl<<(int)(model->MaxTime*0.6)<<std::endl<<(int)(model->MaxTime*0.6/tStep)<<std::endl<<(int)(model->MaxTime*0.8)<<std::endl<<(int)(model->MaxTime*0.8/tStep)<<std::endl<<(int)(model->MaxTime)<<std::endl<<(int)(model->MaxTime/tStep)<<std::endl;
 //        printf("test");
@@ -371,8 +238,6 @@ bool Facade::showProbFunc(double cStart, double cEnd, double cStep, double tStep
                 "set xlabel \"Constant\" \n"
                 "set zlabel \"Probability\"\n"
                 "set ylabel \"Time\"\n"
-//                "set xtics (\"0\" 0, \"2\" 10, \"4\" 20,\"6\" 30, \"8\" 40) \n "
-//                "set ytics (\"0\" 0, \"20\" 40, \"40\" 80,\"60\" 120, \"80\" 160, \"100\" 200) \n "
                 "set xtics (\"%d\" %d, \"%d\" %d, \"%d\" %d,\"%d\" %d, \"%d\" %d) \n "
                 "set ytics (\"%d\" %d, \"%d\" %d, \"%d\" %d,\"%d\" %d, \"%d\" %d, \"%d\" %d) \n "
                 "set palette rgbformulae 33,13,10 \n",(int)cStart,(int)0,(int)(cStart+(cEnd-cStart)*0.25),(int)(((cEnd-cStart)/cStep)*0.25),(int)(cStart+(cEnd-cStart)*0.50),(int)(((cEnd-cStart)/cStep)*0.50),(int)(cStart+(cEnd-cStart)*0.75),(int)(((cEnd-cStart)/cStep)*0.75),(int)cEnd,(int)((cEnd-cStart)/cStep),(int)0,(int)0,(int)(model->MaxTime*0.2),(int)(model->MaxTime*0.2/tStep),(int)(model->MaxTime*0.4),(int)(model->MaxTime*0.4/tStep),(int)(model->MaxTime*0.6),(int)(model->MaxTime*0.6/tStep),(int)(model->MaxTime*0.8),(int)(model->MaxTime*0.8/tStep),(int)(model->MaxTime),(int)(model->MaxTime/tStep));
@@ -398,22 +263,10 @@ bool Facade::showProbFunc(double c, double tStep, double maxTime) {
     unsigned int pIndex = -1;
     double amount = 0;
 
-//    unsigned int tIndex = 0;
-//    for (int i = 0; i < model->N_transitions; i++) {
-//        if (model->places[i].type != TT_DETERMINISTIC) continue;
-//        if (strncmp(model->transitions[i].id, "failure", strlen("failure")) != 0) continue;
-
-//        tIndex = i;
-//    }
-
-//    double time = model->transitions[tIndex].time;
-
-//    FunctionVars *fv = new FunctionVars;
-
     InitializeModel(model);
     //Input and output list of places and transitions are created and sorted wrt to their priority and share.
     model->MaxTime = maxTime;
-    //model->MaxTime = 50 + time;
+
     Marking* initialMarking = createInitialMarking(model);
     long mtime, seconds, useconds;
 
@@ -428,21 +281,6 @@ bool Facade::showProbFunc(double c, double tStep, double maxTime) {
     std::cout << "Number of regions: " <<TimedDiagram::getInstance()->getNumberOfRegions() << std::endl;
     std::cout << "Time to generate STD: " << mtime<< "ms" << std::endl;
 
-    //	if (argc == 4){
-    //		std::cout << "Writing the debug region diagram...." << std::endl;
-    //		std::stringstream ss;
-    //		ss << argv[1] << "_rd";
-    //		TimedDiagram::getInstance()->saveDiagram(ss.str());
-    //	}
-    //  TimedDiagram::getInstance()->scale = 20;
-    //    std::cout << "Writing the debug region diagram...." << std::endl;
-    //    std::stringstream ss;
-    //    ss << "temp" << "_rd";
-    //    TimedDiagram::getInstance()->saveDiagram(ss.str());
-    //    cv::Mat flipped;
-    //    cv::flip(TimedDiagram::getInstance()->debugImage, flipped, 0);
-    //    cv::imshow("STD Diagram Plot", flipped);
-
     ModelChecker *modelChecker = new ModelChecker(model, TimedDiagram::getInstance(), guic);
 
     if (!modelChecker->setVariables()) {
@@ -453,7 +291,6 @@ bool Facade::showProbFunc(double c, double tStep, double maxTime) {
     }
 
     std::cout << "starting measure computation..." << std::endl;
-    //Model* model = TimedDiagram::getInstance()->model;
     for (int i = 0; pIndex == (unsigned)-1 && i < model->N_places; i++) {
         if (model->places[i].type != PT_FLUID) continue;
         if (strncmp(model->places[i].id,QString2Char(placeName), strlen(model->places[i].id)) != 0) continue;
@@ -472,95 +309,20 @@ bool Facade::showProbFunc(double c, double tStep, double maxTime) {
 
     mtime = 0; seconds = 0; useconds = 0;
     timeval t0, t1;
-//    char *argFinder;
-//    switch (model->transitions[gTransitionId(model)].df_distr)
-//    {
-//    case Exp:
-//    case Gamma: fv->lambda = atof(model->transitions[gTransitionId(model)].df_argument);
-//        break;
-//    case Uni:
-//        argFinder = strtok(model->transitions[gTransitionId(model)].df_argument,",");
-//        if (argFinder == NULL) {
-//            guic->addText(QString("Transition #%1 : %2 has an invalid cumulative distribution function (cdf) for uni{a,b}, since this requires two arguments.").arg(gTransitionId(model)+1).arg(model->transitions[gTransitionId(model)].id).toStdString());
-//            delete fv;
-//            freeMarking(initialMarking);
-//            return false;
-//        }
-//        fv->a = atof(argFinder);
-//        argFinder = strtok(NULL,",");
-//        if (argFinder == NULL) {
-//            guic->addText(QString("Transition #%1 : %2 has an invalid cumulative distribution function (cdf) for uni{a,b}, since this requires two arguments.").arg(gTransitionId(model)+1).arg(model->transitions[gTransitionId(model)].id).toStdString());
-//            delete fv;
-//            freeMarking(initialMarking);
-//            return false;
-//        }
-//        fv->b = atof(argFinder);
-//        break;
-//    case Gen:
-//        fv->f = evaluator_create (model->transitions[gTransitionId(model)].df_argument);
-//        break;
-//    case FoldedNorm:
-//    case Norm:
-//        argFinder = strtok(model->transitions[gTransitionId(model)].df_argument,",");
-//        if (argFinder == NULL) {
-//            guic->addText(QString("Transition #%1 : %2 has an invalid cumulative distribution function (cdf) for norm{mu,sigma}, since this requires two arguments.").arg(gTransitionId(model)+1).arg(model->transitions[gTransitionId(model)].id).toStdString());
-//            delete fv;
-//            freeMarking(initialMarking);
-//            return false;
-//        }
-//        fv->mu = atof(argFinder);
-//        argFinder = strtok(NULL,",");
-//        if (argFinder == NULL) {
-//            guic->addText(QString("Transition #%1 : %2 has an invalid cumulative distribution function (cdf) for norm{mu,sigma}, since this requires two arguments.").arg(gTransitionId(model)+1).arg(model->transitions[gTransitionId(model)].id).toStdString());
-//            delete fv;
-//            freeMarking(initialMarking);
-//            return false;
-//        }
-//        fv->sigma = atof(argFinder);
-//        break;
-//    case Dtrm:
-//        fv->dtrm = atof(model->transitions[gTransitionId(model)].df_argument);
-//        break;
-//    }
     amount = c;
     for (double t = 0.2; t <= model->MaxTime + .01; t += tStep){
-        //if (c < model->places[fv->pIndex].f_bound) {
-            //std::cout << "t = " << t << "--amount = " << amount << std::endl;
             gettimeofday(&t0, NULL);
 
             double p = modelChecker->calcProb(modelChecker->calcAtomContISetAtTime(t, pIndex, amount),0.00);
 
-//            //double p = TimedDiagram::getInstance()->calProbAtTime(t, spdf, propertyTest);
-//            switch (model->transitions[gTransitionId(model)].df_distr)
-//            {
-//            case Exp: p = TimedDiagram::getInstance()->calProbAtTime(t, modelChecker->scdfExp, modelChecker->propertyXleqCTest);
-//                break;
-//            case Uni: p = TimedDiagram::getInstance()->calProbAtTime(t, modelChecker->scdfUni, modelChecker->propertyXleqCTest);
-//                break;
-//            case Gen: p = TimedDiagram::getInstance()->calProbAtTime(t, modelChecker->scdfGen, modelChecker->propertyXleqCTest);
-//                break;
-//            case Gamma: p = TimedDiagram::getInstance()->calProbAtTime(t, modelChecker->scdfGamma, modelChecker->propertyXleqCTest);
-//                break;
-//            case Norm: p = TimedDiagram::getInstance()->calProbAtTime(t, modelChecker->scdfNormal, modelChecker->propertyXleqCTest);
-//                break;
-//            case FoldedNorm: p = TimedDiagram::getInstance()->calProbAtTime(t, modelChecker->scdfFoldedNormal, modelChecker->propertyXleqCTest);
-//                break;
-//            case Dtrm: p = TimedDiagram::getInstance()->calProbAtTime(t, modelChecker->scdfDtrm, modelChecker->propertyXleqCTest);
-//            }
             gettimeofday(&t1, NULL);
 
             seconds  += t1.tv_sec  - t0.tv_sec;
             useconds += t1.tv_usec - t0.tv_usec;
-            //if (p > 1) p = 1;
+
             oFile << " "<< p;
-            //std::cout << " "<< p;
-//        } else {
-//            guic->addText("Warning: The constant is greater than the fluid bound of that place.");
-//            oFile << " " << 0;
-//        }
 
         oFile << std::endl;
-        //std::cout << std::endl;
     }
 
     switch (model->transitions[gTransitionId(model)].df_distr)
@@ -577,6 +339,7 @@ bool Facade::showProbFunc(double c, double tStep, double maxTime) {
     {
 
         char buffer[400];
+////              GNUPlot debugging...
 //                sprintf(buffer, "set title 'Place constant 2d-plot '\n "
 //                        "set xlabel \"Time\" \n"
 //                        "set ylabel \"Probability\"\n"
@@ -590,11 +353,8 @@ bool Facade::showProbFunc(double c, double tStep, double maxTime) {
         fprintf(gnuplotPipe,"set title 'Place constant 2d-plot '\n "
                 "set xlabel \"Time\" \n"
                 "set ylabel \"Probability\"\n"
-//                "set term gif\n"
-//                "set output \"./output/%s_2d.gif\"\n"
-
                 "set xtics (\"%d\" %d, \"%d\" %d, \"%d\" %d,\"%d\" %d, \"%d\" %d, \"%d\" %d) \n "
-                /*"set xrange[1:%f] \n "*//*,placeName.toAscii().data()*/,(int)0,(int)0,(int)(model->MaxTime*0.2),(int)(model->MaxTime*0.2/tStep),(int)(model->MaxTime*0.4),(int)(model->MaxTime*0.4/tStep),(int)(model->MaxTime*0.6),(int)(model->MaxTime*0.6/tStep),(int)(model->MaxTime*0.8),(int)(model->MaxTime*0.8/tStep),(int)(model->MaxTime),(int)(model->MaxTime/tStep)/*,model->MaxTime*/);
+                ,(int)0,(int)0,(int)(model->MaxTime*0.2),(int)(model->MaxTime*0.2/tStep),(int)(model->MaxTime*0.4),(int)(model->MaxTime*0.4/tStep),(int)(model->MaxTime*0.6),(int)(model->MaxTime*0.6/tStep),(int)(model->MaxTime*0.8),(int)(model->MaxTime*0.8/tStep),(int)(model->MaxTime),(int)(model->MaxTime/tStep)/*,model->MaxTime*/);
 
         fflush(gnuplotPipe);
         fprintf(gnuplotPipe,"plot \"%s\" title \"probability\" with lp \n",QString2Char(QString("./output/%1_2d.dat").arg(placeName)));
@@ -610,7 +370,7 @@ bool Facade::showProbFunc(double c, double tStep, double maxTime) {
 bool Facade::modelCheck(bool &res, QString rawFormula, QString rawCheckTime, double maxTime) {
 
     /*
-     * TODO: Parse the STL formula
+     * Parse the STL formula
      * Use Flex + Lemon, YACC or Bison, rather than ANTLR or own implementation.
      * Flex (Lexer) : Scans the lines and transforms it into tokens.
      * Lemon (Parser) : Creates the datastructure of the AST and gives initial values to the different type of formulas.
@@ -630,19 +390,7 @@ bool Facade::modelCheck(bool &res, QString rawFormula, QString rawCheckTime, dou
         guic->addError("The chosen time to check is invalid, please specify a new time.");
     }
 
-//    unsigned int tIndex = 0;
-//    for (int i = 0; i < model->N_transitions; i++) {
-//        if (model->places[i].type != TT_DETERMINISTIC) continue;
-//        if (strncmp(model->transitions[i].id, "failure", strlen("failure")) != 0) continue;
-
-//        tIndex = i;
-//    }
-
-//    double time = model->transitions[tIndex].time;
-
     InitializeModel(model);
-
-//    guic->addText(QString("Tijd : %1").arg(time).toStdString());
 
     model->MaxTime = maxTime;
 
@@ -658,15 +406,9 @@ bool Facade::modelCheck(bool &res, QString rawFormula, QString rawCheckTime, dou
     if (!modelChecker->parseFML(fullFML, rawFormula)) {
         delete modelChecker;
         freeMarking(initialMarking);
-//        delete fullFML;
         return false;
     };
     std::cout << "starting measure computation..." << std::endl;
-
-    //InitializeModel(model);
-
-    //Input and output list of places and transitions are created and sorted wrt to their priority and share.
-    //model->MaxTime = checkTime + 100.0;
 
     if (!modelChecker->setVariables()) {
         // Clean-up code

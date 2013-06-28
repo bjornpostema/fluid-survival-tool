@@ -1,0 +1,62 @@
+#####################
+# Overflow model file               #
+#####################
+#
+#### Number of places
+5
+# List of places
+# Syntax: type id discMarking fluidLevel fluidBound
+#
+# Types:
+#
+# DISCRETE   0
+# FLUID      1
+#
+1 reservoir 0 0 10
+1 demandContainer 0 0 50
+1 overflowContainer 0 0 50
+0 useless1 1 0 0
+0 useless2 1 0 0
+#
+#### Number of transitions
+4
+#
+# List of transitions
+# Syntax: type id discFiringTime weight priority fluidFlowRate genDistribution(EXP rate)
+#
+# Types:
+#
+# DETERMINISTIC   0
+# IMMEDIATE       1
+# FLUID           2
+# GENERAL         3
+#
+2 input 0 0 0 2.0 na
+2 demand 0 0 0 2.0 na
+2 overflow 0 0 0 1.0 na
+3 useless 5 1.0 0 0 dtrm{10}
+#
+#### Number of arcs
+6
+#
+# List of arcs
+# Syntax: type id fromId toId weight share priority
+#
+# Types:
+# DISCRETE_INPUT  0
+# DISCRETE_OUTPUT 1
+# FLUID_INPUT     2
+# FLUID_OUTPUT    3
+# INHIBITOR       4
+# TEST            5
+#
+# Input,test,inhibitor: Place -> Transition,  Output: Transition -> Place
+#
+3 pipe1 input reservoir 1 1 0
+2 pipe2 reservoir demand 1 1 1
+3 pipe2b demand demandContainer 1 1 0
+2 pipe2alternative reservoir overflow 1 1 2
+3 pipe2alternativeb overflow overflowContainer 1 1 0
+0 useless1Arc useless1 useless 1 1 0
+1 useless2Arc useless useless2 1 1 0
+#

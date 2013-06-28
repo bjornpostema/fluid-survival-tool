@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['time',['time',['../structDtrmEvent.html#a23d94e3ab2a80c673f5e42aac1b6ecb0',1,'DtrmEvent']]],
-  ['timebias',['timeBias',['../classRegion.html#af080e4f60bc8a0231ee52d96f69f40e3',1,'Region::timeBias()'],['../classSTDRegion.html#a66f6dbac4fc0f9f2b08ac7929ef41295',1,'STDRegion::timeBias()']]],
-  ['timesegment',['timeSegment',['../structStochasticEvent.html#a39fc3833721f4066c15044e6772a5435',1,'StochasticEvent']]]
+  ['time',['time',['../structmodel_1_1DtrmEvent.html#a93b16ee47d2a884f6b32eb35e5080551',1,'model::DtrmEvent']]],
+  ['timebias',['timeBias',['../classmodel_1_1Region.html#aa72332cc94d02ec355b6496eedcc203f',1,'model::Region']]],
+  ['timesegment',['timeSegment',['../structmodel_1_1StochasticEvent.html#a5ef3fd53ce53c35008fa8a569fd153e0',1,'model::StochasticEvent']]]
 ];

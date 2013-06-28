@@ -10,6 +10,9 @@
 
 #include <vector>
 #include <math.h>
+#include <algorithm>
+#include <iostream>
+#include <fstream>
 
 #include <opencv2/opencv.hpp>
 
@@ -17,7 +20,6 @@
 #include "DFPN2.h"
 #include "Region.h"
 #include "Line.h"
-#include "Calculator.h"
 #include "IntervalSet.h"
 
 namespace model {

@@ -1,8 +1,8 @@
 var searchData=
 [
-  ['generatediagram',['generateDiagram',['../classTimedDiagram.html#a55bc9188cb14b08bc95dde3778579f90',1,'TimedDiagram']]],
-  ['geometryhelper',['GeometryHelper',['../classGeometryHelper.html',1,'']]],
-  ['gettext',['getText',['../classGUIController.html#a56423f7cdd1f3fd60d1692efd39220c4',1,'GUIController']]],
-  ['gety',['getY',['../classLine.html#a3d15d876c9e5405948078bcaa20fa1ce',1,'Line::getY(double x)'],['../classLine.html#a3d15d876c9e5405948078bcaa20fa1ce',1,'Line::getY(double x)']]],
+  ['generatediagram',['generateDiagram',['../classmodel_1_1TimedDiagram.html#a5aebcfa972fbb24032a1fb6200407000',1,'model::TimedDiagram']]],
+  ['geometryhelper',['GeometryHelper',['../classmodel_1_1GeometryHelper.html',1,'model']]],
+  ['gettext',['getText',['../classGUIController.html#a494d1c2423ce3e7d44633edc50269803',1,'GUIController']]],
+  ['gety',['getY',['../classmodel_1_1Line.html#a06427de20f24ae5d09813134814d54a5',1,'model::Line']]],
   ['guicontroller',['GUIController',['../classGUIController.html',1,'GUIController'],['../classGUIController.html#a3f85fdeac642a3c52c0f0b586462eb8a',1,'GUIController::GUIController()']]]
 ];
