@@ -16,6 +16,7 @@
 #include "DFPN2.h"
 #include <math.h>
 #include <QString>
+#include <string.h>
 
 extern "C" {
 #include <matheval.h>

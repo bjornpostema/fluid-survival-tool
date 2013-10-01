@@ -534,25 +534,25 @@ void InitializeModel(Model *M) {
 				}
 			}
 
-			printf("\n Place %s: \n input  -> ", M->places[i].id);
-			for (j = 0; j < M->places[i].inputListSize; j++) {
-				printf(
-						"%d=P:%d %s (%lg), ",
-						M->places[i].inputList[j],
-						M->arcs[M->places[i].inputList[j]].priority,
-						M->transitions[M->arcs[M->places[i].inputList[j]].fromId].id,
-						M->arcs[M->places[i].inputList[j]].share);
-			}
-			printf("\n output -> ");
-			for (j = 0; j < M->places[i].outputListSize; j++) {
-				printf(
-						"%d=P:%d %s (%lg), ",
-						M->places[i].outputList[j],
-						M->arcs[M->places[i].outputList[j]].priority,
-						M->transitions[M->arcs[M->places[i].outputList[j]].toId].id,
-						M->arcs[M->places[i].outputList[j]].share);
-			}
-			printf("\n\n");
+//			printf("\n Place %s: \n input  -> ", M->places[i].id);
+//			for (j = 0; j < M->places[i].inputListSize; j++) {
+//				printf(
+//						"%d=P:%d %s (%lg), ",
+//						M->places[i].inputList[j],
+//						M->arcs[M->places[i].inputList[j]].priority,
+//						M->transitions[M->arcs[M->places[i].inputList[j]].fromId].id,
+//						M->arcs[M->places[i].inputList[j]].share);
+//			}
+//			printf("\n output -> ");
+//			for (j = 0; j < M->places[i].outputListSize; j++) {
+//				printf(
+//						"%d=P:%d %s (%lg), ",
+//						M->places[i].outputList[j],
+//						M->arcs[M->places[i].outputList[j]].priority,
+//						M->transitions[M->arcs[M->places[i].outputList[j]].toId].id,
+//						M->arcs[M->places[i].outputList[j]].share);
+//			}
+//			printf("\n\n");
 		}
 	}
 	/*

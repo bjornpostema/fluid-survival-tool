@@ -49,9 +49,9 @@ void TimedDiagram::generateDiagram(Marking* initialMarking) {
 	//TODO: consider the marking after the last dtrEvent.
 	double prePoint = 0;
 	gTrEnabledTime = 0;
-	for (int j = 0; (unsigned)j < dtrmEventList.size() - 1; j++){
-		std::cout << dtrmEventList[j]->time << std::endl;
-	}
+//	for (int j = 0; (unsigned)j < dtrmEventList.size() - 1; j++){
+//		std::cout << dtrmEventList[j]->time << std::endl;
+//	}
 	// ignore the the last event.
 	for (int j = 0; (unsigned)j < dtrmEventList.size() - 1; j++){
 
@@ -181,7 +181,7 @@ void TimedDiagram::SegmentizeDtrmRegion(Marking* initialMarking){
 
 		if (hasImmediateEnabled) {
 			//TODO: Take care of immediate transitions!!
-			std::cout << "An immediate transition is enabled." << std::endl;
+            //std::cout << "An immediate transition is enabled." << std::endl;
 			fireTransition(model, marking, firstEventID);
 			DtrmEvent* e = new DtrmEvent(firstEventType);
 			e->id = firstEventID;
@@ -255,9 +255,9 @@ void TimedDiagram::segmentizeStochasticRegion(Marking* marking, StochasticEvent*
 
 
 	Segment* eventLine = eventSeg->timeSegment;
-    std::cout << "P2 : " << eventLine->p2.X << " P1: "<< eventLine->p1.X << std::endl;
+    //std::cout << "P2 : " << eventLine->p2.X << " P1: "<< eventLine->p1.X << std::endl;
 	if (eventLine->p2.Y > model->MaxTime || eventLine->p2.X > model->MaxTime) {
-		std::cout << ("\n Maximum time reached") << std::endl;
+        //std::cout << ("\n Maximum time reached") << std::endl;
 		return;
 	}
 
@@ -321,7 +321,7 @@ void TimedDiagram::segmentizeStochasticRegion(Marking* marking, StochasticEvent*
 
 	if (hasImmediateEnabled) {
 		//TODO: Take care of immediate transitions!!
-		std::cout << "An immediate transition is enabled." << std::endl;
+        //std::cout << "An immediate transition is enabled." << std::endl;
 
 	} else {
 		for (int i = 0; i < cntFirst; i++) {
@@ -346,7 +346,7 @@ void TimedDiagram::segmentizeStochasticRegion(Marking* marking, StochasticEvent*
 			StochasticEvent* detTransEvent = new StochasticEvent(detTransSeg, TRANSITION);
 			detTransEvent->id = enabledTransitionCache[i];
 			detTransEvent->preRegionMarking = marking;
-            detTransSeg->print();
+//            detTransSeg->print();
 			potentialEvents->push_back(detTransEvent);
 
 		}
@@ -398,12 +398,12 @@ void TimedDiagram::segmentizeStochasticRegion(Marking* marking, StochasticEvent*
 					placeEvent->eventType = PLACE_UPPER_BOUNDRY;
 				} else if (d < -ZERO_PREC) {
 
-					std::cout << a << ", " << std::abs(d) + eventLine->b << ", " << start << ", " <<  end << std::endl;
+                    //std::cout << a << ", " << std::abs(d) + eventLine->b << ", " << start << ", " <<  end << std::endl;
 					placeSeg = new Segment(eventLine->a + a / std::abs(d),
 						b / std::abs(d) + eventLine->b,
 						//+ gTrEnabledTime*(1- eventLine->a - a /abs(d))/*+ timeBias*/,
                         start, end);
-                    placeSeg->print();
+//                    placeSeg->print();
 					placeEvent->eventType = PLACE_LOWER_BOUNDRY;
 				}
 
@@ -425,7 +425,7 @@ void TimedDiagram::segmentizeStochasticRegion(Marking* marking, StochasticEvent*
 
 		if (cntFirst > 0) { // if there is at least an event that can happen
 
-            eventLine->print();
+//            eventLine->print();
 			std::vector<StochasticEvent*> *nextEvents = new std::vector<StochasticEvent*>();
 			computeNextEvents(potentialEvents, eventLine, nextEvents);
 
@@ -508,7 +508,7 @@ void TimedDiagram::minLines(std::vector<StochasticEvent*> * potentialEvents, Seg
 	double minStart = INF;
 	int minIndex;
     for (int i = 0; (unsigned)i < potentialEvents->size(); i++) {
-        std::cout << "a: " << potentialEvents->at(i)->timeSegment->a << std::endl;
+        //std::cout << "a: " << potentialEvents->at(i)->timeSegment->a << std::endl;
 		if (potentialEvents->at(i)->timeSegment->getY(start) < minStart) {
 			minStart = potentialEvents->at(i)->timeSegment->getY(start);
 			minIndex = i;
@@ -544,23 +544,23 @@ void TimedDiagram::minLines(std::vector<StochasticEvent*> * potentialEvents, Seg
 
 		nextEvents->push_back(sEvent);
 
-        std::cout << "minIndex:"  << minIndex << std::endl;
-        std::cout << "crntIndex:" << crntIndex << std::endl;
-        std::cout << "potentialEvents->size():" << potentialEvents->size()<< std::endl;
-        uSegment->print();
+//        std::cout << "minIndex:"  << minIndex << std::endl;
+//        std::cout << "crntIndex:" << crntIndex << std::endl;
+//        std::cout << "potentialEvents->size():" << potentialEvents->size()<< std::endl;
+//        uSegment->print();
 		//if there is no intersection we are done.
 		if (crntIndex == nextIndex) {
 			Point uPoint;
 
 			//if we have an intersection with the underlying segment, we should consider it.
-            potentialEvents->at(crntIndex)->timeSegment->print();
+//            potentialEvents->at(crntIndex)->timeSegment->print();
 			if (potentialEvents->at(crntIndex)->timeSegment->intersect(*uSegment, uPoint) && uPoint != uSegment->p2 && uPoint != uSegment->p1){
 				nextEvents->back()->timeSegment->p2 = uPoint;
 				uSegment->p1 = uPoint;
 				potentialEvents->erase(potentialEvents->begin() + crntIndex);
 				//I think potentialEvents->at(crntIndex) should be omitted.
-                uSegment->print();
-                std::cout << "potentialEvents->size():" << potentialEvents->size()<< std::endl;
+//                uSegment->print();
+                //std::cout << "potentialEvents->size():" << potentialEvents->size()<< std::endl;
 				minLines(potentialEvents, uSegment, nextEvents);
 			}
 

@@ -84,6 +84,11 @@ const char* Facade::QString2Char(QString rawQString) {
  * @return Gives true when the STD can be shown else false.
  */
 bool Facade::showSTD(QString rawFileName, double maxTime, int imageScale) {
+    timeval start, end;
+    long mtime_full,mtime_std, seconds, useconds;
+    int regionAmount;
+    gettimeofday(&start, NULL);
+
     if (model == 0 || fileName == 0) {
         return false;
     }
@@ -103,7 +108,7 @@ bool Facade::showSTD(QString rawFileName, double maxTime, int imageScale) {
 
     model->MaxTime = maxTime;
     Marking* initialMarking = createInitialMarking(model);
-    long mtime, seconds, useconds;
+    seconds = 0, useconds = 0;
 
     TimedDiagram::getInstance()->setModel(model);
 
@@ -114,15 +119,13 @@ bool Facade::showSTD(QString rawFileName, double maxTime, int imageScale) {
 
     seconds  = gt2.tv_sec  - gt1.tv_sec;
     useconds = gt2.tv_usec - gt1.tv_usec;
-    mtime = ((seconds) * 1000 + useconds/1000.0) + 0.5;
-
-    std::cout << "Number of regions: " << TimedDiagram::getInstance()->getNumberOfRegions() << std::endl;
-    std::cout << "Time to generate STD: " << mtime << "ms" << std::endl;
-
-    guic->addText(QString("Time to generate STD: %1 ms").arg(mtime).toStdString());
+    mtime_std = ((seconds) * 1000 + useconds/1000.0) + 0.5;
+    regionAmount = TimedDiagram::getInstance()->getNumberOfRegions();
+    //std::cout << "Number of regions: " << TimedDiagram::getInstance()->getNumberOfRegions() << std::endl;
+    //std::cout << "Time to generate STD: " << mtime_std << "ms" << std::endl;
 
     TimedDiagram::getInstance()->scale = imageScale;
-    std::cout << "Writing the debug region diagram...." << std::endl;
+    //std::cout << "Writing the debug region diagram...." << std::endl;
     std::stringstream ss;
     ss << "./output/" << rawFileName.toStdString() << "_std";
     TimedDiagram::getInstance()->saveDiagram(ss.str());
@@ -130,10 +133,26 @@ bool Facade::showSTD(QString rawFileName, double maxTime, int imageScale) {
     cv::flip(TimedDiagram::getInstance()->debugImage, flipped, 0);
     cv::imshow("STD Diagram Plot", flipped);
     freeMarking(initialMarking);
+
+    gettimeofday(&end, NULL);
+
+    seconds  = end.tv_sec  - start.tv_sec;
+    useconds = end.tv_usec - start.tv_usec;
+    mtime_full = ((seconds) * 1000 + useconds/1000.0) + 0.5;
+
+    guic->addText(QString("Number of regions: %1").arg(regionAmount).toStdString());
+    guic->addText(QString("Time to generate STD: %1 ms").arg(mtime_std).toStdString());
+    guic->addText(QString("Total execution time: %1 ms").arg(mtime_full).toStdString());
+
     return true;
 }
 
 bool Facade::showProbFunc(double cStart, double cEnd, double cStep, double tStep, double maxTime) {
+    timeval start, end;
+    long mtime_full,mtime_std,mtime_measures, seconds, useconds;
+    int regionAmount;
+    gettimeofday(&start, NULL);
+
     if (model == 0 || placeName == 0) {
         return false;
     }
@@ -146,7 +165,7 @@ bool Facade::showProbFunc(double cStart, double cEnd, double cStep, double tStep
     model->MaxTime = maxTime;
 
     Marking* initialMarking = createInitialMarking(model);
-    long mtime, seconds, useconds;
+    seconds = 0; useconds = 0;
 
     TimedDiagram::getInstance()->setModel(model);
     timeval gt1, gt2;
@@ -155,9 +174,10 @@ bool Facade::showProbFunc(double cStart, double cEnd, double cStep, double tStep
     gettimeofday(&gt2, NULL);
     seconds  = gt2.tv_sec  - gt1.tv_sec;
     useconds = gt2.tv_usec - gt1.tv_usec;
-    mtime = ((seconds) * 1000 + useconds/1000.0) + 0.5;
-    std::cout << "Number of regions: " <<TimedDiagram::getInstance()->getNumberOfRegions() << std::endl;
-    std::cout << "Time to generate STD: " << mtime<< "ms" << std::endl;
+    mtime_std = ((seconds) * 1000 + useconds/1000.0) + 0.5;
+    regionAmount = TimedDiagram::getInstance()->getNumberOfRegions();
+    //std::cout << "Number of regions: " <<TimedDiagram::getInstance()->getNumberOfRegions() << std::endl;
+    //std::cout << "Time to generate STD: " << mtime_std<< "ms" << std::endl;
 
     ModelChecker *modelChecker = new ModelChecker(model, TimedDiagram::getInstance(), guic);
 
@@ -168,7 +188,7 @@ bool Facade::showProbFunc(double cStart, double cEnd, double cStep, double tStep
         return false;
     }
 
-    std::cout << "starting measure computation..." << std::endl;
+    //std::cout << "starting measure computation..." << std::endl;
 
     for (int i = 0; pIndex == (unsigned)-1 && i < model->N_places; i++) {
         if (model->places[i].type != PT_FLUID) continue;
@@ -186,32 +206,31 @@ bool Facade::showProbFunc(double cStart, double cEnd, double cStep, double tStep
     std::ofstream oFile;
     oFile.open(QString2Char(QString("./output/%1_3d.dat").arg(placeName)), std::ios::out);
 
-    mtime = 0; seconds = 0; useconds = 0;
+    seconds = 0; useconds = 0;
     timeval t0, t1;
-
+    gettimeofday(&t0, NULL);
     for (double t = .02; t <= model->MaxTime + .01; t += tStep){
         for (amount = cStart+.05; amount <= cEnd; amount += cStep){
-            gettimeofday(&t0, NULL);
 
             double p = modelChecker->calcProb(modelChecker->calcAtomContISetAtTime(t, pIndex, amount),0.00);
-
-            gettimeofday(&t1, NULL);
-
-            seconds  += t1.tv_sec  - t0.tv_sec;
-            useconds += t1.tv_usec - t0.tv_usec;
 
             oFile << " "<< p;
         }
         oFile << std::endl;
     }
 
+    gettimeofday(&t1, NULL);
+
+    seconds  += t1.tv_sec  - t0.tv_sec;
+    useconds += t1.tv_usec - t0.tv_usec;
+
     switch (model->transitions[gTransitionId(model)].df_distr)
     {
     case Gen: evaluator_destroy(modelChecker->getF());
         break;
     }
-    mtime = ((seconds * 1000 + useconds/1000.0) + 0.5);
-    std::cout << "total time computing measures:  " << mtime << "ms" << std::endl;
+    mtime_measures = ((seconds * 1000 + useconds/1000.0) + 0.5);
+    //std::cout << "total time computing measures:  " << mtime_measures << "ms" << std::endl;
 
     oFile.close();
     FILE* gnuplotPipe;
@@ -252,10 +271,27 @@ bool Facade::showProbFunc(double cStart, double cEnd, double cStep, double tStep
 //    delete fv;
     delete modelChecker;
     freeMarking(initialMarking);
+
+    gettimeofday(&end, NULL);
+
+    seconds  = end.tv_sec  - start.tv_sec;
+    useconds = end.tv_usec - start.tv_usec;
+    mtime_full = ((seconds) * 1000 + useconds/1000.0) + 0.5;
+
+    guic->addText(QString("Number of regions: %1").arg(regionAmount).toStdString());
+    guic->addText(QString("Time to generate STD: %1 ms").arg(mtime_std).toStdString());
+    guic->addText(QString("Total time computing measures: %1 ms").arg(mtime_measures).toStdString());
+    guic->addText(QString("Total execution time: %1 ms").arg(mtime_full).toStdString());
+
     return true;
 }
 
 bool Facade::showProbFunc(double c, double tStep, double maxTime) {
+    timeval start, end;
+    long mtime_full,mtime_std,mtime_measures,seconds,useconds;
+    int regionAmount;
+    gettimeofday(&start, NULL);
+
     if (model == 0 || placeName == 0) {
         return false;
     }
@@ -268,7 +304,6 @@ bool Facade::showProbFunc(double c, double tStep, double maxTime) {
     model->MaxTime = maxTime;
 
     Marking* initialMarking = createInitialMarking(model);
-    long mtime, seconds, useconds;
 
     TimedDiagram::getInstance()->setModel(model);
     timeval gt1, gt2;
@@ -277,9 +312,10 @@ bool Facade::showProbFunc(double c, double tStep, double maxTime) {
     gettimeofday(&gt2, NULL);
     seconds  = gt2.tv_sec  - gt1.tv_sec;
     useconds = gt2.tv_usec - gt1.tv_usec;
-    mtime = ((seconds) * 1000 + useconds/1000.0) + 0.5;
-    std::cout << "Number of regions: " <<TimedDiagram::getInstance()->getNumberOfRegions() << std::endl;
-    std::cout << "Time to generate STD: " << mtime<< "ms" << std::endl;
+    mtime_std = ((seconds) * 1000 + useconds/1000.0) + 0.5;
+    regionAmount = TimedDiagram::getInstance()->getNumberOfRegions();
+    //std::cout << "Number of regions: " <<TimedDiagram::getInstance()->getNumberOfRegions() << std::endl;
+    //std::cout << "Time to generate STD: " << mtime_std<< "ms" << std::endl;
 
     ModelChecker *modelChecker = new ModelChecker(model, TimedDiagram::getInstance(), guic);
 
@@ -290,7 +326,7 @@ bool Facade::showProbFunc(double c, double tStep, double maxTime) {
         return false;
     }
 
-    std::cout << "starting measure computation..." << std::endl;
+    //std::cout << "starting measure computation..." << std::endl;
     for (int i = 0; pIndex == (unsigned)-1 && i < model->N_places; i++) {
         if (model->places[i].type != PT_FLUID) continue;
         if (strncmp(model->places[i].id,QString2Char(placeName), strlen(model->places[i].id)) != 0) continue;
@@ -307,31 +343,32 @@ bool Facade::showProbFunc(double c, double tStep, double maxTime) {
     std::ofstream oFile;
     oFile.open(QString2Char(QString("./output/%1_2d.dat").arg(placeName)), std::ios::out);
 
-    mtime = 0; seconds = 0; useconds = 0;
+    seconds = 0; useconds = 0;
     timeval t0, t1;
     amount = c;
+    gettimeofday(&t0, NULL);
     for (double t = 0.2; t <= model->MaxTime + .01; t += tStep){
-            gettimeofday(&t0, NULL);
 
             double p = modelChecker->calcProb(modelChecker->calcAtomContISetAtTime(t, pIndex, amount),0.00);
-
-            gettimeofday(&t1, NULL);
-
-            seconds  += t1.tv_sec  - t0.tv_sec;
-            useconds += t1.tv_usec - t0.tv_usec;
 
             oFile << " "<< p;
 
         oFile << std::endl;
     }
 
+    gettimeofday(&t1, NULL);
+
+    seconds  += t1.tv_sec  - t0.tv_sec;
+    useconds += t1.tv_usec - t0.tv_usec;
+
     switch (model->transitions[gTransitionId(model)].df_distr)
     {
     case Gen: evaluator_destroy(modelChecker->getF());
         break;
     }
-    mtime = ((seconds * 1000 + useconds/1000.0) + 0.5);
-    std::cout << "total time computing measures:  " << mtime << "ms" << std::endl;
+
+    mtime_measures = ((seconds * 1000 + useconds/1000.0) + 0.5);
+    //std::cout << "total time computing measures:  " << mtime_measures << "ms" << std::endl;
 
     oFile.close();
     FILE* gnuplotPipe;
@@ -364,10 +401,30 @@ bool Facade::showProbFunc(double c, double tStep, double maxTime) {
     }
     delete modelChecker;
     freeMarking(initialMarking);
+
+    gettimeofday(&end, NULL);
+
+    seconds  = end.tv_sec  - start.tv_sec;
+    useconds = end.tv_usec - start.tv_usec;
+    mtime_full = ((seconds) * 1000 + useconds/1000.0) + 0.5;
+
+    guic->addText(QString("Number of regions: %1").arg(regionAmount).toStdString());
+    guic->addText(QString("Time to generate STD: %1 ms").arg(mtime_std).toStdString());
+    guic->addText(QString("Total time computing measures: %1 ms").arg(mtime_measures).toStdString());
+    guic->addText(QString("Total execution time: %1 ms").arg(mtime_full).toStdString());
     return true;
 }
 
 bool Facade::modelCheck(bool &res, QString rawFormula, QString rawCheckTime, double maxTime) {
+    /* Simulation implemented for stress-test purposes. */
+    int simruns = 1; /* default should be 1, so the algorithm is performed once */
+    timeval start, end;
+    long mtime_full = 0, mtime_std = 0, mtime_measures = 0, seconds = 0, useconds = 0;
+    int regionAmount = 0;
+    //double resProb;
+    for (int i=0;i<simruns;i++) {
+    //resProb = 0.0;
+    gettimeofday(&start, NULL);
 
     /*
      * Parse the STL formula
@@ -398,8 +455,23 @@ bool Facade::modelCheck(bool &res, QString rawFormula, QString rawCheckTime, dou
 
     TimedDiagram::getInstance()->setModel(model);
 
-    TimedDiagram::getInstance()->generateDiagram(initialMarking);
+    seconds = 0; useconds = 0;
 
+    timeval gt1, gt2;
+    gettimeofday(&gt1, NULL);
+    TimedDiagram::getInstance()->generateDiagram(initialMarking);
+    gettimeofday(&gt2, NULL);
+    seconds  = gt2.tv_sec  - gt1.tv_sec;
+    useconds = gt2.tv_usec - gt1.tv_usec;
+    mtime_std += ((seconds) * 1000 + useconds/1000.0) + 0.5;
+
+    regionAmount = TimedDiagram::getInstance()->getNumberOfRegions();
+    //std::cout << "Number of regions: " <<TimedDiagram::getInstance()->getNumberOfRegions() << std::endl;
+    //std::cout << "Time to generate STD: " << mtime_std<< "ms" << std::endl;
+
+    seconds = 0; useconds = 0;
+    timeval t0, t1;
+    gettimeofday(&t0, NULL);
     ModelChecker *modelChecker = new ModelChecker(model, TimedDiagram::getInstance(), guic, checkTime);
 
     Formula *fullFML;
@@ -408,7 +480,7 @@ bool Facade::modelCheck(bool &res, QString rawFormula, QString rawCheckTime, dou
         freeMarking(initialMarking);
         return false;
     };
-    std::cout << "starting measure computation..." << std::endl;
+    //std::cout << "starting measure computation..." << std::endl;
 
     if (!modelChecker->setVariables()) {
         // Clean-up code
@@ -425,7 +497,8 @@ bool Facade::modelCheck(bool &res, QString rawFormula, QString rawCheckTime, dou
         delete fullFML;
         return false;
     }
-    res ? guic->addSuccess("Yes! The formula is satisfied.") : guic->addSuccess("No! The formula is not satisfied.");
+
+    //std::cout << "total time computing measures:  " << mtime_measures << "ms" << std::endl;
 
     switch (model->transitions[gTransitionId(model)].df_distr)
     {
@@ -436,6 +509,31 @@ bool Facade::modelCheck(bool &res, QString rawFormula, QString rawCheckTime, dou
     delete modelChecker;
     freeMarking(initialMarking);
     delete fullFML;
+
+    gettimeofday(&t1, NULL);
+
+    seconds  += t1.tv_sec  - t0.tv_sec;
+    useconds += t1.tv_usec - t0.tv_usec;
+
+    mtime_measures += ((seconds * 1000 + useconds/1000.0) + 0.5);
+
+    gettimeofday(&end, NULL);
+
+    seconds  = end.tv_sec  - start.tv_sec;
+    useconds = end.tv_usec - start.tv_usec;
+    mtime_full += ((seconds) * 1000 + useconds/1000.0) + 0.5;
+    }
+
+    mtime_std = mtime_std /*/ simruns*/;
+    mtime_measures = mtime_measures /*/ simruns*/;
+    mtime_full = mtime_full /*/ simruns*/;
+
+    //guic->addText(QString("Probability : %1").arg(resProb).toStdString());
+    res ? guic->addSuccess("Yes! The formula is satisfied.") : guic->addSuccess("No! The formula is not satisfied.");
+    guic->addText(QString("Number of regions: %1").arg(regionAmount).toStdString());
+    guic->addText(QString("Time to generate STD: %1 ms").arg(mtime_std).toStdString());
+    guic->addText(QString("Total time computing measures: %1 ms").arg(mtime_measures).toStdString());
+    guic->addText(QString("Total execution time: %1 ms").arg(mtime_full).toStdString());
 
     return true;
 }

@@ -23,8 +23,8 @@ IntervalSet* ModelChecker::visitStocRegion(Region* region, Formula* psi1, Formul
 	psi1_poly = geometryHelper->cropPolygon(psi1_poly, bound.end, DOWN);
 	psi2_poly = geometryHelper->cropPolygon(psi2_poly, bound.end, DOWN);
 
-	if (psi1_poly != NULL) psi1_poly->print();
-	if (psi2_poly != NULL) psi2_poly->print();
+    //if (psi1_poly != NULL) psi1_poly->print();
+    //if (psi2_poly != NULL) psi2_poly->print();
 
 	if (!debugImage.empty()){
 		if (psi1_poly != NULL) geometryHelper->drawPolygon(debugImage, psi1_poly, scale, cv::Scalar(0, 0, 255));
@@ -86,8 +86,11 @@ bool ModelChecker::setVariables() {
     int a;
 
     int distr = this->model->transitions[gTransitionId(this->model)].df_distr;
-    char *argument = this->model->transitions[gTransitionId(this->model)].df_argument;
 
+    //char *argument = this->model->transitions[gTransitionId(this->model)].df_argument;
+    char argument[strlen(this->model->transitions[gTransitionId(this->model)].df_argument)];
+    strcpy(argument, this->model->transitions[gTransitionId(this->model)].df_argument);
+    //memcpy (argument, this->model->transitions[gTransitionId(this->model)].df_argument, sizeof (char *));
     switch (distr)
     {
     case Exp: this->setLambda(atof(argument));
@@ -99,13 +102,13 @@ bool ModelChecker::setVariables() {
     case Uni:
         argFinder = strtok(argument,",");
         if (argFinder == NULL) {
-            guic->addError(QString("Transition #%1 : %2 has an invalid cumulative distribution function (cdf) for uni{a,b}, since this requires two arguments.").arg(gTransitionId(this->model)+1).arg(this->model->transitions[gTransitionId(this->model)].id).toStdString());
+            guic->addError(QString("ATransition #%1 : %2 has an invalid cumulative distribution function (cdf) for uni{a,b}, since this requires two arguments.").arg(gTransitionId(this->model)+1).arg(this->model->transitions[gTransitionId(this->model)].id).toStdString());
             return false;
         }
         a = atof(argFinder);
         argFinder = strtok(NULL,",");
         if (argFinder == NULL) {
-            guic->addError(QString("Transition #%1 : %2 has an invalid cumulative distribution function (cdf) for uni{a,b}, since this requires two arguments.").arg(gTransitionId(this->model)+1).arg(this->model->transitions[gTransitionId(this->model)].id).toStdString());
+            guic->addError(QString("BTransition #%1 : %2 has an invalid cumulative distribution function (cdf) for uni{a,b}, since this requires two arguments.").arg(gTransitionId(this->model)+1).arg(this->model->transitions[gTransitionId(this->model)].id).toStdString());
             return false;
         }
         this->setAB(a,atof(argFinder));
@@ -214,7 +217,7 @@ bool ModelChecker::until(IntervalSet *&res, Formula* psi1, Formula* psi2, Interv
     satSet = new IntervalSet();
 
     double t = ttc; // - std->getTrEnabledTime();
-	std::cout << "t" << t << std::endl;
+    //std::cout << "t" << t << std::endl;
 	Line timeLine(0, t);
 	Point p1, p2;
 
@@ -224,7 +227,7 @@ bool ModelChecker::until(IntervalSet *&res, Formula* psi1, Formula* psi2, Interv
 	//iterating over all deterministic events.
 	// the last event regards the maximum time reached. so should not be considered.
 	for (unsigned int i = 0; i < std->dtrmEventList.size() - 1; i++){
-		std::cout << i << std::endl;
+        //std::cout << i << std::endl;
         if (std->dtrmEventList[i]->time <= ttc && std->dtrmEventList[i]->nextDtrmEvent->time > ttc){
 			satSet = satSet->unionWith(visitDtrmRegion(std->dtrmEventList[i], psi1, psi2,t, bound));
 			break;
@@ -292,35 +295,35 @@ bool ModelChecker::iSetTT(IntervalSet *&res) {
     res = new IntervalSet();
     Interval I(0, INFINITY);
     res->intervals.push_back(I);
-    std::cout << "IntervalSet result TT : ";
-    res->print(std::cout);
-    std::cout << std::endl;
+    //std::cout << "IntervalSet result TT : ";
+    //res->print(std::cout);
+    //std::cout << std::endl;
     return true;
 }
 
 bool ModelChecker::iSetNeg(IntervalSet *&res, IntervalSet* iset1) {
-    std::cout << "IntervalSet 1 : ";
-    iset1->print(std::cout);
-    std::cout << std::endl;
+    //std::cout << "IntervalSet 1 : ";
+    //iset1->print(std::cout);
+    //std::cout << std::endl;
     if(!iSetTT(res)) return false;
     res->minus(iset1);
-    std::cout << "IntervalSet result NEG : ";
-    res->print(std::cout);
-    std::cout << std::endl;
+    //std::cout << "IntervalSet result NEG : ";
+    //res->print(std::cout);
+    //std::cout << std::endl;
     return true;
 }
 
 bool ModelChecker::iSetAnd(IntervalSet *&res, IntervalSet* iset1, IntervalSet* iset2) {
-    std::cout << "IntervalSet 1 : ";
-    iset1->print(std::cout);
-    std::cout << std::endl;
-    std::cout << "IntervalSet 2 : ";
-    iset2->print(std::cout);
-    std::cout << std::endl;
+    //std::cout << "IntervalSet 1 : ";
+    //iset1->print(std::cout);
+    //std::cout << std::endl;
+    //std::cout << "IntervalSet 2 : ";
+    //iset2->print(std::cout);
+    //std::cout << std::endl;
     res = iset1->intersect(iset2);
-    std::cout << "IntervalSet result AND : ";
-    res->print(std::cout);
-    std::cout << std::endl;
+    //std::cout << "IntervalSet result AND : ";
+    //res->print(std::cout);
+    //std::cout << std::endl;
     return true;
 }
 
@@ -373,7 +376,7 @@ bool ModelChecker::parseFML(Formula *&fullFML, QString rawFormula) {
     reset_lexer();
 
     if (getColError() == -1) {
-        guic->addText("The formula is succesfully parsed.");
+        //guic->addText("The formula is succesfully parsed.");
     } else {
         guic->addError(QString("Syntax error for character %1 in formula %2: The formula could not be parsed.").arg(getColError()).arg(rawFormula).toStdString());
         return false;
@@ -388,8 +391,8 @@ bool ModelChecker::traverseFML(bool &res, Formula *fullFML) {
      * TODO: Traverse through the STL formula
      * Strategies is post-order
      */
-    IntervalSet *iSetLeft;
-    IntervalSet *iSetRight;
+    IntervalSet *iSetLeft = new IntervalSet();
+    IntervalSet *iSetRight = new IntervalSet();
     res = false;
     if (fullFML->getLeftChild() != 0) { if (!traverseISetFML(iSetLeft,fullFML->getLeftChild())) return false; }
     if (fullFML->getRightChild() != 0) { if (!traverseISetFML(iSetRight,fullFML->getRightChild())) return false; }
@@ -417,6 +420,8 @@ bool ModelChecker::traverseFML(bool &res, Formula *fullFML) {
             break;
         }
     }
+    delete iSetLeft;
+    delete iSetRight;
     return true;
 }
 
@@ -426,8 +431,8 @@ bool ModelChecker::traverseISetFML(IntervalSet *&res, Formula *fullFML) {
      * Strategies is post-order
      */
     res = 0;
-    IntervalSet *iSetLeft;
-    IntervalSet *iSetRight;
+    IntervalSet *iSetLeft = new IntervalSet();
+    IntervalSet *iSetRight = new IntervalSet();
     if (fullFML->getLeftChild() != 0) { if (!traverseISetFML(iSetLeft, fullFML->getLeftChild())) return false; }
     if (fullFML->getRightChild() != 0) { if (!traverseISetFML(iSetRight,fullFML->getRightChild())) return false; }
     /*
@@ -466,18 +471,21 @@ bool ModelChecker::traverseISetFML(IntervalSet *&res, Formula *fullFML) {
     break;
     case AND:
         if (fullFML->getLeftChild() != 0 && fullFML->getRightChild() != 0) {
-            IntervalSet *iSetLeft;
+            IntervalSet *iSetLeft = new IntervalSet();
             if(!traverseISetFML(iSetLeft,fullFML->getLeftChild())) return false;
-            IntervalSet *iSetRight;
+            IntervalSet *iSetRight = new IntervalSet();
             if(!traverseISetFML(iSetRight,fullFML->getRightChild())) return false;
             if(!iSetAnd(res,iSetLeft,iSetRight)) return false;
+            delete iSetLeft;
+            delete iSetRight;
         }
     break;
     case NEG:
         if (fullFML->getLeftChild() != 0) {
-            IntervalSet *iSetLeft;
+            IntervalSet *iSetLeft = new IntervalSet();
             if(!traverseISetFML(iSetLeft,fullFML->getLeftChild())) return false;
             if (!iSetNeg(res,iSetLeft)) return false;
+            delete iSetLeft;
         }
     break;
     case UNTIL:
@@ -494,6 +502,9 @@ bool ModelChecker::traverseISetFML(IntervalSet *&res, Formula *fullFML) {
         res = 0;
     break;
     }
+
+    delete iSetLeft;
+    delete iSetRight;
     return res;
 }
 

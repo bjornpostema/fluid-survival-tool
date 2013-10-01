@@ -30,7 +30,7 @@ RegionState GeometryHelper::getTimeAndDirection(DtrmEvent* dtrmRegion,Formula* f
 	 * IMPORTANT: we assume and between discrete and continuous formulas.
 	 */
 
-	std::cout << "formula->getType(): " << formula->getType()  << std::endl;
+//	std::cout << "formula->getType(): " << formula->getType()  << std::endl;
 
 	if (formula->getType() == COMBI){
 		AtomDisFormula* disFormula = ((ADFormula*)formula)->disFormula;
@@ -54,7 +54,7 @@ RegionState GeometryHelper::getTimeAndDirection(DtrmEvent* dtrmRegion,Formula* f
 			return NONE;
 	}else {
 		dir = (d > 0) ? UP : DOWN;
-		std::cout << "atomConProp->getC(): " << atomConProp->getC()  << "f0: " << f0 << "d: " << d << "dtrmRegion->time: " << dtrmRegion->time << std::endl;
+//		std::cout << "atomConProp->getC(): " << atomConProp->getC()  << "f0: " << f0 << "d: " << d << "dtrmRegion->time: " << dtrmRegion->time << std::endl;
 		t = (atomConProp->getC() - f0)/d + dtrmRegion->time;
 	}
 
@@ -127,7 +127,7 @@ Polygon* GeometryHelper::createPolygon(Region* region, Formula* formula) {
     double f1 = region->marking->fluid1[model->places[atomConProp->getPlaceIndex()].idInMarking];
     double d = region->marking->fluidPlaceDeriv[model->places[atomConProp->getPlaceIndex()].idInMarking];
 
-	std:: cout << "f0: "<< f0 << " f1: " << f1 << " d: "<< d << std::endl;
+//	std:: cout << "f0: "<< f0 << " f1: " << f1 << " d: "<< d << std::endl;
 	Polygon* poly;
 	Line propLine;
 
@@ -157,7 +157,7 @@ Polygon* GeometryHelper::createPolygon(Region* region, Formula* formula) {
 Polygon* GeometryHelper::splitRegion(Region* region, Line* line, Direction direction) {
 	Polygon* poly = new Polygon();
 
-	region->print(std::cout);
+//	region->print(std::cout);
 
 	for (unsigned int i = 0; i < region->eventSegments->size(); i++)
 		addToPolygon(poly, region->eventSegments->at(i)->timeSegment, line, direction);
@@ -238,8 +238,8 @@ bool GeometryHelper::isPolyContainPt(Polygon* poly, Point* p) {
 IntervalSet* GeometryHelper::getIntersectionIntervals(Polygon* poly, Segment* segment) {
 	Point intPt1, intPt2;
 	int numIntersection = 0;
-	std::cout << "---------------------------" << std::endl;
-	poly->print();
+//	std::cout << "---------------------------" << std::endl;
+//	poly->print();
     for (unsigned int i = 0; i < poly->segments->size(); i++){
             Point intPt;
             IntersectionStatus inStatus = poly->segments->at(i)->intersect2(*segment, intPt);
@@ -290,7 +290,7 @@ IntervalSet* GeometryHelper::getIntersectionIntervals(Polygon* poly1, Polygon* p
             ret->intervals.push_back(I);
         }
     }
-	std::cout << "ret: ";
+//	std::cout << "ret: ";
 //	ret->print();
 	ret->removeRedundency();
 	return ret;
