@@ -12,11 +12,12 @@ class PlaceProbDialogController : public QDialog
     Q_OBJECT
     
 public:
-    explicit PlaceProbDialogController(QWidget *parent = 0, QString fileName="");
+    explicit PlaceProbDialogController(QWidget *parent = 0, QString fileName="", bool isDES=false);
     ~PlaceProbDialogController();
     QString getPlaceName();
     double getMaxTime();
     double getTimeStep();
+    int getDESRuns();
     double getConstStep();
     double getConstStart();
     double getConstEnd();

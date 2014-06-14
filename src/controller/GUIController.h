@@ -206,6 +206,10 @@ private slots:
      */
     void generateProbFunc();
     /**
+     * @brief Generates an probability function for a given place using DES.
+     */
+    void generateDESProbFunc();
+    /**
      * @brief
      *
      */

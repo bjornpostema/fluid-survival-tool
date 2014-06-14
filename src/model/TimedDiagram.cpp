@@ -16,7 +16,13 @@ TimedDiagram::TimedDiagram() {
 }
 
 void TimedDiagram::clear(){
+    for(std::vector<DtrmEvent*>::iterator it = dtrmEventList.begin(); it != dtrmEventList.end(); ++it) {
+        delete *it;
+    }
 	dtrmEventList.clear();
+    for(std::vector<Region*>::iterator it = regionList.begin(); it != regionList.end(); ++it) {
+        delete *it;
+    }
 	regionList.clear();
 	//instance == NULL;
 }
@@ -52,8 +58,9 @@ void TimedDiagram::generateDiagram(Marking* initialMarking) {
 //	for (int j = 0; (unsigned)j < dtrmEventList.size() - 1; j++){
 //		std::cout << dtrmEventList[j]->time << std::endl;
 //	}
-	// ignore the the last event.
-	for (int j = 0; (unsigned)j < dtrmEventList.size() - 1; j++){
+    // ignore the the last event.
+    Marking *p1, *p2;
+    for (int j = 0; (unsigned)j < dtrmEventList.size() - 1; j++){
 
 		if (!isGTransitionEnabled(model, dtrmEventList[j]->postRegionMarking)){
             prePoint = dtrmEventList[j]->nextDtrmEvent->time;
@@ -65,6 +72,9 @@ void TimedDiagram::generateDiagram(Marking* initialMarking) {
 		//in case that two consequent event are happening in the same time approximately.
 		if (j > 0 && IS_ZERO(dtrmEventList[j]->time - dtrmEventList[j-1]->time))
 			continue;
+
+        // Prevent memory leaking
+        //if(j >= 2) freeMarking(p2);
 
 		//moving to the frame with origin at (gTrEnabledTime, gTrEnabledTime)
         Point startPoint(prePoint - gTrEnabledTime, prePoint - gTrEnabledTime);	//******//
@@ -90,6 +100,8 @@ void TimedDiagram::generateDiagram(Marking* initialMarking) {
 		segmentizeStochasticRegion(gtFiredMarking, initEvent, prePoint);
 
         prePoint = dtrmEventList[j]->nextDtrmEvent->time;
+        p2 = p1;
+        p1 = gtFiredMarking;
 	}
 
 	//std::ofstream regionfile("regions.out");
@@ -141,11 +153,16 @@ void TimedDiagram::SegmentizeDtrmRegion(Marking* initialMarking){
     dtrmEventList.push_back(crntEvent);
     preEvent = crntEvent;
 
+    Marking *p1, *p2;
+    int j = 0;
 	while (crntTime < model->MaxTime){
 
 
 		checkEnabled(model, marking);
-		setActFluidRate(model, marking, crntTime);
+        setActFluidRate(model, marking, crntTime);
+
+        // Prevent memory leakage
+        //if(j++ > 2) freeMarking(p2);
 		
 		Marking* preMarking = copyMarking(model, marking);
 
@@ -249,6 +266,9 @@ void TimedDiagram::SegmentizeDtrmRegion(Marking* initialMarking){
         if (preEvent != NULL)
             preEvent->nextDtrmEvent = crntEvent;
         preEvent = crntEvent;
+
+        p2 = p1;
+        p1 = preMarking;
 	}
 }
 void TimedDiagram::segmentizeStochasticRegion(Marking* marking, StochasticEvent* eventSeg, double timeBias) {
@@ -465,7 +485,7 @@ void TimedDiagram::segmentizeStochasticRegion(Marking* marking, StochasticEvent*
 
 				nextEvents->at(i)->postRegionMarking = newMarking;
 
-				segmentizeStochasticRegion(newMarking, nextEvents->at(i), timeBias);
+                segmentizeStochasticRegion(newMarking, nextEvents->at(i), timeBias);
 			}
 		} else {
 
@@ -506,8 +526,8 @@ void TimedDiagram::minLines(std::vector<StochasticEvent*> * potentialEvents, Seg
     double end = uSegment->p2.X;
 
 	double minStart = INF;
-	int minIndex;
-    for (int i = 0; (unsigned)i < potentialEvents->size(); i++) {
+    int minIndex = 0;
+    for (unsigned int i = 0; i < potentialEvents->size(); i++) {
         //std::cout << "a: " << potentialEvents->at(i)->timeSegment->a << std::endl;
 		if (potentialEvents->at(i)->timeSegment->getY(start) < minStart) {
 			minStart = potentialEvents->at(i)->timeSegment->getY(start);
@@ -684,7 +704,7 @@ void TimedDiagram::saveDiagram(std::string filename){
 		drawSegmet(debugImage, *regionList[i]->leftBoundry, scale);
 		drawSegmet(debugImage, *regionList[i]->rightBoundry, scale);
 		drawSegmet(debugImage, *regionList[i]->lowerBoundry, scale);
-		for (int j = 0; j < regionList[i]->eventSegments->size(); j++)
+        for (int j = 0; j < regionList[i]->eventSegments->size(); j++)
 			drawSegmet(debugImage, *regionList[i]->eventSegments->at(j)->timeSegment, scale);
 
 		cv::Point p(scale*(regionList[i]->lowerBoundry->p1.X + regionList[i]->lowerBoundry->p2.X)/2,

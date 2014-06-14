@@ -21,7 +21,7 @@ void Polygon::print() {
 }
 
 Polygon::~Polygon() {
-	// TODO Auto-generated destructor stub
+    delete segments;
 }
 
 bool Polygon::intersect(Line* l, Point& p1, Point& p2) {

@@ -190,10 +190,15 @@ typedef struct {
 
 bool validateModel(Model *model, Logger *guic);
 Model *ReadModel(const char *FileName, Logger *guic);
+
+bool validateModel(Model *model, Logger *guic, bool allowMultipleGeneralTransitions);
+Model *ReadModel(const char *FileName, Logger *guic, bool allowMultipleGeneralTransitions);
 void InitializeModel(Model *M);
 
 Marking *allocMarking(Model *M);
 void freeMarking(Marking *K);
+void clearAllocatedMarkings();
+void freeAllocatedMarkings();
 Marking *copyMarking(Model *M, Marking *Src);
 void printState(Model *M, State *S);
 Marking *createInitialMarking(Model *M);

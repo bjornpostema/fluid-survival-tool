@@ -13,12 +13,22 @@ Region::Region(std::vector<StochasticEvent*> * eventList, Segment * lowerBoundra
     successors = new std::vector<Region*>();
 	eventSegments = eventList;
 	this->lowerBoundry = lowerBoundray;
+    this->leftBoundry = NULL;
+    this->rightBoundry = NULL;
 	for (int i = 0; (unsigned)i < eventSegments->size(); i++){
-		if (eventSegments->at(i)->timeSegment->p1.X == lowerBoundray->p1.X)
+        if (eventSegments->at(i)->timeSegment->p1.X == lowerBoundray->p1.X) {
+            if(this->leftBoundry != NULL) delete this->leftBoundry;
 			this->leftBoundry = new Segment(lowerBoundray->p1, eventSegments->at(i)->timeSegment->p1);
-		if (eventSegments->at(i)->timeSegment->p2.X == lowerBoundray->p2.X)
+        }
+        if (eventSegments->at(i)->timeSegment->p2.X == lowerBoundray->p2.X) {
+            if(this->rightBoundry != NULL) delete this->rightBoundry;
 			this->rightBoundry = new Segment(lowerBoundray->p2, eventSegments->at(i)->timeSegment->p2);
+        }
 	}
+}
+
+Region::~Region() {
+    delete successors;
 }
 
 void Region::print(std::ostream &out) {

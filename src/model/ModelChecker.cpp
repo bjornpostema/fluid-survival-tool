@@ -43,6 +43,7 @@ IntervalSet* ModelChecker::visitStocRegion(Region* region, Formula* psi1, Formul
 			Segment* seg = new Segment(p1, p2);
 
             satSet = satSet->unionWith(geometryHelper->getIntersectionIntervals(psi2_poly, seg));
+            delete seg;
 		}
 	}
 
@@ -56,6 +57,7 @@ IntervalSet* ModelChecker::visitStocRegion(Region* region, Formula* psi1, Formul
 
 			psi1_Int = psi1_Int->unionWith(geometryHelper->getIntersectionIntervals(psi1_poly, seg));
 			//In general case here the psi1_poly should be reformed.
+            delete seg;
 		}
 
 		if (psi2_poly != NULL){
@@ -369,7 +371,7 @@ bool ModelChecker::parseFML(Formula *&fullFML, QString rawFormula) {
      * Bison (Parser) : Creates the datastructure of the AST and gives initial values to the different type of formulas.
      */
     struct yy_buffer_state* bufferState;
-    bufferState = yy_scan_string(rawFormula.toAscii().data());
+    bufferState = yy_scan_string(rawFormula.toUtf8().data());
     yyparse();
     yy_delete_buffer(bufferState);
 //    yylex_destroy();
@@ -713,6 +715,42 @@ double ModelChecker::scdfFoldedNormal(double s){
 
 double ModelChecker::scdfDtrm(double s){
     return (s < this->dtrm) ? 0 : 1;
+}
+
+double ModelChecker::calculateDistributionValue(int distr, char* argument, double randomValue) {
+    switch(distr) {
+        case Exp:
+            return (-1 * log(randomValue)) / atof(argument);
+
+        case Uni:
+            {
+                char *argCopy = new char[strlen(argument)];
+                strcpy(argCopy, argument);
+                char* argFinder = strtok(argCopy, ",");
+                if(argFinder == NULL) {
+                    guic->addError("Invalid first argument for uniform distribution.");
+                    return -1;
+                }
+                double a = atof(argFinder);
+                argFinder = strtok(NULL, ",");
+                if(argFinder == NULL) {
+                    guic->addError("Invalid second argument for uniform distribution.");
+                    return -1;
+                }
+                double b = atof(argFinder);
+                delete argCopy;
+                return a + (b - a) * randomValue;
+            }
+
+        case Dtrm:
+            return atof(argument);
+
+        // TODO: add Gen, Gamma, Norm and FoldedNorm distributions
+
+        default:
+            guic->addError("There is a non-supported distribution for DES in your model.");
+            return -1;
+    }
 }
 
 }

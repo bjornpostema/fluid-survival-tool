@@ -162,6 +162,8 @@ public:
     double scdfNormal(double s);
     double scdfFoldedNormal(double s);
     double scdfDtrm(double s);
+
+    double calculateDistributionValue(int dist, char* argument, double randomValue);
 };
 
 }

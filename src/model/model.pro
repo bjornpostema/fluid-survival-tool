@@ -6,7 +6,7 @@
 #-------------------------------------------------
 
 ! include( ../common.pri ) {
-    error( Couldn't find the common.pri file! )
+    error( "Couldn't find the common.pri file!" )
 }
 
 #INCLUDEPATH += /usr/include/opencv \

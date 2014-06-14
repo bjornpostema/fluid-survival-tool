@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <set>
 
 extern "C" {
 #include <matheval.h>
@@ -28,7 +29,7 @@ const char *arcsTypeName[] = { "D.In ", "D.Out", "F.In ", "F.Out", "Inhib", "Tes
 #define READ_BUF_DIM 16384
 
 double ReadData(FILE *fp) {
-	static char Buff[READ_BUF_DIM];
+    static char Buff[READ_BUF_DIM];
 	double Val;
 
     if (!fgets(Buff, READ_BUF_DIM, fp)) return 0;
@@ -92,6 +93,10 @@ int findTransition(Model *M, char *id) {
 #define MAX_ID_LEN 2048
 
 bool validateModel(Model *model, Logger *guic) {
+    validateModel(model, guic, false);
+}
+
+bool validateModel(Model *model, Logger *guic, bool allowMultipleGeneralTransitions) {
     bool res = true;
     /*
      * Place checks
@@ -151,9 +156,16 @@ bool validateModel(Model *model, Logger *guic) {
     }
 
     /* The maximum amount of general transitions is restricted. */
-    if (gentrans != 1) {
-        guic->addError(QString("There are %1 general transition(s), while there should be 1.").arg(gentrans).toStdString());
-        res = false;
+    if(allowMultipleGeneralTransitions) {
+        if (gentrans < 1) {
+            guic->addError(QString("There are no general transition(s), while there should be at least 1.").arg(gentrans).toStdString());
+            res = false;
+        }
+    } else {
+        if (gentrans != 1) {
+            guic->addError(QString("There are %1 general transition(s), while there should be 1.").arg(gentrans).toStdString());
+            res = false;
+        }
     }
 
     /*
@@ -173,6 +185,10 @@ bool validateModel(Model *model, Logger *guic) {
 }
 
 Model *ReadModel(const char *FileName, Logger *guic) {
+    ReadModel(FileName, guic, false);
+}
+
+Model *ReadModel(const char *FileName, Logger *guic, bool allowMultipleGeneralTransitions) {
     /*
      * 'locale' should be set in order for european machine's to work with dots in the files.
      * Using comma's instead of dots would be a major confusion, as was I when I discovered this tiny little bug. -Bjorn
@@ -300,9 +316,9 @@ Model *ReadModel(const char *FileName, Logger *guic) {
 			} else if (M->transitions[i].type == TT_DETERMINISTIC) {
 				M->transitions[i].idInMarking = M->N_determTransitions;
 				M->N_determTransitions += 1;
-			} else if (M->transitions[i].type == TT_GENERAL) {
+            } else if (M->transitions[i].type == TT_GENERAL) {
 				M->transitions[i].idInMarking = M->N_generalTransitions;
-				M->N_generalTransitions += 1;
+                M->N_generalTransitions += 1;
 			}
 
         }
@@ -377,7 +393,7 @@ Model *ReadModel(const char *FileName, Logger *guic) {
 	printf("\n");
 
     /* Validate the model and found results */
-    return (res && validateModel(M, guic)) ? M : NULL;
+    return (res && validateModel(M, guic, allowMultipleGeneralTransitions)) ? M : NULL;
 }
 
 void InitializeModel(Model *M) {
@@ -612,6 +628,8 @@ void InitializeModel(Model *M) {
 
 }
 
+std::set<Marking *> allocatedMarkings;
+
 Marking *allocMarking(Model *M) {
 	Marking *out;
 	out = (Marking *) malloc(sizeof(Marking));
@@ -628,6 +646,8 @@ Marking *allocMarking(Model *M) {
 
     out->fluidPlaceDeriv = (double *) calloc(M->N_fluidPlaces, sizeof(double));
     out->N_generalFired = 0;
+
+    allocatedMarkings.insert(out);
 
 	return out;
 }
@@ -646,6 +666,19 @@ void freeMarking(Marking *K) {
 	free(K->fluidPlaceDeriv);
 
 	free(K);
+
+    allocatedMarkings.erase(K);
+}
+
+void clearAllocatedMarkings() {
+    allocatedMarkings.clear();
+}
+
+void freeAllocatedMarkings() {
+    std::set<Marking *> allocatedMarkingsCopy (allocatedMarkings);
+    for(std::set<Marking *>::iterator it = allocatedMarkingsCopy.begin(); it != allocatedMarkingsCopy.end(); ++it) {
+        freeMarking(*it);
+    }
 }
 
 Marking *copyMarking(Model *M, Marking *Src) {

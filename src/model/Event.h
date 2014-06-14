@@ -53,18 +53,22 @@ struct StochasticEvent{
 	 */
 	Marking* postRegionMarking;
 
-	static bool greaterSlopeFirst(StochasticEvent* e1, StochasticEvent* e2){return e1->timeSegment->a > e2->timeSegment->a;};
+    static bool greaterSlopeFirst(StochasticEvent* e1, StochasticEvent* e2)
+    {
+        return e1->timeSegment->a > e2->timeSegment->a;
+    }
 
-	StochasticEvent(Segment *line, EventType type) : timeSegment(line), eventType(type), preRegion(0), preDtrmEvent(0){};
-	StochasticEvent(StochasticEvent* se){
+    StochasticEvent(Segment *line, EventType type) : timeSegment(line), eventType(type), preRegion(0), preDtrmEvent(0) {}
+    StochasticEvent(StochasticEvent* se)
+    {
 		timeSegment = se->timeSegment;
         eventType = se->eventType;
 		id = se->id;
 		preRegionMarking = se->preRegionMarking;
 		postRegionMarking = se->postRegionMarking;
-	};
+    }
 
-	StochasticEvent(){};
+    StochasticEvent() {}
 
 };
 
@@ -100,7 +104,13 @@ struct DtrmEvent{
 	 */
 	Marking* postRegionMarking;
 
-    DtrmEvent(EventType type) : eventType(type){nextRegions = new std::vector<Region*>();};
+    DtrmEvent(EventType type) : eventType(type) {
+        nextRegions = new std::vector<Region*>();
+    }
+
+    ~DtrmEvent() {
+        delete nextRegions;
+    }
 };
 
 }

@@ -26,6 +26,7 @@ class DtrmEvent;
 class Region {
 public:
     Region(std::vector<StochasticEvent*> * eventList, Segment * lowerBoundry);
+    virtual ~Region();
 
 
 	std::vector<StochasticEvent*>* eventSegments; //list of surrounding segments.

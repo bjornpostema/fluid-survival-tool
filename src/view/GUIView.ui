@@ -191,8 +191,8 @@ p, li { white-space: pre-wrap; }
        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;---- Application Output ----&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Ubuntu'; font-size:11pt;&quot;&gt;---- Application Output ----&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
     </item>
@@ -204,7 +204,7 @@ p, li { white-space: pre-wrap; }
      <x>0</x>
      <y>0</y>
      <width>892</width>
-     <height>23</height>
+     <height>24</height>
     </rect>
    </property>
    <property name="palette">
@@ -574,6 +574,7 @@ p, li { white-space: pre-wrap; }
      </property>
      <addaction name="actionSTD"/>
      <addaction name="actionProbability_Distribution"/>
+     <addaction name="actionDES_Probability_Distribution"/>
     </widget>
     <addaction name="menuGenerate"/>
     <addaction name="actionModel_Checker"/>
@@ -667,7 +668,7 @@ p, li { white-space: pre-wrap; }
   </action>
   <action name="actionInfo">
    <property name="icon">
-    <iconset resource="GUIResources.qrc">
+    <iconset>
      <normaloff>:/resources/resources/dacs_logo.jpg</normaloff>:/resources/resources/dacs_logo.jpg</iconset>
    </property>
    <property name="text">
@@ -867,6 +868,15 @@ p, li { white-space: pre-wrap; }
   <action name="actionOverflow">
    <property name="text">
     <string>Overflow</string>
+   </property>
+  </action>
+  <action name="actionDES_Probability_Distribution">
+   <property name="icon">
+    <iconset resource="GUIResources.qrc">
+     <normaloff>:/resources/resources/introduction3.png</normaloff>:/resources/resources/introduction3.png</iconset>
+   </property>
+   <property name="text">
+    <string>Cont. Place &amp;DES Prob. Plots...</string>
    </property>
   </action>
  </widget>
@@ -1115,6 +1125,22 @@ p, li { white-space: pre-wrap; }
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionDES_Probability_Distribution</sender>
+   <signal>triggered()</signal>
+   <receiver>GUIController</receiver>
+   <slot>generateDESProbFunc()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>445</x>
+     <y>278</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>about()</slot>
@@ -1137,5 +1163,6 @@ p, li { white-space: pre-wrap; }
   <slot>exampleWater()</slot>
   <slot>exampleSewage()</slot>
   <slot>exampleOverflow()</slot>
+  <slot>generateDESProbFunc()</slot>
  </slots>
 </ui>

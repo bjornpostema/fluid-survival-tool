@@ -9,7 +9,7 @@
 #include "ModelChecker.h"
 
 #include <QString>
-#include <QTextEdit>
+//#include <QTextEdit>
 #include <cmath>
 #include <iostream>
 #include <ostream>
@@ -23,14 +23,18 @@ namespace model {
 class Facade
 {
 public:
+    Facade(QString rawFileName, QString rawPlaceName, Logger *guic, bool allowMultipleGeneralTransitions);
     Facade(QString rawFileName, QString rawPlaceName, Logger *guic);
     Facade(QString rawFileName, Logger *guic);
     virtual ~Facade();
     bool virtual setPlace(QString rawPlaceName);
+    bool virtual setFile(QString rawFileName, bool allowMultipleGeneralTransitions);
     bool virtual setFile(QString rawFileName);
     bool virtual showSTD(QString rawFileName, double maxTime, int imageScale);
     bool virtual showProbFunc(double cStart, double cEnd, double cStep, double tStep, double maxTime);
     bool virtual showProbFunc(double c, double tStep, double maxTime);
+    bool virtual showDESProbFunc(double cStart, double cEnd, double cStep, int runsPerStep, double tStep, double maxTime);
+    bool virtual showDESProbFunc(double c, int runsPerStep, double tStep, double maxTime);
     bool virtual modelCheck(bool &res, QString rawFormula, QString rawCheckTime, double maxTime);
 //    bool virtual tempUntilModelCheck();
 
@@ -41,6 +45,7 @@ public:
 
 private:
     const char* QString2Char(QString rawQString);
+    bool _showDESProbFunc(double cStart, double cEnd, double cStep, int runsPerStep, double tStep, double maxTime);
 };
 
 }

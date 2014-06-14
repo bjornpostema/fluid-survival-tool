@@ -7,6 +7,8 @@
 #include "ui_GUIView.h"
 #include "../model/Polygon.h"
 #include "iostream"
+#include <QFileDialog>
+#include <QMessageBox>
 #include <QtGui>
 #include "QRect"
 #include "QDesktopWidget"
@@ -289,7 +291,7 @@ void GUIController::generateSTD() {
 }
 
 void GUIController::generateProbFunc() {
-    PlaceProbDialogController dialogPlaceProb(this,modelFileName);
+    PlaceProbDialogController dialogPlaceProb(this,modelFileName, false);
     if (!checkSave(ui->modelEditor) || modelCurFile.isEmpty()) {
         this->addError("The model file must be saved before execution.");
     } else if(dialogPlaceProb.exec() == QDialog::Accepted )
@@ -310,6 +312,45 @@ void GUIController::generateProbFunc() {
                     this->addSuccess("Displaying Probability Distribution Pr-t plot...");
                 } else {
                     this->addError("The Probability Distribution Pr-t plot could not be displayed.");
+                }
+            }
+        } catch (const std::exception & e)  {
+            QMessageBox msgBox;
+            msgBox.setWindowTitle("Exception.");
+            msgBox.setInformativeText(e.what());
+            msgBox.exec();
+        } catch (...) {
+            QMessageBox msgBox;
+            msgBox.setWindowTitle("Exception.");
+            msgBox.setInformativeText("An unknown exception is caught.");
+            msgBox.exec();
+        }
+    }
+}
+
+void GUIController::generateDESProbFunc() {
+    PlaceProbDialogController dialogPlaceProb(this,modelFileName, true);
+    if (!checkSave(ui->modelEditor) || modelCurFile.isEmpty()) {
+        this->addError("The model file must be saved before execution.");
+    } else if(dialogPlaceProb.exec() == QDialog::Accepted )
+    {
+        try {
+            if (dialogPlaceProb.checkConstRange()) {
+                model::Facade *f;
+                f = new model::Facade(modelCurFile, dialogPlaceProb.getPlaceName(), this, true);
+                if (f->showDESProbFunc(dialogPlaceProb.getConstStart(),dialogPlaceProb.getConstEnd(),dialogPlaceProb.getConstStep(),dialogPlaceProb.getDESRuns(),dialogPlaceProb.getTimeStep(),dialogPlaceProb.getMaxTime())) {
+                    this->addSuccess("Displaying DES Probability Distribution Pr-t plot...");
+                } else {
+                    this->addError("The DES Probability Distribution Pr-t plot could not be displayed.");
+                }
+
+            } if (dialogPlaceProb.checkSpecConst()) {
+                model::Facade *f;
+                f = new model::Facade(modelCurFile, dialogPlaceProb.getPlaceName(), this, true);
+                if (f->showDESProbFunc(dialogPlaceProb.getConst(), dialogPlaceProb.getDESRuns(), dialogPlaceProb.getTimeStep(), dialogPlaceProb.getMaxTime())) {
+                    this->addSuccess("Displaying DES Probability Distribution Pr-t plot...");
+                } else {
+                    this->addError("The DES Probability Distribution Pr-t plot could not be displayed.");
                 }
             }
         } catch (const std::exception & e)  {
@@ -450,10 +491,10 @@ void GUIController::addError(std::string str)
 
 void GUIController::setText(std::string str)
 {
-    QString qStr = QString::fromAscii(str.data(),str.size());
+    QString qStr = QString::fromUtf8(str.data(),str.size());
     ui->outputEditor->setHtml(qStr);
-    QScrollBar *sb = ui->outputEditor->verticalScrollBar();
-    sb->triggerAction(QScrollBar::SliderToMaximum);
+    //QScrollBar *sb = ui->outputEditor->verticalScrollBar();
+    //sb->triggerAction(QAbstractSlider::SliderToMaximum);
 }
 
 std::string GUIController::getText()
@@ -466,7 +507,7 @@ std::string GUIController::escapeHTML(std::string & Str)
     entity references. */
   {
     std::string Escaped="";
-    for (int i = 0; i < Str.size(); ++i)
+    for (unsigned int i = 0; i < Str.size(); ++i)
       {
         std::string ThisCh = Str.substr(i,1);
         if (ThisCh == "&")
